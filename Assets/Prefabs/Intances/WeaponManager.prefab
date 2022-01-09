@@ -1,0 +1,69 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2561813695016223369
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2561813695016223375}
+  - component: {fileID: 2561813695016223374}
+  m_Layer: 0
+  m_Name: WeaponManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2561813695016223375
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2561813695016223369}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.8983297, y: -2.0422153, z: 3.1508865}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2561813695016223374
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2561813695016223369}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4c8462814e1e7b49be4bf8c0b76e2fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  allWeapons:
+  - name: AK-47
+    prefab: {fileID: 7489893567846038471, guid: c7ec0e3c8dc442643b5f8785c5f4f187, type: 3}
+  - name: M4A4
+    prefab: {fileID: 4484158918520316832, guid: 1dd3c144f2627fe45bc12d137df0affc, type: 3}
+  - name: Makarov
+    prefab: {fileID: 7330234428275062796, guid: 63706c2e38877884d9dcb119f12d2c48, type: 3}
+  - name: M58A
+    prefab: {fileID: 9130538387348980961, guid: 354f121efb561d647bf71866bf2c0841, type: 3}
+  - name: SVD
+    prefab: {fileID: 9014002615599485563, guid: 81ecbb98da80cb044bca47d1c79a1a20, type: 3}
+  - name: Kedr
+    prefab: {fileID: 7927471080846231128, guid: 863f40509ad51974b98721390da1915c, type: 3}
+  grenades:
+  - name: Frag
+    icon: {fileID: 21300000, guid: 32c2aadfb7b621e439ef0abd54ca0137, type: 3}
+  - name: Smoke
+    icon: {fileID: 21300000, guid: 6f4d2899d8d876445ad44119ec09d021, type: 3}
+  - name: Flashbang
+    icon: {fileID: 21300000, guid: 6b5cb4d7bad64944ea764a7a26405e4e, type: 3}
+  size: 0.78
+  defaultHitEnemyParticles: {fileID: 9217232770542293536, guid: 27f55154fee352241a4871dd63973989, type: 3}
+  defaultHitWallParticles: {fileID: 100002, guid: 0b24f31f464fa614a84acdeac974ed6b, type: 3}
+  flashbangVolume: {fileID: 0}

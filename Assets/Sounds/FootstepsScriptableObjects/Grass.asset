@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f076583f11457694da0c26fb83062361, type: 3}
+  m_Name: Grass
+  m_EditorClassIdentifier: 
+  walkingClips:
+  - {fileID: 8300000, guid: cf0f3950f5c009246b186e56aec14040, type: 3}
+  - {fileID: 8300000, guid: 159850501b6ce4b4ca59deb7e44d9351, type: 3}
+  - {fileID: 8300000, guid: 10bc8159cdc097e4d81d6bb7a3353ef9, type: 3}
+  - {fileID: 8300000, guid: 5c218de1c290d8f4a865efc21ded186b, type: 3}
+  - {fileID: 8300000, guid: 8f682bb7cd5bb544e9748e6f611b5aa7, type: 3}
+  - {fileID: 8300000, guid: b434862b94d6a8f4b96a9264bbad6b19, type: 3}
+  - {fileID: 8300000, guid: 7085033907b277f40b8e4fab0a5a3e2b, type: 3}
+  - {fileID: 8300000, guid: ed692d105244f64478c2f85ad822fdb1, type: 3}
+  - {fileID: 8300000, guid: 343512d7e7f4a0641bbdf4d1057cd246, type: 3}
+  - {fileID: 8300000, guid: b3c4363f7acc010448e13a48e2f0a335, type: 3}
+  runningClips:
+  - {fileID: 8300000, guid: 2cd08369305db5947be3afd7d277e90d, type: 3}
+  - {fileID: 8300000, guid: 66514658b74420e459e903c76e541040, type: 3}
+  - {fileID: 8300000, guid: e1aba36341c9d5b4b9827293b1772cb7, type: 3}
+  - {fileID: 8300000, guid: a5cd9466db63f3143ae3712e6750d7bf, type: 3}
+  - {fileID: 8300000, guid: 004bdd4a118caa046b61e24adf0615f1, type: 3}
+  - {fileID: 8300000, guid: 6feeddc1f8f84eb4fa9f7134ba63b8e4, type: 3}
+  - {fileID: 8300000, guid: 48b802048c58cae4eb2368885c531db2, type: 3}
+  - {fileID: 8300000, guid: b96493840cdf1a542957195b142586db, type: 3}
+  - {fileID: 8300000, guid: 077c74cfc97cf4343938fd512f4b35bf, type: 3}
+  - {fileID: 8300000, guid: aed825afe50e9024ea004ac5ebc25337, type: 3}
+  - {fileID: 8300000, guid: 9d696301271ad3d4a977ce1f61577c7a, type: 3}
+  landingClips:
+  - {fileID: 8300000, guid: 2c92c5d6776baa943839ae1283d0a66d, type: 3}
+  - {fileID: 8300000, guid: 153a67f9402131b48b70c77eb4d1e81d, type: 3}
+  - {fileID: 8300000, guid: a51bc77ada104a64ab5014eb5b941c6e, type: 3}
+  - {fileID: 8300000, guid: 570c2e244034f8e4597bb93a585161f0, type: 3}
+  - {fileID: 8300000, guid: 526bf39809667364b84ee36b9e5e90be, type: 3}
+  - {fileID: 8300000, guid: 31a8d5fe623129449a05df5548a84990, type: 3}

@@ -1,0 +1,109 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f3758f8f58fdef43803eb9be1df0608, type: 3}
+  m_Name: PhotonServerSettings
+  m_EditorClassIdentifier: 
+  AppSettings:
+    AppIdRealtime: 6e5a3c93-c9d9-4980-b614-a59d329fe6d1
+    AppIdFusion: 
+    AppIdChat: 
+    AppIdVoice: 
+    AppVersion: 
+    UseNameServer: 1
+    FixedRegion: eu
+    Server: 
+    Port: 0
+    ProxyServer: 
+    Protocol: 0
+    EnableProtocolFallback: 1
+    AuthMode: 0
+    EnableLobbyStatistics: 0
+    NetworkLogging: 1
+  DevRegion: 
+  PunLogging: 0
+  EnableSupportLogger: 0
+  RunInBackground: 1
+  StartInOfflineMode: 0
+  RpcList:
+  - ClickRpc
+  - DestroyRpc
+  - DestroySpaceship
+  - Fire
+  - RespawnSpaceship
+  - RPC_TakeDamage
+  - RPC_SetParent
+  - RPC_BarrelParticles
+  - RPC_HitParticles
+  - RPC_SetMeshMaterial
+  - RPC_RemoveSpawnpointFromList
+  - RPC_DestroyWeapon
+  - RPC_IninScoreboard
+  - RPC_AddAssist
+  - RPC_AddDeath
+  - RPC_AddKill
+  - RPC_AddPlayerCount
+  - RPC_OnWin
+  - RPC_ChangeRemainingPlayers
+  - RPC_WeaponSwap
+  - RPC_SetScope
+  - RPC_Bum
+  - RPC_OnDefuse
+  - RPC_SetBombPlanted
+  - RPC_DestroyThis
+  - RPC_EndWarmup
+  - RPC_OnPlayerSetTeam
+  - RPC_StartRagdoll
+  - RPC_WarmupEnd
+  - RPC_AddKillMessage
+  - RPC_ChangeAimingState
+  - RPC_DropWeaponMaster
+  - RPC_DropWeaponOwner
+  - RPC_TrySetWeaponOwner
+  - RPC_ChangeMoney
+  - RPC_OnWinAll
+  - RPC_OnWinMaster
+  - RPC_ResetRoundAll
+  - RPC_StartRoundAlll
+  - RPC_WarmupEndStateChange
+  - RPC_SetAnimationTrigger
+  - RPC_GenerateFlashbang
+  - RPC_PlayParticles
+  - RPC_Disable
+  - RPC_Trigger
+  - RPC_3rdPersonAnim
+  - RPC_AddLean
+  - RPC_ResetLean
+  - RPC_AddManagerToList
+  - RPC_ChangeAliveState
+  - RPC_SpawnMarker
+  - RPC_ChangeTerroTeam
+  - RPC_WinGame
+  - RPC_ShotSoundEffect
+  - RPC_ReloadSoundEffect
+  - RPC_UpdateUI
+  - RPC_AskForExactAmmo
+  - RPC_OnShoot
+  - RPC_UpdateAmmo
+  - RPC_UpdateAmmoOnOthers
+  - RPC_StartCrouching
+  - RPC_StopCrouching
+  - RPC_StartMovingSound
+  - RPC_StopMovingSound
+  - RPC_PlayFootstep
+  - RPC_PlayRunstep
+  - RPC_PlayReloadSound
+  - RPC_PlayShellSound
+  - RPC_AddHEadshot
+  - RPC_SetGrenade
+  DisableAutoOpenWizard: 1
+  ShowSettings: 1
+  DevRegionSetOnce: 1
