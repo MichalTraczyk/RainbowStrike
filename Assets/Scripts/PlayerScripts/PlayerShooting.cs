@@ -293,12 +293,12 @@ public class PlayerShooting : MonoBehaviour
     }
     public void HardStopAiming()
     {
-
-        if (currentWeapon == null)
-            return;
-
-        gunPos.transform.localPosition = currentWeapon.hipfireOffset;
-        gunPos.transform.localEulerAngles = Vector3.zero;
+        Debug.Log("chuj");
+        if(currentWeapon != null)
+        {
+            gunPos.transform.localPosition = currentWeapon.hipfireOffset;
+            gunPos.transform.localEulerAngles = Vector3.zero;
+        }
 
         if (PV.IsMine)
         {
@@ -309,8 +309,11 @@ public class PlayerShooting : MonoBehaviour
                 //aimVolume.weight = 1;
             }
         }
+        if (currentWeapon != null)
+            AnimatorUpdate();
 
         aiming = false;
+        FindObjectOfType<WeaponCamera>().aiming = false;
         PV.RPC("RPC_ChangeAimingState", RpcTarget.All, aiming);
 
     }

@@ -18,9 +18,12 @@ public class WeaponInfoPanel : MonoBehaviour
         parentObj.SetActive(true);
         weaponNameT.text = weaponName;
         Icon.sprite = icon;
+
         damageSlider.value = damage;
-        accuracySlider.value = 0.5f - accuracy;
-        rateOfFireSlider.value = 1.5f-rateOfFire;
+
+        accuracySlider.value = 0.8f - accuracy;
+
+        rateOfFireSlider.value = rateOfFire;
     }
     public void TurnOff()
     {

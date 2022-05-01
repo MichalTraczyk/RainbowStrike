@@ -170,6 +170,8 @@ public class PlayerWeaponSwap : MonoBehaviourPunCallbacks
         t.localPosition = Vector3.zero;
         t.localRotation = Quaternion.identity;
 
+        shootingHandle.gunPos.localPosition = t.GetComponent<Weapon>().hipfireOffset;
+
         if (!PV.IsMine)
         {
             t.GetComponent<Weapon>().handsMesh.layer = LayerMask.NameToLayer("DontSee");

@@ -11,7 +11,7 @@ public class GlobalUIManager : MonoBehaviour
     [SerializeField] GameObject playerStatsListPrefab;
     [SerializeField] Transform playerListParent;
     [SerializeField] TextMeshProUGUI winText;
-    [SerializeField] GameObject roundWinParent;
+    [SerializeField] GameObject GameWinParent;
     //DO ZROBIENIA
     [Header("Round Winner")]
     [SerializeField] GameObject winnerUI;
@@ -147,7 +147,8 @@ public class GlobalUIManager : MonoBehaviour
     }
     public void WinGame(Team t,List<playerStatsStruct> sortedPlayerStats)
     {
-        roundWinParent.SetActive(false);
+
+        GameWinParent.SetActive(true);
 
         foreach (playerStatsStruct s in sortedPlayerStats)
         {

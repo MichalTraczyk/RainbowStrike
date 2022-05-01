@@ -56,6 +56,8 @@ MonoBehaviour:
     prefab: {fileID: 9014002615599485563, guid: 81ecbb98da80cb044bca47d1c79a1a20, type: 3}
   - name: Kedr
     prefab: {fileID: 7927471080846231128, guid: 863f40509ad51974b98721390da1915c, type: 3}
+  - name: TEC-9
+    prefab: {fileID: 4724544863606683765, guid: 04de0ee90ea561d4db31520ec24add8c, type: 3}
   grenades:
   - name: Frag
     icon: {fileID: 21300000, guid: 32c2aadfb7b621e439ef0abd54ca0137, type: 3}

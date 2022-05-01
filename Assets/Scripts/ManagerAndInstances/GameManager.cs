@@ -268,7 +268,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void RPC_WinGame(Team winnerTeam)
     {
-
+        Debug.Log("Winowow");
         PlayerManager.Instance.DisablePlayer();
 
         PlayerStats[] playerS = playerStats.ToArray();
@@ -308,9 +308,21 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         PlayerStats localStats = getStatsByPlayer(PhotonNetwork.LocalPlayer);
 
+        Debug.Log("Saving kills: ");
+        Debug.Log("Saved: " + kills);
+        Debug.Log("local: " + localStats.kills);
+
+        Debug.Log("headshots: ");
+        Debug.Log("Saved: " + HS);
+        Debug.Log("Local: " + localStats.headshots);
+
+        Debug.Log("GamesPlayed: ");
+        Debug.Log("Saved: " + gamesPlayed);
+
         PlayerPrefs.SetInt("Kills", kills + localStats.kills);
         PlayerPrefs.SetInt("Headshot", HS + localStats.headshots);
-        PlayerPrefs.SetInt("GamesPlayer", gamesPlayed + 1);
+        PlayerPrefs.SetInt("GamesPlayed", gamesPlayed + 1);
+
         if(winnerTeam == localStats.team)
         {
             PlayerPrefs.SetInt("GamesWon", gamesWon + 1);
@@ -485,9 +497,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     void RPC_WarmupEndStateChange()
     {
         currentGameState = GameState.WarmupEnd;
+        Invoke("deleteLocalWeapons", 2);
+    }
+    void deleteLocalWeapons()
+    {
         PlayerManager.Instance.DeleteAllWeapons();
     }
-
 
     public void EndWarmup()
     {

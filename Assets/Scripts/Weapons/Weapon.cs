@@ -20,8 +20,7 @@ public enum WeaponType
 public enum WeaponSlot
 {
     Primary,
-    Secondary,
-    Grenade
+    Secondary
 }
 [System.Serializable]
 public class WeaponInfo

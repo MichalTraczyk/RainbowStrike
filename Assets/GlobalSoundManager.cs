@@ -26,6 +26,10 @@ public class GlobalSoundManager : MonoBehaviour
         soundFXVolume = PlayerPrefs.GetFloat("soundFXVolume", 0.5f);
         footstepsVolume = PlayerPrefs.GetFloat("footstepsVolume", 0.5f);
         gunVolume = PlayerPrefs.GetFloat("gunVolume", 0.5f);
+
+        PlayerPrefs.SetFloat("soundFXVolume", soundFXVolume);
+        PlayerPrefs.SetFloat("footstepsVolume", footstepsVolume);
+        PlayerPrefs.SetFloat("gunVolume", gunVolume);
     }
 
     public void PlayGlobalSound(AudioClip clip)

@@ -14,8 +14,8 @@ GameObject:
   - component: {fileID: 6042444408423295911}
   - component: {fileID: 3248928094414880179}
   - component: {fileID: -6275624989442147328}
-  - component: {fileID: 6097593880681874711}
   - component: {fileID: -5414266922148124076}
+  - component: {fileID: 8926040853774558563}
   m_Layer: 0
   m_Name: Flashbang
   m_TagString: Grenade
@@ -101,7 +101,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 0
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!136 &3248928094414880179
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -135,26 +135,10 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 6097593880681874711}
+  - {fileID: 8926040853774558563}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &6097593880681874711
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2166876578539422730}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!114 &-5414266922148124076
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,3 +156,19 @@ MonoBehaviour:
   flashbangClip: {fileID: 8300000, guid: acd7ba9d056f37a42810b325c4b7c8cc, type: 3}
   particles: {fileID: 0}
   radius: 25
+--- !u!114 &8926040853774558563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2166876578539422730}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 0.2

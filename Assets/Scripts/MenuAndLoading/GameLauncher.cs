@@ -170,4 +170,8 @@ public class GameLauncher : MonoBehaviourPunCallbacks
     {
         map = newMap;
     }
+    public void ResetProgress()
+    {
+        PlayerPrefs.DeleteAll();
+    }
 }

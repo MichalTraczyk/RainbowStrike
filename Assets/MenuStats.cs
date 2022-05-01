@@ -19,6 +19,10 @@ public class MenuStats : MonoBehaviour
         int gamesPlayed = PlayerPrefs.GetInt("GamesPlayed");
         int gamesWon = PlayerPrefs.GetInt("GamesWon");
 
+        Debug.Log("Kills: " + kills);
+        Debug.Log("HS: " + HS);
+        Debug.Log("played: " + gamesPlayed);
+        Debug.Log("won: " + gamesWon);
 
         killsText.text = kills.ToString();
 
@@ -28,7 +32,8 @@ public class MenuStats : MonoBehaviour
         }
         else
         {
-            HSText.text = Mathf.RoundToInt((HS / kills) * 100).ToString();
+            float HSPercentage = HS*100 / kills;
+            HSText.text = Mathf.RoundToInt(HSPercentage).ToString();
         }
 
         GamesPlayedText.text = gamesPlayed.ToString();
@@ -40,7 +45,8 @@ public class MenuStats : MonoBehaviour
         }
         else
         {
-            WinratioText.text = Mathf.RoundToInt((gamesWon / gamesPlayed) * 100).ToString();
+            float winPrecentage = gamesWon * 100 / gamesPlayed;
+            WinratioText.text = Mathf.RoundToInt(winPrecentage).ToString();
         }
 
     }

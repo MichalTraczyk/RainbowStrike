@@ -9,9 +9,6 @@ using System;
 public class PlayerUI : MonoBehaviour
 {
     public GameObject shop;
-    //DO PRZENIESIENIA: COUNTDOWN
-    [Header("Countdown")]
-    public GameObject coundownPanel;
     [Header("Weapon UI")]
     public TextMeshProUGUI currentAmmo;
     public TextMeshProUGUI overallAmmo;
@@ -181,7 +178,7 @@ public class PlayerUI : MonoBehaviour
     {
         Weapon w = WeaponManager.Instance.GetWeaponByName(weaponName).GetComponent<Weapon>();
 
-        weaponInfoPanel.Setup(w.weaponName, w.baseDamage, w.bulletSpread, w.fireDecay, w.icon);
+        weaponInfoPanel.Setup(w.weaponName, w.baseDamage, w.bulletSpread, 60/w.fireDecay, w.icon);
 
 
     }

@@ -43377,8 +43377,8 @@ GameObject:
   - component: {fileID: 3995204284977505853}
   - component: {fileID: 6291149158132952468}
   - component: {fileID: 4985893694761413279}
-  - component: {fileID: 3292949081416162804}
   - component: {fileID: 7408785890193330814}
+  - component: {fileID: -2046958458982029407}
   m_Layer: 0
   m_Name: Frag
   m_TagString: Grenade
@@ -43498,26 +43498,10 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents:
-  - {fileID: 3292949081416162804}
+  - {fileID: -2046958458982029407}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
---- !u!114 &3292949081416162804
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2743952917080061498}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!114 &7408785890193330814
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43541,3 +43525,19 @@ MonoBehaviour:
     m_Bits: 128
   AudioContainer: {fileID: 113248636185683624, guid: 319bb4d72cd06704a8debcb7600a9740, type: 3}
   explosionGrenade: {fileID: 8300000, guid: 3fb6c8af0f41178438c0603a25c9e004, type: 3}
+--- !u!114 &-2046958458982029407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2743952917080061498}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64179f3720bbfe947b7724caa67b7c1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SynchronizeVelocity: 1
+  m_SynchronizeAngularVelocity: 0
+  m_TeleportEnabled: 1
+  m_TeleportIfDistanceGreaterThan: 0.2
