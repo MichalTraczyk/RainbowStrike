@@ -12,6 +12,11 @@ public class MouseLook : MonoBehaviour
 	//public Transform recoilT;
 
 	float rotY = 0f;
+	
+	float rotYMin = 0f;
+	float rotYMax = 0f;
+
+
 	float rotX = 0f;
 
 	Vector2 targetRecoil;
@@ -20,13 +25,18 @@ public class MouseLook : MonoBehaviour
 	PhotonView PV;
 	public GameObject[] camsToOff;
 	PlayerShooting handle;
-
+	PlayerMove PM;
 	float inputX;
 	float inputY;
+
+
+	bool limitedRotation = false;
+
     private void Awake()
     {
 		PV = GetComponent<PhotonView>();
 		handle = GetComponent<PlayerShooting>();
+		PM = GetComponent<PlayerMove>();
 	}
     private void Start()
     {
@@ -51,18 +61,38 @@ public class MouseLook : MonoBehaviour
 
 		//handle.ProceduralAnimation(inputX* PlayerSettings.Instance.mouseSensitivityX/15, inputY* PlayerSettings.Instance.mouseSensitivityY / 6);
 		
+
 		rotY += inputX * PlayerSettings.Instance.mouseSensitivityY/6;
 		rotX += inputY * PlayerSettings.Instance.mouseSensitivityX / 6;
+
+		if(limitedRotation)
+        {
+			rotY = Mathf.Clamp(rotY, rotYMin, rotYMax);
+        }
+
 		float targetX = rotX - targetRecoil.x;
 		targetX = Mathf.Clamp(targetX, minX, maxX);
 
 		transform.localEulerAngles = AngleLerp(transform.localEulerAngles,new Vector3(0, rotY + targetRecoil.y, 0),recoilSpeed*Time.deltaTime);
+
 		cam.transform.localEulerAngles = AngleLerp(cam.transform.localEulerAngles,new Vector3(-targetX, 0, 0),recoilSpeed*Time.deltaTime);
 	}
 
     private void FixedUpdate()
     {
 		handle.ProceduralAnimation(inputX* PlayerSettings.Instance.mouseSensitivityX / 15, inputY * inputY * PlayerSettings.Instance.mouseSensitivityY / 15);
+	}
+	public void SetRepel(float startRot,int range)
+    {
+		rotY = startRot;
+		rotYMin = startRot - range;
+		rotYMax = startRot + range;
+		limitedRotation = true;
+
+	}
+	public void StopRepel()
+    {
+		limitedRotation = false;
 	}
 
     public void AddRecoil(float x, float y)

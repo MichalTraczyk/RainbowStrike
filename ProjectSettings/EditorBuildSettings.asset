@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Dust.unity
     guid: a1db6774e8bb67c4bb2d384ec36ac49d
   - enabled: 1
+    path: Assets/Scenes/test.unity
+    guid: 34600a22ff31228428bc0cea0a91ae96
+  - enabled: 1
     path: Assets/Scenes/Mirage.unity
     guid: c4a5c888eb332dc4fad3eb38a5601e2b
   m_configObjects: {}

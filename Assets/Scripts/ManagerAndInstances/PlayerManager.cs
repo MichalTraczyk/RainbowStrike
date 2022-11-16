@@ -111,8 +111,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         {
             currentPlayerGameObject.GetComponent<PlayerMove>().DisablePlayer();
             currentPlayerGameObject.transform.position = getSpawnpoint();
-            //currentPlayerGameObject.GetComponent<PlayerMove>().EnablePlayer();
-
         }
         else
         {

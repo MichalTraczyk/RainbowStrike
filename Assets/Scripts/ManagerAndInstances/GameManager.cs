@@ -235,7 +235,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 Team t = Team.Null;
 
-                Debug.Log("Po³owa!!");
+                Debug.Log("Poï¿½owa!!");
                 Debug.Log("Old terro team " + currentTerroTeam);
 
                 if (currentTerroTeam == Team.Red)

@@ -104,6 +104,7 @@ MonoBehaviour:
   - RPC_PlayShellSound
   - RPC_AddHEadshot
   - RPC_SetGrenade
+  - RPC_RotatePlayer
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

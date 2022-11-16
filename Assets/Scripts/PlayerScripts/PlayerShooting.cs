@@ -233,16 +233,25 @@ public class PlayerShooting : MonoBehaviour
 
     IEnumerator FirstPersonGrenadeAnim()
     {
-        canShot = false;
-        handGFX.SetActive(true);
-        gunPos.gameObject.SetActive(false);
+        HideWeapons();
         animator.Play("ThrowGrenade1");
         yield return new WaitForSeconds(1.5f);
 
+        ShowWeapons();
+    }
+    public void HideWeapons()
+    {
+        canShot = false;
+        handGFX.SetActive(true);
+        gunPos.gameObject.SetActive(false);
+    }
+    public void ShowWeapons()
+    {
         gunPos.gameObject.SetActive(true);
         handGFX.SetActive(false);
         canShot = true;
     }
+
     void SpawnNewGrenade()
     {
         object[] senderData = new object[]
@@ -304,10 +313,6 @@ public class PlayerShooting : MonoBehaviour
         {
             normalCamera.SetActive(true);
             aimCamera.SetActive(false);
-            if(currentWeapon.shotCam != null)
-            {
-                //aimVolume.weight = 1;
-            }
         }
         if (currentWeapon != null)
             AnimatorUpdate();

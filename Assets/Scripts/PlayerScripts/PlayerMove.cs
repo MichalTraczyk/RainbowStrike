@@ -6,7 +6,8 @@ public enum MoveState
 {
     Walking,
     Running,
-    Crouching
+    Crouching,
+    Repeling
 }
 public class PlayerMove : MonoBehaviour
 {
@@ -14,12 +15,16 @@ public class PlayerMove : MonoBehaviour
     private CharacterController controller;
     public Transform groundCheck;
     public Transform camParent;
+    public Transform repelCheck;
 
     public Vector3 NormalCamPos;
     public Vector3 CrouchCamPos;
     public Vector3 CrouchWalkCamPos;
     public float crouchHeight;
     public LayerMask ground;
+    public LayerMask repel;
+    public Vector3 repelRight;
+
 
 
     private bool groundedPlayer;
@@ -84,8 +89,48 @@ public class PlayerMove : MonoBehaviour
             return;
         CrouchCameraLerp();
         MyInput();
-
+        RepelCheck();
         Move();
+    }
+    void RepelCheck()
+    {
+        RaycastHit hit;
+        if(Physics.Raycast(repelCheck.position, Vector3.down, out hit, 30, repel))
+        {
+            if(Input.GetKeyDown(KeyCode.L))
+            {
+                RaycastHit h;
+                if(Physics.Raycast(camParent.position,camParent.forward,out h,1.5f,ground))
+                {
+                    StartCoroutine(StartRepelCorut(-h.normal,h.point));
+                }
+            }
+        }
+    }
+    IEnumerator StartRepelCorut(Vector3 normal, Vector3 pos)
+    {
+        GetComponent<PlayerShooting>().HideWeapons();
+        transform.position = pos + normal / 2;
+        animator.Play("StartRepel");
+       // DisablePlayer();
+        yield return new WaitForSeconds(0.9f);
+       // EnablePlayer();
+        StartRepel(normal);
+        GetComponent<PlayerShooting>().ShowWeapons();
+    }
+    void StartRepel(Vector3 normal)
+    {
+        currentMoveState = MoveState.Repeling;
+        //rotatiting player towards valid 
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, normal);
+        GetComponent<MouseLook>().SetRepel(rotation.eulerAngles.y,45);
+        repelRight = Quaternion.Euler(0, 90, 0) * normal;
+
+    }
+    void StopRepel()
+    {
+        GetComponent<MouseLook>().StopRepel();
+        currentMoveState = MoveState.Walking;
     }
     void CrouchCameraLerp()
     {
@@ -100,28 +145,27 @@ public class PlayerMove : MonoBehaviour
     }
     void MyInput()
     {
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift) && currentMoveState != MoveState.Repeling)
         {
             if (currentMoveState == MoveState.Crouching)
                 StopCrouching();
 
             currentMoveState = MoveState.Running;
         }
-        if (Input.GetKeyUp(KeyCode.LeftShift))
+        if (Input.GetKeyUp(KeyCode.LeftShift) && currentMoveState == MoveState.Running)
         {
-            if (currentMoveState == MoveState.Running)
-                currentMoveState = MoveState.Walking;
+            currentMoveState = MoveState.Walking;
         }
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKeyDown(KeyCode.LeftControl) && currentMoveState != MoveState.Repeling)
         {
             StartCrouching();
         }
-        if (Input.GetKeyUp(KeyCode.LeftControl))
+        if (Input.GetKeyUp(KeyCode.LeftControl) && currentMoveState == MoveState.Crouching)
         {
-            if (currentMoveState == MoveState.Crouching)
-                StopCrouching();
+             StopCrouching();
         }
     }
+    
     void Move()
     {
         switch (currentMoveState)
@@ -142,11 +186,6 @@ public class PlayerMove : MonoBehaviour
 
         //Ground check
         groundedPlayer = Physics.CheckSphere(groundCheck.position, 0.2f, ground);
-        if (groundedPlayer && yVelocity.y < 0)
-        {
-            yVelocity.y = -2f;
-        }
-
 
         float x = 0;
         float z = 0;
@@ -154,6 +193,48 @@ public class PlayerMove : MonoBehaviour
         {
             x = Input.GetAxis("Horizontal");
             z = Input.GetAxis("Vertical");
+        }
+
+        if(currentMoveState == MoveState.Repeling)
+        {
+            Vector3 input = repelRight * x + transform.up * z;
+            Vector3 finalMove = Vector3.zero;
+
+
+
+            if(Input.GetKeyDown(KeyCode.K))
+            {
+                StopRepel();
+            }
+            if ((x > 0 && RepelMoveCheck(1)) || (x < 0 && RepelMoveCheck(-1)))
+            {
+                Debug.Log("boki can");
+                finalMove.x += input.x;
+                finalMove.z += input.z;
+            }
+
+            if (input.y > 0 && RepelMoveCheck(0))
+            {
+                Debug.Log("up can");
+                finalMove.y += input.y;
+            }
+            else if (input.y < 0)
+                finalMove.y += input.y;
+
+            readVelocity = finalMove;
+
+            Debug.Log("input: " + input);
+            Debug.Log("final: " + finalMove);
+
+
+            controller.Move(finalMove*1 * Time.deltaTime); 
+            return;
+        }
+
+
+        if (groundedPlayer && yVelocity.y < 0)
+        {
+            yVelocity.y = -2f;
         }
         //Setting the animatior
         animator.SetFloat("velx", x);
@@ -185,12 +266,20 @@ public class PlayerMove : MonoBehaviour
     public void DisablePlayer()
     {
         GetComponent<CharacterController>().enabled = false;
+        GetComponent<MouseLook>().StopRepel();
         GetComponent<PlayerShooting>().enabled = false;
         GetComponent<PlayerShooting>().HardStopAiming();
         canMove = false;
         currentMoveState = MoveState.Walking;
         GetComponent<PlayerShooting>().AnimatorUpdate();
 
+    }
+    bool RepelMoveCheck(int dir)
+    {
+        //RaycastHit hit;
+        Ray r = new Ray(transform.up + transform.position + repelRight/6 * dir, Vector3.up);
+        //return Physics.Raycast(r, out hit, Mathf.Infinity, repel);
+        return Physics.Raycast(r,Mathf.Infinity, repel);
     }
     public void EnablePlayer()
     {
