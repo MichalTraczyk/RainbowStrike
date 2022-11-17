@@ -105,6 +105,7 @@ MonoBehaviour:
   - RPC_AddHEadshot
   - RPC_SetGrenade
   - RPC_RotatePlayer
+  - RPC_PlayLocalAndOnlineAnimation
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

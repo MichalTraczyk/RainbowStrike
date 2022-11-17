@@ -189,8 +189,11 @@ public class PlayerShooting : MonoBehaviour
     [PunRPC]
     void RPC_AddLean(int lean)
     {
-        currentLean += lean;
-        currentLean = Mathf.Clamp(currentLean, -1, 1);
+        if (lean == currentLean)
+            currentLean = 0;
+        else
+            currentLean = lean;
+
         leanT = 0;
         currentLeanPos = leanContainer.localPosition;
         currentLeanRot = leanContainer.localEulerAngles;
@@ -302,7 +305,6 @@ public class PlayerShooting : MonoBehaviour
     }
     public void HardStopAiming()
     {
-        Debug.Log("chuj");
         if(currentWeapon != null)
         {
             gunPos.transform.localPosition = currentWeapon.hipfireOffset;

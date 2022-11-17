@@ -47,15 +47,21 @@ public class PlayerMove : MonoBehaviour
     Vector3 targetLerp;
 
     //Refrences
+    PlayerAnimationHelper animHelper;
+    MouseLook playerMouseLook;
     Animator animator;
     PhotonView PV;
     PlayerAudioManager audioManager;
+    PlayerShooting playerShooting;
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
+        playerMouseLook = GetComponent<MouseLook>();
         controller = gameObject.GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         audioManager = GetComponent<PlayerAudioManager>();
+        animHelper = GetComponent<PlayerAnimationHelper>();
+        playerShooting = GetComponent<PlayerShooting>();
         targetLerp = NormalCamPos;
     }
     void StartCrouching()
@@ -91,45 +97,134 @@ public class PlayerMove : MonoBehaviour
         MyInput();
         RepelCheck();
         Move();
+
+        if(Input.GetKeyDown(KeyCode.P))
+        {
+            StartCoroutine(jumpIntoWindow());
+        }
+
     }
+    #region Repeling and window jumping
+    IEnumerator jumpIntoWindow()
+    {
+        DisablePlayer();
+        Vector3 targetBack = -transform.forward;
+        targetBack.y = 0;
+
+        Vector3 startPos = transform.position;
+        Vector3 change = Vector3.zero;
+        float angle = 0;
+
+        //up movement
+        float t = 0;
+        float speed = 1.5f;
+        float sin;
+        while(t < 1)
+        {
+            angle = ((3 * Mathf.PI) / 2);
+            angle += Mathf.PI * t / 2;
+
+            sin = Mathf.Sin(angle);
+
+            change = targetBack * (sin+1) * 1.5f;
+            change.y = sin + 1;
+            transform.position = startPos + change;
+
+            t += Time.deltaTime * speed;
+
+            yield return new WaitForEndOfFrame();
+        }
+        //down movement
+        t = 0;
+        Vector3 startPos2 = transform.position;
+        speed *= 2;
+        while (t < 1)
+        {
+            transform.position = Vector3.Lerp(startPos2, startPos, t);
+            t += Time.deltaTime * speed;
+            yield return new WaitForEndOfFrame();
+        }
+
+        //front movement
+        t = 0;
+        while (t < 1)
+        {
+            change = -targetBack * 1.5f * t;
+            transform.position = startPos + change;
+            t += Time.deltaTime * speed;
+            yield return new WaitForEndOfFrame();
+        }
+        EnablePlayer();
+    }
+
     void RepelCheck()
     {
-        RaycastHit hit;
-        if(Physics.Raycast(repelCheck.position, Vector3.down, out hit, 30, repel))
+        if (Input.GetKeyDown(KeyCode.L))
         {
-            if(Input.GetKeyDown(KeyCode.L))
+            if(currentMoveState != MoveState.Repeling)
             {
-                RaycastHit h;
-                if(Physics.Raycast(camParent.position,camParent.forward,out h,1.5f,ground))
+                RaycastHit hit;
+                if (Physics.Raycast(repelCheck.position, Vector3.down, out hit, 30, repel))
                 {
-                    StartCoroutine(StartRepelCorut(-h.normal,h.point));
+                    Debug.Log("StartRepel");
+                    RaycastHit h;
+                    if (Physics.Raycast(camParent.position, camParent.forward, out h, 5f, ground))
+                    {
+                        StartCoroutine(StartRepelCorut(-h.normal, h.point));
+                    }
+
                 }
+            }
+            else
+            {
+                StopRepel();
             }
         }
     }
     IEnumerator StartRepelCorut(Vector3 normal, Vector3 pos)
     {
-        GetComponent<PlayerShooting>().HideWeapons();
-        transform.position = pos + normal / 2;
-        animator.Play("StartRepel");
-       // DisablePlayer();
+        playerShooting.HideWeapons();
+
+        controller.enabled = false;
+        
+        //Calculating how far player is from a wall
+        Vector3 alongWall = Quaternion.Euler(0,90,0) * normal;
+        Vector3 pointOnWall = new Vector3(pos.x, transform.position.y, pos.z);
+        Ray ray = new Ray(pointOnWall, alongWall);
+        float distance = Vector3.Cross(ray.direction, transform.position - ray.origin).magnitude;
+
+        //Moving player so its always fixed distance from a wall
+        transform.position = transform.position + normal*distance + -normal/1.5f;
+
+        //Rotating player towards a wall
+        Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, normal);
+        playerMouseLook.SetRepel(rotation.eulerAngles.y, 45);
+
+        //Playing animations
+        animHelper.PlayLocalAndOnlineAnimation("StartRepel", "StartRepelOnline");
+        
         yield return new WaitForSeconds(0.9f);
-       // EnablePlayer();
+
+
+        controller.enabled = true;
+        
+        
         StartRepel(normal);
-        GetComponent<PlayerShooting>().ShowWeapons();
+        playerShooting.ShowWeapons();
     }
     void StartRepel(Vector3 normal)
     {
+
         currentMoveState = MoveState.Repeling;
-        //rotatiting player towards valid 
-        Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, normal);
-        GetComponent<MouseLook>().SetRepel(rotation.eulerAngles.y,45);
         repelRight = Quaternion.Euler(0, 90, 0) * normal;
 
     }
+
+#endregion
     void StopRepel()
     {
-        GetComponent<MouseLook>().StopRepel();
+        Debug.Log("Stoping the repel");
+        playerMouseLook.StopRepel();
         currentMoveState = MoveState.Walking;
     }
     void CrouchCameraLerp()
@@ -200,12 +295,6 @@ public class PlayerMove : MonoBehaviour
             Vector3 input = repelRight * x + transform.up * z;
             Vector3 finalMove = Vector3.zero;
 
-
-
-            if(Input.GetKeyDown(KeyCode.K))
-            {
-                StopRepel();
-            }
             if ((x > 0 && RepelMoveCheck(1)) || (x < 0 && RepelMoveCheck(-1)))
             {
                 Debug.Log("boki can");
@@ -223,8 +312,6 @@ public class PlayerMove : MonoBehaviour
 
             readVelocity = finalMove;
 
-            Debug.Log("input: " + input);
-            Debug.Log("final: " + finalMove);
 
 
             controller.Move(finalMove*1 * Time.deltaTime); 
@@ -265,13 +352,13 @@ public class PlayerMove : MonoBehaviour
     }
     public void DisablePlayer()
     {
-        GetComponent<CharacterController>().enabled = false;
-        GetComponent<MouseLook>().StopRepel();
-        GetComponent<PlayerShooting>().enabled = false;
-        GetComponent<PlayerShooting>().HardStopAiming();
+        controller.enabled = false;
+        playerMouseLook.StopRepel();
+        playerShooting.enabled = false;
+        playerShooting.HardStopAiming();
         canMove = false;
         currentMoveState = MoveState.Walking;
-        GetComponent<PlayerShooting>().AnimatorUpdate();
+        playerShooting.AnimatorUpdate();
 
     }
     bool RepelMoveCheck(int dir)
@@ -284,9 +371,9 @@ public class PlayerMove : MonoBehaviour
     public void EnablePlayer()
     {
         GetComponent<CharacterController>().enabled = true;
-        GetComponent<PlayerShooting>().enabled = true;
+        playerShooting.enabled = true;
         canMove = true;
-        GetComponent<PlayerShooting>().AnimatorUpdate();
+        playerShooting.AnimatorUpdate();
     }
     public bool isWalking()
     {
