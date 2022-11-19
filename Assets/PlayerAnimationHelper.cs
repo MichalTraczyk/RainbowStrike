@@ -21,7 +21,9 @@ public class PlayerAnimationHelper : MonoBehaviourPunCallbacks
     {
         if (PV.IsMine && !l.Equals(""))
             animator.Play(l);
+        
         else if(!PV.IsMine && !n.Equals(""))
             animator.Play(n);
+        
     }
 }

@@ -121,7 +121,7 @@ public class PlayerShooting : MonoBehaviour
             return;
 
         //Grenade input
-        if (Input.GetKeyDown(KeyCode.F) && currentGrenade != "")
+        if (Input.GetKeyDown(KeyCode.F) && currentGrenade != "" && interact.currInteract != null)
         {
             StartCoroutine(ThrowGrenade());
         }
@@ -200,7 +200,6 @@ public class PlayerShooting : MonoBehaviour
 
         desiredLeanPos = defaultCamPosition + new Vector3(leanOffsetPosition.x * currentLean, leanOffsetPosition.y * Mathf.Abs(currentLean), leanOffsetPosition.z * Mathf.Abs(currentLean));
         desiredLeanRot = defaultCamRotation + new Vector3(leanOffsetRotation.x * Mathf.Abs(currentLean), leanOffsetRotation.y * Mathf.Abs(currentLean), leanOffsetRotation.z * currentLean);
-        Debug.Log("desired: " + desiredLeanRot);
     }
 
     public void ResetLean()
@@ -560,7 +559,13 @@ public class PlayerShooting : MonoBehaviour
         bool hitEnemy = false;
         if (Physics.Raycast(shotPos, aimpos, out hit, Mathf.Infinity, shotLayers))
         {
-            Debug.Log("dist: " + Vector3.Distance(transform.position,hit.point));
+            WindowPart wp = hit.transform.GetComponent<WindowPart>();
+            if(wp!= null)
+            {
+                wp.HitThis();
+            }
+            
+
             PlayerCollider enemyCollider = hit.transform.GetComponent<PlayerCollider>();
             if (enemyCollider != null)
             {
@@ -579,6 +584,7 @@ public class PlayerShooting : MonoBehaviour
                     ShowHitmarker();
 
             }
+
             PV.RPC("RPC_HitParticles", RpcTarget.All,hitEnemy,hit.point,hit.normal);
         }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using Photon.Pun;
 public enum MoveState
 {
@@ -35,6 +36,12 @@ public class PlayerMove : MonoBehaviour
     public float jumpHeight = 1.0f;
     public float gravityValue = -20.81f;
     public bool canMove = true;
+
+    [Header("Repel and Window Jumping")]
+    bool canJumpIntoWindow = false, isJumpingIntoWindow = false;
+    public float repelSpeed = 1;
+    public float jumpSpeedModifier = 1.6f;
+    public TextMeshProUGUI jumpText;
 
 
     float normalHeight;
@@ -98,16 +105,12 @@ public class PlayerMove : MonoBehaviour
         RepelCheck();
         Move();
 
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            StartCoroutine(jumpIntoWindow());
-        }
-
     }
     #region Repeling and window jumping
     IEnumerator jumpIntoWindow()
     {
         DisablePlayer();
+        isJumpingIntoWindow = true;
         Vector3 targetBack = -transform.forward;
         targetBack.y = 0;
 
@@ -137,7 +140,7 @@ public class PlayerMove : MonoBehaviour
         //down movement
         t = 0;
         Vector3 startPos2 = transform.position;
-        speed *= 2;
+        speed *= jumpSpeedModifier;
         while (t < 1)
         {
             transform.position = Vector3.Lerp(startPos2, startPos, t);
@@ -155,30 +158,43 @@ public class PlayerMove : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         EnablePlayer();
+        isJumpingIntoWindow = false;
+        canJumpIntoWindow = false;
     }
 
     void RepelCheck()
     {
-        if (Input.GetKeyDown(KeyCode.L))
+        jumpText.text = "";
+        if(canJumpIntoWindow && !isJumpingIntoWindow)
         {
-            if(currentMoveState != MoveState.Repeling)
-            {
-                RaycastHit hit;
-                if (Physics.Raycast(repelCheck.position, Vector3.down, out hit, 30, repel))
-                {
-                    Debug.Log("StartRepel");
-                    RaycastHit h;
-                    if (Physics.Raycast(camParent.position, camParent.forward, out h, 5f, ground))
-                    {
-                        StartCoroutine(StartRepelCorut(-h.normal, h.point));
-                    }
+            jumpText.text = "Press space to jump!";
+            if(Input.GetButtonDown("Jump"))
+                StartCoroutine(jumpIntoWindow());
+        }
 
-                }
-            }
-            else
+        if (isJumpingIntoWindow)
+            return;
+        if (currentMoveState != MoveState.Repeling && Physics.Raycast(repelCheck.position, Vector3.down, 30, repel))
+        {
+            jumpText.text = "Press space to start repel!";
+
+            if (!Input.GetButtonDown("Jump"))
+                return;
+
+            RaycastHit h;
+            if (Physics.Raycast(camParent.position, camParent.forward, out h, 5f, ground))
             {
-                StopRepel();
+                StartCoroutine(StartRepelCorut(-h.normal, h.point));
             }
+
+        }
+        else if(currentMoveState == MoveState.Repeling)
+        {
+            if(jumpText.text.Equals(""))
+                jumpText.text = "Press space to stop repel!";
+
+            if(Input.GetButtonDown("Jump"))
+                StopRepel();
         }
     }
     IEnumerator StartRepelCorut(Vector3 normal, Vector3 pos)
@@ -214,10 +230,8 @@ public class PlayerMove : MonoBehaviour
     }
     void StartRepel(Vector3 normal)
     {
-
         currentMoveState = MoveState.Repeling;
         repelRight = Quaternion.Euler(0, 90, 0) * normal;
-
     }
 
 #endregion
@@ -314,7 +328,7 @@ public class PlayerMove : MonoBehaviour
 
 
 
-            controller.Move(finalMove*1 * Time.deltaTime); 
+            controller.Move(finalMove* repelSpeed * Time.deltaTime); 
             return;
         }
 
@@ -333,6 +347,9 @@ public class PlayerMove : MonoBehaviour
         //Setting the read velocity for other scripts
         readVelocity = move;
 
+        if (!controller.enabled)
+            return;
+            
         //Moving 
         controller.Move(move * speed * Time.deltaTime);
 
@@ -385,5 +402,16 @@ public class PlayerMove : MonoBehaviour
         }
 
         return walking;
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Window")
+            canJumpIntoWindow = true;
+
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "Window")
+            canJumpIntoWindow = false;
     }
 }

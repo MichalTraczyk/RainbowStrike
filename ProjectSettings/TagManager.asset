@@ -11,6 +11,7 @@ TagManager:
   - Grenade
   - DamageVolume
   - DyingVolume
+  - Window
   layers:
   - Default
   - TransparentFX
@@ -28,8 +29,8 @@ TagManager:
   - Bombsite
   - RetroScreen
   - Repel
-  - 
-  - 
+  - Window
+  - WindowJump
   - 
   - 
   - 

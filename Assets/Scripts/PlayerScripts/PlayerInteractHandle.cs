@@ -10,14 +10,14 @@ public class PlayerInteractHandle : MonoBehaviour
     public LayerMask layers2;
     private void LateUpdate()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.F))
         {
             if (currInteract != null)
             {
                 currInteract.onKeyPressed.Invoke();
             }
         }
-        if (Input.GetKeyUp(KeyCode.E))
+        if (Input.GetKeyUp(KeyCode.F))
         {
             if (currInteract != null)
                 currInteract.onKeyrelased.Invoke();
