@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class WindowPart : MonoBehaviour
 {
-    Window parentScript;
+    Barricade parentScript;
 
     private void Awake()
     {
-        parentScript = GetComponentInParent<Window>();
+        parentScript = GetComponentInParent<Barricade>();
         parentScript.addPart(this);
     }
     public void HitThis()
