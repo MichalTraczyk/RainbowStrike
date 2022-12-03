@@ -35,6 +35,7 @@ public class PlayerShooting : MonoBehaviour
     int currentLean = 0;
     float leanT;
 
+    public float force = 50;
 
 
     [Header("Weapons")]
@@ -564,7 +565,15 @@ public class PlayerShooting : MonoBehaviour
             {
                 wp.HitThis();
             }
+
+            DestructiblePart wall = hit.transform.GetComponent<DestructiblePart>();
+            if(wall != null)
+            {
+                Debug.Log("wykrytwo strzał");
+                wall.Hit(hit.point, 0.2f, force);
+            }
             
+
 
             PlayerCollider enemyCollider = hit.transform.GetComponent<PlayerCollider>();
             if (enemyCollider != null)

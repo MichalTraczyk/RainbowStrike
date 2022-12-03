@@ -107,6 +107,8 @@ MonoBehaviour:
   - RPC_RotatePlayer
   - RPC_PlayLocalAndOnlineAnimation
   - RPC_OnHit
+  - RPC_GenerateBoom
+  - RPC_HitWall
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

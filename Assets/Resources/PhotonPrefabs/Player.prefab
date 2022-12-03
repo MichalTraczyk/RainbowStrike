@@ -2439,12 +2439,13 @@ MonoBehaviour:
   markerPrefab: {fileID: 5962055404996893575, guid: 9115efa37945f1b4a9c7c063e354ab78, type: 3}
   shotLayers:
     serializedVersion: 2
-    m_Bits: 65729
+    m_Bits: 327873
   gunPos: {fileID: 3142150597065738946}
   hitmarkerSound: {fileID: 8300000, guid: 2c1a00831a0ce11418ec1d9dd066730b, type: 3}
   leanContainer: {fileID: 5691341662956498016}
   leanOffsetPosition: {x: 0.18, y: 0, z: 0}
   leanOffsetRotation: {x: 0, y: 0, z: -20}
+  force: 500
   currentWeapon: {fileID: 0}
   primaryWeapon: {fileID: 0}
   secondaryWeapon: {fileID: 0}
