@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class PlayerAnimationHelper : MonoBehaviourPunCallbacks
 {
-    public PhotonView PV;
-    public Animator animator;
+    PhotonView PV;
+    Animator animator;
     private void Awake()
     {
         PV = GetComponent<PhotonView>();

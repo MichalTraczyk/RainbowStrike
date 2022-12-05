@@ -109,6 +109,10 @@ MonoBehaviour:
   - RPC_OnHit
   - RPC_GenerateBoom
   - RPC_HitWall
+  - RPC_StartReinforcing
+  - RPC_SetOnlineAndLocalBool
+  - RPC_Reinforce
+  - RPC_StopReinforcing
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

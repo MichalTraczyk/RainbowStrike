@@ -77,9 +77,11 @@ public class PlayerShooting : MonoBehaviour
         defaultCamPosition = leanContainer.localPosition;
         defaultCamRotation = leanContainer.localRotation.eulerAngles;
         playerUI = GetComponent<PlayerUI>();
+        
     }
     private void Start()
     {
+        handGFX.SetActive(false);
         //aimVolume = GameObject.FindGameObjectWithTag("AimVolume").GetComponent<Volume>();
     }
     public void UpdateUI()
@@ -246,10 +248,12 @@ public class PlayerShooting : MonoBehaviour
     {
         canShot = false;
         handGFX.SetActive(true);
+        Debug.Log("Hands active: " + handGFX.activeSelf);
         gunPos.gameObject.SetActive(false);
     }
     public void ShowWeapons()
     {
+        Debug.Log("Hands was active: " + handGFX.activeSelf);
         gunPos.gameObject.SetActive(true);
         handGFX.SetActive(false);
         canShot = true;
