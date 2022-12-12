@@ -18,7 +18,7 @@ public class Barricade : MonoBehaviourPunCallbacks
     }
     private void Start()
     {
-        activeParts = allParts;
+        activeParts = new List<WindowPart>(allParts);
 
         if (destroyedAtStart)
             DestroyThis();
@@ -37,7 +37,7 @@ public class Barricade : MonoBehaviourPunCallbacks
         WindowPart wp = activeParts[indexOf];
         wp.gameObject.SetActive(false);
         activeParts.RemoveAt(indexOf);
-
+        Debug.Log("On hit: " + activeParts.Count + " " + neededToDestroy + "");
         if (activeParts.Count + neededToDestroy <= allParts.Count)
         {
             DestroyThis();

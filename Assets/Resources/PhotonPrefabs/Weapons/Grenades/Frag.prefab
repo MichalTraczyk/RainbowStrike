@@ -43520,9 +43520,9 @@ MonoBehaviour:
   baseDmgPerPart: 10
   dmgLoss: 0.5
   radius: 7
-  playerColliderLayers:
+  colliderLayers:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 327808
   AudioContainer: {fileID: 113248636185683624, guid: 319bb4d72cd06704a8debcb7600a9740, type: 3}
   explosionGrenade: {fileID: 8300000, guid: 3fb6c8af0f41178438c0603a25c9e004, type: 3}
 --- !u!114 &-2046958458982029407

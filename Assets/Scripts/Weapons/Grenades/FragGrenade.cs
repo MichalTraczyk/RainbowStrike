@@ -8,7 +8,7 @@ public class FragGrenade : Grenade
     public float baseDmgPerPart;
     public float dmgLoss;
     public float radius;
-    public LayerMask playerColliderLayers;
+    public LayerMask colliderLayers;
     public GameObject AudioContainer;
     public AudioClip explosionGrenade;
     private void Start()
@@ -27,9 +27,10 @@ public class FragGrenade : Grenade
     public override void Trigger()
     {
         PV.RPC("RPC_PlayParticles", RpcTarget.All);
-        Collider[] colliders = Physics.OverlapSphere(transform.position, radius, playerColliderLayers);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius, colliderLayers);
         foreach (Collider c in colliders)
         {
+            Debug.Log("1");
             PlayerCollider pc = c.GetComponent<PlayerCollider>();
             if (pc != null)
             {
@@ -37,6 +38,23 @@ public class FragGrenade : Grenade
                 int damage = Mathf.RoundToInt(baseDmgPerPart - dmgLoss * dist);
                 damage = Mathf.Clamp(damage, 0, 100);
                 pc.Damage(damage, sender, "Grenade", transform.position);
+            }
+
+            Debug.Log("2");
+            WindowPart wp = c.transform.GetComponent<WindowPart>();
+            if (wp != null)
+            {
+                wp.HitThis();
+            }
+
+            
+            Debug.Log("3");
+            DestructiblePart wall = c.transform.GetComponent<DestructiblePart>();
+            Debug.Log(wall);
+            if (wall != null)
+            {
+                Debug.Log("Hitting wall!");
+                wall.Hit(transform.position, radius/3,500);
             }
         }
 

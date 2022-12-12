@@ -56,7 +56,6 @@ public class ToTakeWeapon : MonoBehaviour
     }
     public void PickUpWeapon()
     {
-        Debug.Log("trying to pickup");
         GetComponent<Interactable>().owner.GetComponent<PlayerWeaponSwap>().TrySetWeapon(weaponName, 0, PhotonNetwork.LocalPlayer, scope, magazineAmmo, maxAmmo);
         DestroyThis();
     }    

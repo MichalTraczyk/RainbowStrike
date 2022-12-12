@@ -36,7 +36,6 @@ public class PlayerSettings : MonoBehaviour
         FieldOfView = PlayerPrefs.GetFloat("FOV",60);
         mouseSensitivityX = PlayerPrefs.GetFloat("MouseX",7);
         mouseSensitivityY = PlayerPrefs.GetFloat("MouseY",7);
-        Debug.Log("owo");
         SlidersSetup();
     }
 

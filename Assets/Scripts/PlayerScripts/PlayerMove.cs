@@ -38,7 +38,7 @@ public class PlayerMove : MonoBehaviour
     public bool canMove = true;
 
     [Header("Repel and Window Jumping")]
-    bool canJumpIntoWindow = false, isJumpingIntoWindow = false;
+    bool canJumpIntoWindow = false, inJumpingIntoSomething = false;
     public float repelSpeed = 1;
     public float jumpSpeedModifier = 1.6f;
     public TextMeshProUGUI jumpText;
@@ -60,6 +60,9 @@ public class PlayerMove : MonoBehaviour
     PhotonView PV;
     PlayerAudioManager audioManager;
     PlayerShooting playerShooting;
+
+
+    public Transform test;
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
@@ -110,7 +113,7 @@ public class PlayerMove : MonoBehaviour
     IEnumerator jumpIntoWindow()
     {
         DisablePlayer();
-        isJumpingIntoWindow = true;
+        inJumpingIntoSomething = true;
         Vector3 targetBack = -transform.forward;
         targetBack.y = 0;
 
@@ -158,23 +161,69 @@ public class PlayerMove : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         EnablePlayer();
-        isJumpingIntoWindow = false;
+        inJumpingIntoSomething = false;
         canJumpIntoWindow = false;
     }
+    IEnumerator jumpOnTheRoof()
+    {
+        DisablePlayer();
+        inJumpingIntoSomething = true;
+        Vector3 playerFront = Quaternion.Euler(0, -90, 0) * repelRight;
+        RaycastHit hit;
+        Ray ray = new Ray(transform.position + playerFront + Vector3.up,Vector3.down);
+        float t = 0;
+        float lerpSpeed = 2;
+        if(Physics.Raycast(ray,out hit,3,ground))
+        {
+            Vector3 startPos = transform.position;
+            Vector3 targetPos = transform.position;
+            targetPos.y = hit.point.y;
 
+            while(t<=1)
+            {
+                t = Mathf.Clamp01(t);
+                transform.position = Vector3.Lerp(startPos, targetPos, t);
+                t += Time.deltaTime * lerpSpeed;
+                yield return new WaitForEndOfFrame();
+            }
+
+            t = 0;
+            startPos = transform.position;
+            targetPos = hit.point;
+            while (t <= 1)
+            {
+                t = Mathf.Clamp01(t);
+                transform.position = Vector3.Lerp(startPos, targetPos, t);
+                t += Time.deltaTime * lerpSpeed;
+                yield return new WaitForEndOfFrame();
+            }
+        }
+        EnablePlayer();
+        inJumpingIntoSomething = false;
+    }
     void RepelCheck()
     {
         jumpText.text = "";
-        if(canJumpIntoWindow && !isJumpingIntoWindow)
+        if(canJumpIntoWindow && !inJumpingIntoSomething)
         {
             jumpText.text = "Press space to jump!";
             if(Input.GetButtonDown("Jump"))
                 StartCoroutine(jumpIntoWindow());
         }
 
-        if (isJumpingIntoWindow)
+        if (inJumpingIntoSomething)
             return;
-        if (currentMoveState != MoveState.Repeling && Physics.Raycast(repelCheck.position, Vector3.down, 30, repel))
+
+
+        if (!RepelMoveCheck(0) && currentMoveState == MoveState.Repeling)
+        {
+            jumpText.text = "Press space to jump on the roof!";
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                StartCoroutine(jumpOnTheRoof());
+            }
+        }
+        else if (currentMoveState != MoveState.Repeling && Physics.Raycast(repelCheck.position, Vector3.down, 30, repel))
         {
             jumpText.text = "Press space to start repel!";
 
@@ -315,11 +364,11 @@ public class PlayerMove : MonoBehaviour
                 finalMove.x += input.x;
                 finalMove.z += input.z;
             }
-
             if (input.y > 0 && RepelMoveCheck(0))
-            {
+            {       
                 Debug.Log("up can");
                 finalMove.y += input.y;
+                
             }
             else if (input.y < 0)
                 finalMove.y += input.y;
@@ -381,7 +430,7 @@ public class PlayerMove : MonoBehaviour
     bool RepelMoveCheck(int dir)
     {
         //RaycastHit hit;
-        Ray r = new Ray(transform.up + transform.position + repelRight/6 * dir, Vector3.up);
+        Ray r = new Ray((transform.up+Vector3.down * Mathf.Abs(dir) * 0.2f) + transform.position + repelRight/6 * dir, Vector3.up);
         //return Physics.Raycast(r, out hit, Mathf.Infinity, repel);
         return Physics.Raycast(r,Mathf.Infinity, repel);
     }
