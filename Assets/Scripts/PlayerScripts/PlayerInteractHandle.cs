@@ -7,7 +7,6 @@ public class PlayerInteractHandle : MonoBehaviour
     public Interactable currInteract;
     public Transform rayStart;
     public LayerMask layers;
-    public LayerMask layers2;
     private void LateUpdate()
     {
         if (Input.GetKeyDown(KeyCode.F))
@@ -24,7 +23,7 @@ public class PlayerInteractHandle : MonoBehaviour
         }
 
         RaycastHit hit;
-        if (Physics.Raycast(rayStart.position, rayStart.forward, out hit, 4, layers))
+        if (Physics.Raycast(rayStart.position, rayStart.forward, out hit, 2, layers))
         {
             if (currInteract == null)
             {
@@ -44,12 +43,6 @@ public class PlayerInteractHandle : MonoBehaviour
             currInteract = null;
         }
         UpdateUI();
-
-        //RaycastHit hit2;
-        //if (Physics.Raycast(rayStart.position, rayStart.forward, out hit2, Mathf.Infinity, layers2))
-        //{
-       //     Debug.Log(Vector3.Distance(transform.position, hit2.point));
-       // }
     }
     public void UpdateUI()
     {

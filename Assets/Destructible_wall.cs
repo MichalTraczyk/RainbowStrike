@@ -13,7 +13,22 @@ public class Destructible_wall : Destructible
     public float timeToReinforce;
     float reinforceTimer;
     Player playerWhoIsReinforcing;
+    public GameObject interactObject;
 
+    public Material baseMaterial;
+    public Material reinforceMaterial;
+
+
+    void OnReset()
+    {
+        Repair();
+        isReinforced = false;
+        MeshRenderer[] rends = GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer mr in rends)
+        {
+            mr.material = baseMaterial;
+        }
+    }
     public override void Update()
     {
         base.Update();
@@ -33,9 +48,7 @@ public class Destructible_wall : Destructible
             return;
 
         //Play Animation
-        PlayerManager.Instance.currentPlayerGameObject.GetComponent<PlayerShooting>().HideWeapons();
-
-        PlayerManager.Instance.currentPlayerGameObject.GetComponent<Animator>().SetBool("Reinforcing", true);
+        StartInteraction();
         PV.RPC("RPC_StartReinforcing", RpcTarget.All, PhotonNetwork.LocalPlayer);
     }
 
@@ -65,8 +78,6 @@ public class Destructible_wall : Destructible
         isBeingReinforced = false;
         reinforceTimer = 0;
     }
-
-
     public void Reinforce()
     {
         PV.RPC("RPC_Reinforce", RpcTarget.All);
@@ -75,14 +86,25 @@ public class Destructible_wall : Destructible
     [PunRPC]
     void RPC_Reinforce()
     {
-        Destroy(GetComponent<Interactable>());
+        interactObject.SetActive(false);
         isReinforced = true;
+        Repair();
+        MeshRenderer[] rends = GetComponentsInChildren<MeshRenderer>();
+        foreach(MeshRenderer mr in rends)
+        {
+            mr.material = reinforceMaterial;
+        }
     }
+
+
+
 
     [PunRPC]
     void RPC_HitWall(Vector3 pos, float range, float force, bool hard)
     {
-        RPC_HitWallOnParent(pos, range, force, hard);
+        if (isReinforced && !hard)
+            return;
+        RPC_HitWallOnParent(pos, range, force);
     }
 
 

@@ -43519,7 +43519,7 @@ MonoBehaviour:
   particles: {fileID: 599864025}
   baseDmgPerPart: 10
   dmgLoss: 0.5
-  radius: 7
+  radius: 5
   colliderLayers:
     serializedVersion: 2
     m_Bits: 327808

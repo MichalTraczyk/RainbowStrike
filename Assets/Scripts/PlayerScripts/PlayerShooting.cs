@@ -151,7 +151,7 @@ public class PlayerShooting : MonoBehaviour
             PV.RPC("RPC_AddLean", RpcTarget.All, -1);
         }
         //lean right
-        if (Input.GetKeyDown(KeyCode.E) && interact.currInteract == null)
+        if (Input.GetKeyDown(KeyCode.E))
         {
             PV.RPC("RPC_AddLean", RpcTarget.All, 1);
         }
@@ -561,22 +561,13 @@ public class PlayerShooting : MonoBehaviour
         bool hitEnemy = false;
         if (Physics.Raycast(shotPos, aimpos, out hit, Mathf.Infinity, shotLayers))
         {
-            WindowPart wp = hit.transform.GetComponent<WindowPart>();
-            if(wp!= null)
-            {
-                wp.HitThis();
-            }
-
             DestructiblePart wall = hit.transform.GetComponent<DestructiblePart>();
             if(wall != null)
             {
                 Debug.Log("wykrytwo strzał");
-                wall.Hit(hit.point, 0.2f, force);
+                wall.Hit(hit.point, 0.05f, force);
             }
-            
-
-
-            PlayerCollider enemyCollider = hit.transform.GetComponent<PlayerCollider>();
+                        PlayerCollider enemyCollider = hit.transform.GetComponent<PlayerCollider>();
             if (enemyCollider != null)
             {
                 float distance = Vector3.Distance(transform.position, hit.point);

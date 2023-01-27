@@ -10,12 +10,13 @@ public class Interactable : MonoBehaviour
     public UnityEvent onKeyrelased;
     public string MessageTosShow;
     public PlayerInteractHandle owner;
-
-    private void Start()
+    public void TeamCheck()
     {
-        if(!Contains(teamsThatCan, PlayerManager.Instance.localPlayerTeam))
+        Debug.Log("team czek " + PlayerManager.Instance.localPlayerTeam + "should be destoreyd? " + !Contains(teamsThatCan, PlayerManager.Instance.localPlayerTeam));
+
+        if (!Contains(teamsThatCan, PlayerManager.Instance.localPlayerTeam))
         {
-            Destroy(this);
+            GetComponent<BoxCollider>().enabled = false;
         }
     }
     private void OnDestroy()

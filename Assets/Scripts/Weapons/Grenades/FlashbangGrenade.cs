@@ -7,7 +7,6 @@ public class FlashbangGrenade : Grenade
 {
     public AudioClip flashbangClip;
     public Transform particles;
-    public float radius;
     private void Start()
     {
         if (!PV.IsMine)
@@ -42,7 +41,6 @@ public class FlashbangGrenade : Grenade
     }
     void GenerateEffects()
     {
-        return; 
         particles.parent = null;
         particles.rotation = Quaternion.identity;
         particles.GetComponent<ParticleSystem>().Play();

@@ -113,6 +113,9 @@ MonoBehaviour:
   - RPC_SetOnlineAndLocalBool
   - RPC_Reinforce
   - RPC_StopReinforcing
+  - RPC_Repair
+  - RPC_StartRepairing
+  - RPC_StopRepairing
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -473,6 +473,11 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void OnPlayerSetTeam()
     {
         PV.RPC("RPC_OnPlayerSetTeam", RpcTarget.All);
+        Interactable[] interacts = FindObjectsOfType<Interactable>();
+        foreach(Interactable i in interacts)
+        {
+            i.TeamCheck();
+        }
     }
 
 

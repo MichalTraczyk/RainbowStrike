@@ -7,7 +7,6 @@ public class FragGrenade : Grenade
     public Transform particles;
     public float baseDmgPerPart;
     public float dmgLoss;
-    public float radius;
     public LayerMask colliderLayers;
     public GameObject AudioContainer;
     public AudioClip explosionGrenade;
@@ -34,34 +33,26 @@ public class FragGrenade : Grenade
             PlayerCollider pc = c.GetComponent<PlayerCollider>();
             if (pc != null)
             {
+                bool behindWall;
+                behindWall = CheckIfBehindCover(transform.position, pc.transform.position);
+
                 float dist = Vector3.Distance(transform.position, c.transform.position);
                 int damage = Mathf.RoundToInt(baseDmgPerPart - dmgLoss * dist);
                 damage = Mathf.Clamp(damage, 0, 100);
                 pc.Damage(damage, sender, "Grenade", transform.position);
             }
-
-            Debug.Log("2");
-            WindowPart wp = c.transform.GetComponent<WindowPart>();
-            if (wp != null)
-            {
-                wp.HitThis();
-            }
-
-            
             Debug.Log("3");
             DestructiblePart wall = c.transform.GetComponent<DestructiblePart>();
             Debug.Log(wall);
-            if (wall != null)
+            if (wall != null && !CheckIfBehindCover(wall.transform.position,transform.position))
             {
                 Debug.Log("Hitting wall!");
                 wall.Hit(transform.position, radius/3,500);
             }
         }
 
-        if (PV.IsMine)
-        {
-            Invoke("DisableThis", destroyTimeAfterTrigger);
-        }
+        Invoke("DisableThis", destroyTimeAfterTrigger);
+        
     }
     
     [PunRPC]

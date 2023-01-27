@@ -8,8 +8,7 @@ public class BridgeGrenade : Grenade
     public Transform particles;
     public float baseDmgPerPart;
     public float dmgLoss;
-    public float radius;
-    public LayerMask playerColliderLayers;
+    public LayerMask colliderLayers;
     public GameObject AudioContainer;
     public AudioClip explosionGrenade;
     private void Start()
@@ -20,6 +19,9 @@ public class BridgeGrenade : Grenade
     }
     private void OnCollisionEnter(Collision collision)
     {
+        GetComponent<Rigidbody>().isKinematic = true;
+        transform.rotation = Quaternion.LookRotation(collision.contacts[0].normal);
+
         if (PV.IsMine)
         {
             Invoke("Trigger", delay);
@@ -28,9 +30,10 @@ public class BridgeGrenade : Grenade
     public override void Trigger()
     {
         PV.RPC("RPC_PlayParticles", RpcTarget.All);
-        Collider[] colliders = Physics.OverlapSphere(transform.position, radius, playerColliderLayers);
+        Collider[] colliders = Physics.OverlapSphere(transform.position, radius, colliderLayers);
         foreach (Collider c in colliders)
         {
+            Debug.Log("1");
             PlayerCollider pc = c.GetComponent<PlayerCollider>();
             if (pc != null)
             {
@@ -39,12 +42,18 @@ public class BridgeGrenade : Grenade
                 damage = Mathf.Clamp(damage, 0, 100);
                 pc.Damage(damage, sender, "Grenade", transform.position);
             }
+            Debug.Log("3");
+
+            DestructiblePart wall = c.transform.GetComponent<DestructiblePart>();
+            Debug.Log(wall);
+            if (wall != null)
+            {
+                Debug.Log("Hitting wall!");
+                wall.Hit(transform.position, radius / 3, 500,true);
+            }
         }
 
-        if (PV.IsMine)
-        {
-            Invoke("DisableThis", destroyTimeAfterTrigger);
-        }
+        Invoke("DisableThis", destroyTimeAfterTrigger);
     }
 
     [PunRPC]
