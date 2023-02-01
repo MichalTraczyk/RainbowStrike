@@ -23,7 +23,7 @@ public class Destructible_Barricade : Destructible
         if (destroyedAtStart)
             DestroyAll();
 
-        jumpCollider.SetActive(jumpable);
+        jumpCollider.SetActive(false);
         onReset.AddListener(OnReset);
         onHit.AddListener(OnHit);
         InteractCheck();
@@ -32,13 +32,11 @@ public class Destructible_Barricade : Destructible
     void OnReset()
     {
         interactObject.SetActive(true);
+        checkIfJumpable();
     }
     void OnHit()
     {
-        if(pieces.Count <= 3 && jumpable)
-        {
-            jumpCollider.SetActive(true);
-        }
+        checkIfJumpable();
         InteractCheck();
     }
     void InteractCheck()
@@ -48,10 +46,11 @@ public class Destructible_Barricade : Destructible
     [PunRPC]
     void RPC_HitWall(Vector3 pos, float range, float force, bool hard)
     {
+        Debug.Log("Rpc");
         if (pieces.Count + neededToDestroy <= allPieces.Count)
             DestroyAll();
         else
-            RPC_HitWallOnParent(pos, range, force);
+            HitWallOnParent(pos, range, force);
     }
 
     public override void Update()
@@ -82,7 +81,18 @@ public class Destructible_Barricade : Destructible
         isBeingRepaired = true;
         playerWhoIsReinforcing = p;
     }
+    void checkIfJumpable()
+    {
 
+        //if window isnt set to be jumpable or 
+        if (!jumpable || allPieces.Count - pieces.Count < 2)
+        {
+            jumpCollider.SetActive(false);
+            return;
+        }
+        jumpCollider.SetActive(true);
+
+    }
 
     public void StopRepairing()
     {
@@ -116,6 +126,11 @@ public class Destructible_Barricade : Destructible
         Repair();
     }
 
+    public void OnJump()
+    {
+        Debug.Log("on jump!");
+        PV.RPC("RPC_HitWall", RpcTarget.All, transform.position, 2f, 1000f, true);
+    }
 
 
 

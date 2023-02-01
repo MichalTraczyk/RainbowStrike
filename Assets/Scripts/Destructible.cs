@@ -37,7 +37,7 @@ public class Destructible : MonoBehaviourPunCallbacks
         }
         allPieces = new List<Rigidbody>(pieces);
     }
-    protected void RPC_HitWallOnParent(Vector3 pos, float range, float force)
+    protected void HitWallOnParent(Vector3 pos, float range, float force)
     {
         Collider[] c = Physics.OverlapSphere(pos, range, wallLayers);
         foreach (Collider col in c)
@@ -73,7 +73,6 @@ public class Destructible : MonoBehaviourPunCallbacks
     {
         if (t < cooldown)
             return;
-        Debug.Log("hit on wall");
         t = 0;
         PV.RPC("RPC_HitWall", RpcTarget.All, pos, range, force,hard);
     }

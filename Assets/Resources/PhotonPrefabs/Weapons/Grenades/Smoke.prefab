@@ -9490,6 +9490,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   delay: 2
   destroyTimeAfterTrigger: 15
+  radius: 0
   particles: {fileID: 1364783873}
 --- !u!114 &-1467378396558949176
 MonoBehaviour:

@@ -16,7 +16,6 @@ public class PlayerMove : MonoBehaviour
     private CharacterController controller;
     public Transform groundCheck;
     public Transform camParent;
-    public Transform repelCheck;
 
     public Vector3 NormalCamPos;
     public Vector3 CrouchCamPos;
@@ -26,6 +25,7 @@ public class PlayerMove : MonoBehaviour
     public LayerMask repel;
     public Vector3 repelRight;
 
+    bool atRepelPos = false;
 
 
     private bool groundedPlayer;
@@ -38,7 +38,7 @@ public class PlayerMove : MonoBehaviour
     public bool canMove = true;
 
     [Header("Repel and Window Jumping")]
-    bool canJumpIntoWindow = false, inJumpingIntoSomething = false;
+    bool canJumpIntoWindow = false, isJumpingIntoSomething = false;
     public float repelSpeed = 1;
     public float jumpSpeedModifier = 1.6f;
     public TextMeshProUGUI jumpText;
@@ -60,7 +60,6 @@ public class PlayerMove : MonoBehaviour
     PhotonView PV;
     PlayerAudioManager audioManager;
     PlayerShooting playerShooting;
-
 
     public Transform test;
     private void Awake()
@@ -100,7 +99,6 @@ public class PlayerMove : MonoBehaviour
 
     void Update()
     {
-
         if (!PV.IsMine || GlobalUIManager.Instance.paused)
             return;
         CrouchCameraLerp();
@@ -110,10 +108,46 @@ public class PlayerMove : MonoBehaviour
 
     }
     #region Repeling and window jumping
+    bool RepelMoveCheck(int dir)
+    {
+        //RaycastHit hit;
+        Ray r = new Ray((transform.up + Vector3.down * Mathf.Abs(dir) * 0.2f) + transform.position + repelRight / 6 * dir, Vector3.up);
+        return Physics.Raycast(r, Mathf.Infinity, repel);
+    }
+    bool canStartRepel()
+    {
+        if (currentMoveState == MoveState.Repeling)
+            return false;
+        if (!atRepelPos)
+            return false;
+
+        return true;
+    }
+    private bool CanJumpIntoWindow()
+    {
+        if (currentMoveState != MoveState.Repeling)
+            return false;
+        if (!canJumpIntoWindow)
+            return false;
+        if (isJumpingIntoSomething)
+            return false;
+
+        return true;
+    }
+    private bool CanJumpOnTheRoof()
+    {
+        if (RepelMoveCheck(0))
+            return false;
+        if (currentMoveState != MoveState.Repeling)
+            return false;
+        return true;
+    }
+
+
     IEnumerator jumpIntoWindow()
     {
         DisablePlayer();
-        inJumpingIntoSomething = true;
+        isJumpingIntoSomething = true;
         Vector3 targetBack = -transform.forward;
         targetBack.y = 0;
 
@@ -151,6 +185,17 @@ public class PlayerMove : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
+
+        //Destroy window here
+        RaycastHit hit;
+        Debug.Log("start???");
+        if(Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, Mathf.Infinity))
+        {
+            Debug.Log(LayerMask.LayerToName(hit.transform.gameObject.layer));
+            hit.transform.GetComponentInParent<Destructible_Barricade>().OnJump();
+        }
+
+
         //front movement
         t = 0;
         while (t < 1)
@@ -161,20 +206,31 @@ public class PlayerMove : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         EnablePlayer();
-        inJumpingIntoSomething = false;
+        isJumpingIntoSomething = false;
         canJumpIntoWindow = false;
     }
     IEnumerator jumpOnTheRoof()
     {
         DisablePlayer();
-        inJumpingIntoSomething = true;
+        isJumpingIntoSomething = true;
+        
+
+        //calculating where is the player front
         Vector3 playerFront = Quaternion.Euler(0, -90, 0) * repelRight;
         RaycastHit hit;
+        
+        //ray from the player up and front towards the ground - should detect roof to step on
         Ray ray = new Ray(transform.position + playerFront + Vector3.up,Vector3.down);
+
+
         float t = 0;
         float lerpSpeed = 2;
+
+        //if detected ground to step on
         if(Physics.Raycast(ray,out hit,3,ground))
         {
+
+            //player moves up at start
             Vector3 startPos = transform.position;
             Vector3 targetPos = transform.position;
             targetPos.y = hit.point.y;
@@ -187,6 +243,7 @@ public class PlayerMove : MonoBehaviour
                 yield return new WaitForEndOfFrame();
             }
 
+            //and then moves on the point 
             t = 0;
             startPos = transform.position;
             targetPos = hit.point;
@@ -199,23 +256,23 @@ public class PlayerMove : MonoBehaviour
             }
         }
         EnablePlayer();
-        inJumpingIntoSomething = false;
+        isJumpingIntoSomething = false;
     }
     void RepelCheck()
     {
         jumpText.text = "";
-        if(canJumpIntoWindow && !inJumpingIntoSomething)
+        if (CanJumpIntoWindow())
         {
             jumpText.text = "Press space to jump!";
-            if(Input.GetButtonDown("Jump"))
+            if (Input.GetButtonDown("Jump"))
                 StartCoroutine(jumpIntoWindow());
         }
 
-        if (inJumpingIntoSomething)
+        if (isJumpingIntoSomething)
             return;
 
 
-        if (!RepelMoveCheck(0) && currentMoveState == MoveState.Repeling)
+        if(CanJumpOnTheRoof())
         {
             jumpText.text = "Press space to jump on the roof!";
             if (Input.GetKeyDown(KeyCode.Space))
@@ -223,7 +280,7 @@ public class PlayerMove : MonoBehaviour
                 StartCoroutine(jumpOnTheRoof());
             }
         }
-        else if (currentMoveState != MoveState.Repeling && Physics.Raycast(repelCheck.position, Vector3.down, 30, repel))
+        else if (canStartRepel())
         {
             jumpText.text = "Press space to start repel!";
 
@@ -237,15 +294,16 @@ public class PlayerMove : MonoBehaviour
             }
 
         }
-        else if(currentMoveState == MoveState.Repeling)
+        else if (currentMoveState == MoveState.Repeling)
         {
-            if(jumpText.text.Equals(""))
+            if (jumpText.text.Equals(""))
                 jumpText.text = "Press space to stop repel!";
 
-            if(Input.GetButtonDown("Jump"))
+            if (Input.GetButtonDown("Jump"))
                 StopRepel();
         }
     }
+
     IEnumerator StartRepelCorut(Vector3 normal, Vector3 pos)
     {
         playerShooting.HideWeapons();
@@ -282,14 +340,13 @@ public class PlayerMove : MonoBehaviour
         currentMoveState = MoveState.Repeling;
         repelRight = Quaternion.Euler(0, 90, 0) * normal;
     }
-
-#endregion
     void StopRepel()
     {
-        Debug.Log("Stoping the repel");
         playerMouseLook.StopRepel();
         currentMoveState = MoveState.Walking;
     }
+
+#endregion
     void CrouchCameraLerp()
     {
         if((Mathf.Abs(readVelocity.x) + Mathf.Abs(readVelocity.z) > 0.1f) && currentMoveState == MoveState.Crouching)
@@ -360,13 +417,11 @@ public class PlayerMove : MonoBehaviour
 
             if ((x > 0 && RepelMoveCheck(1)) || (x < 0 && RepelMoveCheck(-1)))
             {
-                Debug.Log("boki can");
                 finalMove.x += input.x;
                 finalMove.z += input.z;
             }
             if (input.y > 0 && RepelMoveCheck(0))
             {       
-                Debug.Log("up can");
                 finalMove.y += input.y;
                 
             }
@@ -427,13 +482,6 @@ public class PlayerMove : MonoBehaviour
         playerShooting.AnimatorUpdate();
 
     }
-    bool RepelMoveCheck(int dir)
-    {
-        //RaycastHit hit;
-        Ray r = new Ray((transform.up+Vector3.down * Mathf.Abs(dir) * 0.2f) + transform.position + repelRight/6 * dir, Vector3.up);
-        //return Physics.Raycast(r, out hit, Mathf.Infinity, repel);
-        return Physics.Raycast(r,Mathf.Infinity, repel);
-    }
     public void EnablePlayer()
     {
         GetComponent<CharacterController>().enabled = true;
@@ -457,10 +505,16 @@ public class PlayerMove : MonoBehaviour
         if (other.tag == "Window")
             canJumpIntoWindow = true;
 
+        if (other.tag == "RepelStartPos")
+            atRepelPos = true;
+
     }
     private void OnTriggerExit(Collider other)
     {
         if (other.tag == "Window")
             canJumpIntoWindow = false;
+
+        if (other.tag == "RepelStartPos")
+            atRepelPos = false;
     }
 }

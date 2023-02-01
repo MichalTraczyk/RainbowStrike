@@ -104,7 +104,7 @@ public class Destructible_wall : Destructible
     {
         if (isReinforced && !hard)
             return;
-        RPC_HitWallOnParent(pos, range, force);
+        HitWallOnParent(pos, range, force);
     }
 
 

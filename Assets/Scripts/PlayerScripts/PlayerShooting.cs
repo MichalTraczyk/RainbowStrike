@@ -185,7 +185,6 @@ public class PlayerShooting : MonoBehaviour
             leanContainer.localEulerAngles = AngleLerp(currentLeanRot, desiredLeanRot, leanT * 3);
             leanT += Time.deltaTime;
         }
-
     }
 
     [PunRPC]
@@ -445,12 +444,10 @@ public class PlayerShooting : MonoBehaviour
             if (currentWeapon.currentAmmoOverall >= neededAmmo)
             {
                 yield return new WaitForSeconds(currentWeapon.reloadTime);
-                //r = neededAmmo;
             }
             else
             {
                 yield return new WaitForSeconds(currentWeapon.noAmmoReloadTime);
-                //r = currentWeapon.currentAmmoOverall;
             }
         }
         currentWeapon.animator.ResetTrigger("Shot");
@@ -463,11 +460,9 @@ public class PlayerShooting : MonoBehaviour
         {
             currentWeapon.currentAmmoMagazine += neededAmmo;
             currentWeapon.currentAmmoOverall -= neededAmmo;
-            //currentWeapon.animator.SetInteger("ammoToReloadLeft", neededAmmo);
         }
         else
         {
-            //currentWeapon.animator.SetInteger("ammoToReloadLeft", currentWeapon.currentAmmoOverall);
             currentWeapon.currentAmmoMagazine += currentWeapon.currentAmmoOverall;
             currentWeapon.currentAmmoOverall = 0;
         }
@@ -564,7 +559,6 @@ public class PlayerShooting : MonoBehaviour
             DestructiblePart wall = hit.transform.GetComponent<DestructiblePart>();
             if(wall != null)
             {
-                Debug.Log("wykrytwo strzał");
                 wall.Hit(hit.point, 0.05f, force);
             }
                         PlayerCollider enemyCollider = hit.transform.GetComponent<PlayerCollider>();
