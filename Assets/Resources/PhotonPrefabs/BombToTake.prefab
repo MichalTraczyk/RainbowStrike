@@ -101,7 +101,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3373bd722a1ff1409a15450ba748253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teamsThatCan: 0000000001000000
+  canTTUseIt: 1
+  canCTuseIt: 1
   onKeyPressed:
     m_PersistentCalls:
       m_Calls:
@@ -122,6 +123,7 @@ MonoBehaviour:
       m_Calls: []
   MessageTosShow: Press e to take the bomb
   owner: {fileID: 0}
+  shouldBeEnabled: 1
 --- !u!114 &980684994584931407
 MonoBehaviour:
   m_ObjectHideFlags: 0

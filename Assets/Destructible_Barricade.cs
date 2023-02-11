@@ -24,15 +24,19 @@ public class Destructible_Barricade : Destructible
             DestroyAll();
 
         jumpCollider.SetActive(false);
-        onReset.AddListener(OnReset);
         onHit.AddListener(OnHit);
         InteractCheck();
+        isBeingRepaired = false;
     }
 
-    void OnReset()
+    public override void ResetCompletly()
     {
+        onReset.Invoke();
         interactObject.SetActive(true);
         checkIfJumpable();
+        InteractCheck();
+        Repair();
+        isBeingRepaired = false;
     }
     void OnHit()
     {
@@ -46,7 +50,6 @@ public class Destructible_Barricade : Destructible
     [PunRPC]
     void RPC_HitWall(Vector3 pos, float range, float force, bool hard)
     {
-        Debug.Log("Rpc");
         if (pieces.Count + neededToDestroy <= allPieces.Count)
             DestroyAll();
         else
@@ -96,7 +99,6 @@ public class Destructible_Barricade : Destructible
 
     public void StopRepairing()
     {
-        Debug.Log("Trying to stop?");
         if (playerWhoIsReinforcing != PhotonNetwork.LocalPlayer)
             return;
 
@@ -128,10 +130,6 @@ public class Destructible_Barricade : Destructible
 
     public void OnJump()
     {
-        Debug.Log("on jump!");
         PV.RPC("RPC_HitWall", RpcTarget.All, transform.position, 2f, 1000f, true);
     }
-
-
-
 }

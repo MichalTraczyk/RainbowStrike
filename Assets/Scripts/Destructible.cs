@@ -7,7 +7,7 @@ using System;
 using UnityEngine.Events;
 
 [SelectionBase]
-public class Destructible : MonoBehaviourPunCallbacks
+public abstract class Destructible : MonoBehaviourPunCallbacks
 {
     [SerializeField]public bool soft { get; private set; }
 
@@ -95,10 +95,7 @@ public class Destructible : MonoBehaviourPunCallbacks
         }
         onHit.Invoke();
     }
-    private void ResetCompletly()
-    {
-        onReset.Invoke();
-    }
+    public abstract void ResetCompletly();
 
     protected void StartInteraction()
     {

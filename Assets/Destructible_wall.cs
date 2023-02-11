@@ -19,16 +19,6 @@ public class Destructible_wall : Destructible
     public Material reinforceMaterial;
 
 
-    void OnReset()
-    {
-        Repair();
-        isReinforced = false;
-        MeshRenderer[] rends = GetComponentsInChildren<MeshRenderer>();
-        foreach (MeshRenderer mr in rends)
-        {
-            mr.material = baseMaterial;
-        }
-    }
     public override void Update()
     {
         base.Update();
@@ -69,6 +59,7 @@ public class Destructible_wall : Destructible
 
         PlayerManager.Instance.currentPlayerGameObject.GetComponent<PlayerShooting>().ShowWeapons();
         PlayerManager.Instance.currentPlayerGameObject.GetComponent<Animator>().SetBool("Reinforcing", false);
+        PlayerManager.Instance.currentPlayerGameObject.GetComponent<PlayerMove>().EnablePlayer();
         PV.RPC("RPC_StopReinforcing", RpcTarget.All);
     }
     [PunRPC]
@@ -107,5 +98,15 @@ public class Destructible_wall : Destructible
         HitWallOnParent(pos, range, force);
     }
 
-
+    public override void ResetCompletly()
+    {  
+        onReset.Invoke();
+        Repair();
+        isReinforced = false;
+        MeshRenderer[] rends = GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer mr in rends)
+        {
+            mr.material = baseMaterial;
+        }
+    }
 }

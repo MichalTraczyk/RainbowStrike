@@ -57,7 +57,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3373bd722a1ff1409a15450ba748253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teamsThatCan: 01000000
+  canTTUseIt: 0
+  canCTuseIt: 1
   onKeyPressed:
     m_PersistentCalls:
       m_Calls:
@@ -90,6 +91,7 @@ MonoBehaviour:
         m_CallState: 2
   MessageTosShow: F to reinforce
   owner: {fileID: 0}
+  shouldBeEnabled: 1
 --- !u!1 &5556686167726318764
 GameObject:
   m_ObjectHideFlags: 0
@@ -25244,6 +25246,8 @@ MonoBehaviour:
   cooldown: 0.1
   timeToReinforce: 4
   interactObject: {fileID: 2760147365517380865}
+  baseMaterial: {fileID: 2100000, guid: be7cb4ec88d4e924dab526c189ee5f05, type: 2}
+  reinforceMaterial: {fileID: 2100000, guid: 2d9823cbdaef91a49a4c7a39452237dc, type: 2}
 --- !u!1 &5556686169602104151
 GameObject:
   m_ObjectHideFlags: 0

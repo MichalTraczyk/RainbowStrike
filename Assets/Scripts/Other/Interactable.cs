@@ -5,18 +5,49 @@ using UnityEngine.Events;
 
 public class Interactable : MonoBehaviour
 {
-    public Team[] teamsThatCan= {Team.Red,Team.Blue};
+    public bool canTTUseIt = true;
+    public bool canCTuseIt = true;
+    
     public UnityEvent onKeyPressed;
     public UnityEvent onKeyrelased;
     public string MessageTosShow;
     public PlayerInteractHandle owner;
+    public bool shouldBeEnabled = true;
     public void TeamCheck()
     {
-        Debug.Log("team czek " + PlayerManager.Instance.localPlayerTeam + "should be destoreyd? " + !Contains(teamsThatCan, PlayerManager.Instance.localPlayerTeam));
 
-        if (!Contains(teamsThatCan, PlayerManager.Instance.localPlayerTeam))
+        Team t = PlayerManager.Instance.localPlayerTeam;
+        Team terroTeam = GameManager.Instance.currentTerroTeam;
+
+        if (t == terroTeam)//if players is in terro
         {
-            GetComponent<BoxCollider>().enabled = false;
+            //and terro can use it
+            if(canTTUseIt)
+            {
+                shouldBeEnabled = true;
+            }
+            else
+            {
+                shouldBeEnabled = false;
+            }
+        }          
+        else if(t != terroTeam)//if player is playing CT
+        {
+            if (canCTuseIt)
+            {
+                shouldBeEnabled = true;
+            }
+            else
+            {
+                shouldBeEnabled = false;
+            }
+        }
+        Debug.Log("team czek " + PlayerManager.Instance.localPlayerTeam + "should be destoreyd? " + shouldBeEnabled);
+
+        Collider[] cols = GetComponents<Collider>();
+        foreach(Collider c in cols)
+        {
+            c.enabled = shouldBeEnabled;
         }
     }
     private void OnDestroy()
@@ -31,14 +62,5 @@ public class Interactable : MonoBehaviour
                 h.UpdateUI();
             }
         }
-    }
-    bool Contains(Team[] arr, Team t)
-    {
-        foreach(Team team in arr)
-        {
-            if (team == t)
-                return true;
-        }
-        return false;
     }
 }

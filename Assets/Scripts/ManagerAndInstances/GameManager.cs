@@ -124,10 +124,12 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             if (currentTerroTeam == Team.Red)
             {
+                Debug.Log("Win blue team!");
                 Win(Team.Blue, "rip czas");
             }
             else
             {
+                Debug.Log("Win red team");
                 Win(Team.Red, "rip czas");
             }
             currentGameState = GameState.RoundEnd;
@@ -308,17 +310,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
         PlayerStats localStats = getStatsByPlayer(PhotonNetwork.LocalPlayer);
 
-        Debug.Log("Saving kills: ");
-        Debug.Log("Saved: " + kills);
-        Debug.Log("local: " + localStats.kills);
-
-        Debug.Log("headshots: ");
-        Debug.Log("Saved: " + HS);
-        Debug.Log("Local: " + localStats.headshots);
-
-        Debug.Log("GamesPlayed: ");
-        Debug.Log("Saved: " + gamesPlayed);
-
         PlayerPrefs.SetInt("Kills", kills + localStats.kills);
         PlayerPrefs.SetInt("Headshot", HS + localStats.headshots);
         PlayerPrefs.SetInt("GamesPlayed", gamesPlayed + 1);
@@ -357,6 +348,18 @@ public class GameManager : MonoBehaviourPunCallbacks
         GlobalUIManager.Instance.StartCountdown(Mathf.RoundToInt(timeBeforeRoundStart));
         GlobalUIManager.Instance.BombDefused();
         currentGameState = GameState.RoundPrepare;
+
+        Interactable[] interacts = FindObjectsOfType<Interactable>();
+        foreach (Interactable i in interacts)
+        {
+            i.TeamCheck();
+        }
+        
+        Destructible[] ds = FindObjectsOfType<Destructible>();
+        foreach(Destructible d in ds)
+        {
+            d.ResetCompletly();
+        }
 
         //teleport or spawn new player localy
         PlayerManager.Instance.GenerateNewPlayer();

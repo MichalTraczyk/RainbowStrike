@@ -103,7 +103,8 @@ public class PlayerMove : MonoBehaviour
             return;
         CrouchCameraLerp();
         MyInput();
-        RepelCheck();
+        if(PlayerManager.Instance.localPlayerTeam == GameManager.Instance.currentTerroTeam)
+            RepelCheck();
         Move();
 
     }
@@ -192,7 +193,9 @@ public class PlayerMove : MonoBehaviour
         if(Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, Mathf.Infinity))
         {
             Debug.Log(LayerMask.LayerToName(hit.transform.gameObject.layer));
-            hit.transform.GetComponentInParent<Destructible_Barricade>().OnJump();
+            Destructible_Barricade db = hit.transform.GetComponentInParent<Destructible_Barricade>();
+            if(db != null)
+                db.OnJump();
         }
 
 

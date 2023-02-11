@@ -57,7 +57,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3373bd722a1ff1409a15450ba748253, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teamsThatCan: 01000000
+  canTTUseIt: 0
+  canCTuseIt: 1
   onKeyPressed:
     m_PersistentCalls:
       m_Calls:
