@@ -42,7 +42,6 @@ public class Interactable : MonoBehaviour
                 shouldBeEnabled = false;
             }
         }
-        Debug.Log("team czek " + PlayerManager.Instance.localPlayerTeam + "should be destoreyd? " + shouldBeEnabled);
 
         Collider[] cols = GetComponents<Collider>();
         foreach(Collider c in cols)

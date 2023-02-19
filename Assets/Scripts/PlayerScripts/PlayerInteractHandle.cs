@@ -18,8 +18,7 @@ public class PlayerInteractHandle : MonoBehaviour
         }
         if (Input.GetKeyUp(KeyCode.F))
         {
-            if (currInteract != null)
-                currInteract.onKeyrelased.Invoke();
+            cancelInteract();
         }
 
         RaycastHit hit;
@@ -43,6 +42,11 @@ public class PlayerInteractHandle : MonoBehaviour
             currInteract = null;
         }
         UpdateUI();
+    }
+    public void cancelInteract()
+    {
+        if (currInteract != null)
+            currInteract.onKeyrelased.Invoke();
     }
     public void UpdateUI()
     {

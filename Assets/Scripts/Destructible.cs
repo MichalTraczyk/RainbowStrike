@@ -39,6 +39,7 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
     }
     protected void HitWallOnParent(Vector3 pos, float range, float force)
     {
+        Debug.Log("2");
         Collider[] c = Physics.OverlapSphere(pos, range, wallLayers);
         foreach (Collider col in c)
         {
@@ -51,19 +52,26 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
     }
     void RemovePart(Rigidbody r,Vector3 pos,float range, float force)
     {
+        Debug.Log("3");
         r.isKinematic = false;
         pieces.Remove(r);
+
         StartCoroutine(ResetPart(r, r.position,r.rotation));
-        r.AddExplosionForce(force, pos, range);
+        r.AddExplosionForce(force, pos, range,0,ForceMode.Acceleration);
         onHit.Invoke();
     }
     IEnumerator ResetPart(Rigidbody part,Vector3 startPos,Quaternion startRot)
     {
         yield return new WaitForSeconds(2);
+
         part.isKinematic = true;
         part.transform.position = startPos;
         part.transform.rotation = startRot;
-        part.gameObject.SetActive(false);
+
+        if(GameManager.Instance.currentGameState == GameState.RoundEnd || GameManager.Instance.currentGameState == GameState.RoundPrepare)
+            part.gameObject.SetActive(true);
+        else
+            part.gameObject.SetActive(false);
     }
     public virtual void Update()
     {
@@ -91,7 +99,6 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
         foreach(Rigidbody r in pieces)
         {
             r.gameObject.SetActive(true);
-            r.isKinematic = true;
         }
         onHit.Invoke();
     }

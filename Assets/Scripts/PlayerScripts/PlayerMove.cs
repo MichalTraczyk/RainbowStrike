@@ -483,6 +483,7 @@ public class PlayerMove : MonoBehaviour
         canMove = false;
         currentMoveState = MoveState.Walking;
         playerShooting.AnimatorUpdate();
+        GetComponent<PlayerInteractHandle>().cancelInteract();
 
     }
     public void EnablePlayer()
