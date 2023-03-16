@@ -8772,7 +8772,7 @@ MonoBehaviour:
   timeToReinforce: 4
   interactObject: {fileID: 2760147365517380865}
   baseMaterial: {fileID: 2100000, guid: 1a33c682e9e124b4494956e1b313c085, type: 2}
-  reinforceMaterial: {fileID: 0}
+  reinforceMaterial: {fileID: 2100000, guid: 43b9cbc46aa8bec46883ce6a52129db9, type: 2}
 --- !u!1 &5679620894086688259
 GameObject:
   m_ObjectHideFlags: 0

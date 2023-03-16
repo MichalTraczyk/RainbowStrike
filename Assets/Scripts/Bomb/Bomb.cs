@@ -33,6 +33,8 @@ public class Bomb : MonoBehaviour
     PhotonView PV;
     private float tickTimer;
 
+    public GameObject blinkGO;
+
     private void Start()
     {
         GlobalSoundManager.Instance.PlayGlobalSound(plantSound);
@@ -81,6 +83,7 @@ public class Bomb : MonoBehaviour
         tickTimer += Time.deltaTime;
         if (tickTimer > Mathf.Clamp(baseTickOffset * bombBumTime / startBumTime, 0.1f, 2) && bombBumTime > 0)
         {
+            StartCoroutine(blink());
             source.PlayOneShot(TickSound, GlobalSoundManager.Instance.soundFXVolume);
             tickTimer = 0;
         }
@@ -98,6 +101,14 @@ public class Bomb : MonoBehaviour
         }
 
     }
+
+    IEnumerator blink()
+    {
+        blinkGO.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        blinkGO.SetActive(false);
+    }
+
     void Bum()
     {
         GameManager.Instance.OnBombBum();
