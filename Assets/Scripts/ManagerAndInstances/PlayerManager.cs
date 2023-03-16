@@ -12,6 +12,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public static PlayerManager Instance;
     PhotonView PV;
     public GameObject teamChoseUI;
+    public GameObject waitingUI;
     public GameObject currentPlayerGameObject { get; private set; }
     public Team localPlayerTeam { get; private set; }
     int spawnIndex;
@@ -205,6 +206,15 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             return;
 
         currentPlayerGameObject = obj;
+    }
+    public void onAllPlayersJoin()
+    {
+        if (PV.IsMine)
+        {
+            teamChoseUI.SetActive(true);
+            waitingUI.SetActive(false);
+        }
+
     }
 
     void RemovePlayerGameObject()

@@ -7,7 +7,7 @@ public class Destructible_Barricade : Destructible
 {
     //Wall parameters
     public int neededToDestroy;
-    public bool destroyedAtStart = false;
+    //public bool destroyedAtStart = false;
     public bool jumpable = true;
     public GameObject jumpCollider;
 
@@ -20,8 +20,8 @@ public class Destructible_Barricade : Destructible
     public GameObject interactObject;
     private void Start()
     {
-        if (destroyedAtStart)
-            DestroyAll();
+        //if (destroyedAtStart)
+         //   DestroyAll();
 
         jumpCollider.SetActive(false);
         onHit.AddListener(OnHit);

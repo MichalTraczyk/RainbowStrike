@@ -22,6 +22,11 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
     protected UnityEvent onReset;
     protected UnityEvent onHit;
 
+
+    public GameObject notDamagedWallGO;
+    public GameObject partsParent;
+    private bool hitAlready;
+
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
@@ -36,11 +41,19 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
             pieces.Add(rb);
         }
         allPieces = new List<Rigidbody>(pieces);
+        ShowGoodWall();
     }
     protected void HitWallOnParent(Vector3 pos, float range, float force)
     {
         Debug.Log("2");
+        if(!hitAlready)
+        {
+            Debug.Log("Schowaj sciane!");
+            HideGoodWall();
+        }
+        Debug.Log("Szukam!");
         Collider[] c = Physics.OverlapSphere(pos, range, wallLayers);
+        Debug.Log("Znalazlem: " + c.Length);
         foreach (Collider col in c)
         {
             Rigidbody r = col.GetComponent<Rigidbody>();
@@ -50,6 +63,20 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
             }
         }
     }
+
+    void HideGoodWall()
+    {
+        notDamagedWallGO.SetActive(false);
+        partsParent.SetActive(true);
+        hitAlready = true;
+    }
+    protected void ShowGoodWall()
+    {
+        hitAlready = false;
+        notDamagedWallGO.SetActive(true);
+        partsParent.SetActive(false);
+    }
+
     void RemovePart(Rigidbody r,Vector3 pos,float range, float force)
     {
         Debug.Log("3");
@@ -87,6 +114,7 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
     protected void DestroyAll()
     {
         Debug.Log("owo");
+        HideGoodWall();
         List<Rigidbody> rbs = new List<Rigidbody>(pieces);
         foreach(Rigidbody r in rbs)
         {
@@ -100,7 +128,9 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
         {
             r.gameObject.SetActive(true);
         }
+
         onHit.Invoke();
+        ShowGoodWall();
     }
     public abstract void ResetCompletly();
 
