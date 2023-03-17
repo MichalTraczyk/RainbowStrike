@@ -735,7 +735,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab325655bcc3cee48a5e45281660a16c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  teamChoseUI: {fileID: 8219454938208926093}
+  teamChoseUI: {fileID: 7000466808017907722}
   waitingUI: {fileID: 8765465611759901897}
   spectatorManagerPrefab: {fileID: 2286144017099956870, guid: c610633ba2e131c47837ee8e4056639c, type: 3}
 --- !u!1 &7000466808017907722
@@ -755,7 +755,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1194523543217382523
 RectTransform:
   m_ObjectHideFlags: 0

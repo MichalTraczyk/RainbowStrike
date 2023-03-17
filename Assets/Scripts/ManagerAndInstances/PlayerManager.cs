@@ -31,7 +31,10 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     void Start()
     {
         localPlayerTeam = Team.Null;
-        teamChoseUI.SetActive(PV.IsMine);
+
+        GameManager.Instance.OnPlayerJoinedScene();
+        waitingUI.SetActive(PV.IsMine);
+        //teamChoseUI.SetActive(PV.IsMine);
     }
     
     public void SetRedTeam()
@@ -87,8 +90,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
             currSpectatorManager =  Instantiate(spectatorManagerPrefab, Vector3.zero, Quaternion.identity);
             PV.RPC("RPC_ChangeAliveState", RpcTarget.All, false);
         }
-
-
     }
     void CreateController()
     {
@@ -108,13 +109,18 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
     public void GenerateNewPlayer()
     {
-        if (currentPlayerGameObject != null)
+        if (currentPlayerGameObject != null && !isAlive)
         {
             currentPlayerGameObject.GetComponent<PlayerMove>().DisablePlayer();
             currentPlayerGameObject.transform.position = getSpawnpoint();
         }
         else
         {
+            if(isAlive)
+            {
+                CancelInvoke("DestroyCurrentPlayer");
+                PhotonNetwork.Destroy(currentPlayerGameObject);
+            }
             CreateController();
         }
     }
@@ -209,12 +215,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
     public void onAllPlayersJoin()
     {
-        if (PV.IsMine)
-        {
-            teamChoseUI.SetActive(true);
-            waitingUI.SetActive(false);
-        }
-
+        waitingUI.SetActive(false);
+        teamChoseUI.SetActive(true);
     }
 
     void RemovePlayerGameObject()

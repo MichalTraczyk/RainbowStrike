@@ -92,6 +92,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     List<Team> wonRoundsOrder = new List<Team>();
 
+
+    //room managing
+    private int playersLoaded = 0;
+
     private void Start()
     {
         currentGameState = GameState.Warmup;
@@ -339,7 +343,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         {
             go.GetComponent<ToTakeWeapon>().DestroyThis();
         }
-
         Invoke("StartRound", timeBeforeRoundStart);
     }
     [PunRPC]
@@ -348,6 +351,9 @@ public class GameManager : MonoBehaviourPunCallbacks
         GlobalUIManager.Instance.StartCountdown(Mathf.RoundToInt(timeBeforeRoundStart));
         GlobalUIManager.Instance.BombDefused();
         currentGameState = GameState.RoundPrepare;
+
+
+
 
         Interactable[] interacts = FindObjectsOfType<Interactable>();
         foreach (Interactable i in interacts)
@@ -639,6 +645,30 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         return wonRoundsOrder.ToArray();
     }
+    //MANAGING ROOM
+    public void OnPlayerJoinedScene()
+    {
+        PV.RPC("RPC_OnPlayerJoined",RpcTarget.All);
+    }
+    [PunRPC]
+    void RPC_OnPlayerJoined()
+    {
+        if(!PV.IsMine)
+        {
+            return;
+        }
+        playersLoaded++;
+        if(playersLoaded == PhotonNetwork.PlayerList.Length)
+        {
+            PV.RPC("RPC_OnAllPlayersLoaded", RpcTarget.All);
+        }
+    }
+    [PunRPC]
+    void RPC_OnAllPlayersLoaded()
+    {
+        PlayerManager.Instance.onAllPlayersJoin();
+    }
+
     //Removing someone from scoreboard if they leave
     public override void OnPlayerLeftRoom(Player otherPlayer)
     {
