@@ -32,8 +32,9 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         localPlayerTeam = Team.Null;
 
-        GameManager.Instance.OnPlayerJoinedScene();
         waitingUI.SetActive(PV.IsMine);
+
+        GameManager.Instance.OnPlayerJoinedScene();
         //teamChoseUI.SetActive(PV.IsMine);
     }
     
@@ -215,8 +216,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
     public void onAllPlayersJoin()
     {
+        Debug.Log("Teraz!");
         waitingUI.SetActive(false);
+        Debug.Log("waiting: " + waitingUI.activeInHierarchy);
         teamChoseUI.SetActive(true);
+        Debug.Log("teamChoseUI: " + teamChoseUI.activeInHierarchy);
     }
 
     void RemovePlayerGameObject()

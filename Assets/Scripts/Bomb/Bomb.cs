@@ -83,7 +83,14 @@ public class Bomb : MonoBehaviour
         tickTimer += Time.deltaTime;
         if (tickTimer > Mathf.Clamp(baseTickOffset * bombBumTime / startBumTime, 0.1f, 2) && bombBumTime > 0)
         {
-            StartCoroutine(blink());
+            if(tickTimer<0.15f)
+            {
+                blinkGO.SetActive(true);
+            }
+            else
+            {
+                StartCoroutine(blink());
+            }
             source.PlayOneShot(TickSound, GlobalSoundManager.Instance.soundFXVolume);
             tickTimer = 0;
         }
