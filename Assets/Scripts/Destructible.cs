@@ -45,10 +45,8 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
     }
     protected void HitWallOnParent(Vector3 pos, float range, float force)
     {
-        Debug.Log("2");
         if(!hitAlready)
         {
-            Debug.Log("Schowaj sciane!");
             HideGoodWall();
         }
         Debug.Log("Szukam!");

@@ -41,9 +41,7 @@ public class PlayerAudioManager : MonoBehaviour
     }
     public void PlayOtherSound(AudioClip clip,SoundType type = SoundType.Other)
     {
-        Debug.Log("1s");
-        Debug.Log("Mine: " + PV.IsMine);
-        float volume; ;
+        float volume;
         switch (type)
         {
             case SoundType.Gun:
@@ -59,12 +57,10 @@ public class PlayerAudioManager : MonoBehaviour
                 volume = 0.5f;
                 break;
         }
-        Debug.Log("2s");
+
         Debug.Log(oneshotSource.gameObject.name);
         oneshotSource.pitch = 1;
-        Debug.Log("3s");
         oneshotSource.PlayOneShot(clip,volume);
-        Debug.Log("4s");
     }
 
     private void Update()

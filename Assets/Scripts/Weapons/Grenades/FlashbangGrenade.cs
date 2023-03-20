@@ -8,6 +8,8 @@ public class FlashbangGrenade : Grenade
     public AudioClip flashbangClip;
     public Transform particles;
     public GameObject AudioContainer;
+    bool boomed = false;
+    public LayerMask ground;
     private void Start()
     {
         if (!PV.IsMine)
@@ -22,29 +24,32 @@ public class FlashbangGrenade : Grenade
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if(PV.IsMine)
+        if(PV.IsMine&& !boomed)
         {
+            boomed = true;
             Invoke("Trigger", delay);
         }
     }
     [PunRPC]
     void RPC_GenerateFlashbang()
     {
-
+        Debug.Log("rzucam!");
         GenerateEffects();
-        float dist = Vector3.Distance(transform.position, PlayerManager.Instance.currentPlayerGameObject.transform.position);
+        GameObject playerObj = PlayerManager.Instance.currentPlayerGameObject;
+        float dist = Vector3.Distance(transform.position, playerObj.transform.position);
+        
 
-        Debug.Log("1o");
         if(dist < radius)
         {
-            Debug.Log("2o");
             float w = 1 - (dist - 8) / radius;
 
-            Debug.Log("3o");
+            RaycastHit hit;
+            if(Physics.Raycast(transform.position,playerObj.transform.position + Vector3.up*1.5f,out hit,dist,ground))
+            {
+                w /= 5;
+            }
             WeaponManager.Instance.AddFlashBangEffect(w, 5);
-            Debug.Log("4o");
             //PlayerAudioManager.Instance.PlayOtherSound(flashbangClip,SoundType.Gun);
-            Debug.Log("5o");
         }
     }
     void GenerateEffects()
