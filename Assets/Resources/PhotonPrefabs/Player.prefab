@@ -3133,7 +3133,7 @@ MonoBehaviour:
   crouchHeight: 1.15
   ground:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 1310784
   repel:
     serializedVersion: 2
     m_Bits: 32768
@@ -3265,7 +3265,7 @@ MonoBehaviour:
   leanContainer: {fileID: 5691341662956498016}
   leanOffsetPosition: {x: 0.18, y: 0, z: 0}
   leanOffsetRotation: {x: 0, y: 0, z: -20}
-  force: 500
+  force: 9000
   currentWeapon: {fileID: 0}
   primaryWeapon: {fileID: 0}
   secondaryWeapon: {fileID: 0}
@@ -3305,6 +3305,7 @@ MonoBehaviour:
   hardcoreModeDeactivate:
   - {fileID: 3170439787444672594}
   playerCam: {fileID: 3142150595611531050}
+  localShotCollidersParent: {fileID: 3142150596051378524}
 --- !u!114 &7131923895554832573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4366,8 +4367,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 18.473806
-  m_Center: {x: -5.6700382e-14, y: 8.893808, z: 0.00000026505617}
+  m_Radius: 15.8028145
+  m_Center: {x: -3.9672106e-14, y: 6.2228174, z: 0.00000018545444}
 --- !u!54 &1969577554
 Rigidbody:
   m_ObjectHideFlags: 0

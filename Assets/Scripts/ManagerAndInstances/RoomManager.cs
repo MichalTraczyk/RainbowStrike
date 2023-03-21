@@ -46,7 +46,6 @@ public class RoomManager : MonoBehaviourPunCallbacks
 
     void OnSceneLoaded(Scene scene,LoadSceneMode loadSceneMode)
     {
-        Debug.Log("loaded level!");
         if(scene.buildIndex != 0)
         {
             PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs","PlayerManager"),Vector3.zero,Quaternion.identity);

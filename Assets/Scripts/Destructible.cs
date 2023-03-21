@@ -49,9 +49,7 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
         {
             HideGoodWall();
         }
-        Debug.Log("Szukam!");
         Collider[] c = Physics.OverlapSphere(pos, range, wallLayers);
-        Debug.Log("Znalazlem: " + c.Length);
         foreach (Collider col in c)
         {
             Rigidbody r = col.GetComponent<Rigidbody>();
@@ -77,7 +75,6 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
 
     void RemovePart(Rigidbody r,Vector3 pos,float range, float force)
     {
-        Debug.Log("3");
         r.isKinematic = false;
         pieces.Remove(r);
 
@@ -111,7 +108,6 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
     }
     protected void DestroyAll()
     {
-        Debug.Log("owo");
         HideGoodWall();
         List<Rigidbody> rbs = new List<Rigidbody>(pieces);
         foreach(Rigidbody r in rbs)

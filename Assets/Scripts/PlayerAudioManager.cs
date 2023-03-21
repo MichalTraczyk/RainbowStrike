@@ -58,7 +58,6 @@ public class PlayerAudioManager : MonoBehaviour
                 break;
         }
 
-        Debug.Log(oneshotSource.gameObject.name);
         oneshotSource.pitch = 1;
         oneshotSource.PlayOneShot(clip,volume);
     }

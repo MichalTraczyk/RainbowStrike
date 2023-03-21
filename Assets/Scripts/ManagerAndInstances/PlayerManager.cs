@@ -89,7 +89,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         else
         {
             currSpectatorManager =  Instantiate(spectatorManagerPrefab, Vector3.zero, Quaternion.identity);
-            PV.RPC("RPC_ChangeAliveState", RpcTarget.All, false);
         }
     }
     void CreateController()
@@ -97,12 +96,16 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (currSpectatorManager != null)
             Destroy(currSpectatorManager);
 
+        Debug.Log("Creating controller! id: " + PV.ViewID);
         PV.RPC("RPC_ChangeAliveState", RpcTarget.All, true);
         GameManager.Instance.AddRemainingPlayer(localPlayerTeam);
         currentPlayerGameObject = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"), getSpawnpoint(), Quaternion.identity, 0, new object[] { PV.ViewID }) ;
     }
 
-
+    public void changeAliveState(bool newAliveState)
+    {
+        PV.RPC("RPC_ChangeAliveState", RpcTarget.All, newAliveState);
+    }
     [PunRPC]
     void RPC_ChangeAliveState(bool newState)
     {
@@ -110,21 +113,26 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
     public void GenerateNewPlayer()
     {
-        if (currentPlayerGameObject != null && !isAlive)
+        if (currentPlayerGameObject != null)
         {
-            currentPlayerGameObject.GetComponent<PlayerMove>().DisablePlayer();
-            currentPlayerGameObject.transform.position = getSpawnpoint();
-        }
-        else
-        {
-            if(isAlive)
+            if (!isAlive)
             {
                 CancelInvoke("DestroyCurrentPlayer");
                 PhotonNetwork.Destroy(currentPlayerGameObject);
+                CreateController();
             }
+            else
+            {
+                currentPlayerGameObject.GetComponent<PlayerMove>().DisablePlayer();
+                currentPlayerGameObject.transform.position = getSpawnpoint();
+            }
+        }
+        else
+        {
             CreateController();
         }
     }
+
     public void DisablePlayer()
     {
         if(currentPlayerGameObject != null)
@@ -216,17 +224,15 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
     public void onAllPlayersJoin()
     {
-        Debug.Log("Teraz!");
         waitingUI.SetActive(false);
-        Debug.Log("waiting: " + waitingUI.activeInHierarchy);
         teamChoseUI.SetActive(true);
-        Debug.Log("teamChoseUI: " + teamChoseUI.activeInHierarchy);
     }
 
     void RemovePlayerGameObject()
     {
         if (PV.IsMine)
             return;
+
         currentPlayerGameObject = null;
     }
 }

@@ -20,6 +20,7 @@ public class PlayerNetworkSetup : MonoBehaviour
     public GameObject[] hardcoreModeDeactivate;
 
     public CinemachineVirtualCamera playerCam;
+    public Transform localShotCollidersParent;
 
     // Start is called before the first frame update
     private void Awake()
@@ -36,6 +37,7 @@ public class PlayerNetworkSetup : MonoBehaviour
     {
         playerCam.m_Lens.FieldOfView = PlayerSettings.Instance.FieldOfView;
     }
+
     void Start()
     {
         PlayerSettings.Instance.OnSettingsChanged += UpdateSettings;
@@ -60,6 +62,12 @@ public class PlayerNetworkSetup : MonoBehaviour
                     ob.SetActive(false);
                 }
             }
+
+            Collider[] localShotColliders = localShotCollidersParent.GetComponentsInChildren<Collider>();
+            foreach (Collider c in localShotColliders)
+            {
+                c.enabled = false;
+            }
         }
         else
         {
@@ -67,6 +75,9 @@ public class PlayerNetworkSetup : MonoBehaviour
             UI.SetActive(false);
         }
     }
+
+
+
     private void OnDestroy()
     {
         PlayerSettings.Instance.OnSettingsChanged -= UpdateSettings;
@@ -102,10 +113,5 @@ public class PlayerNetworkSetup : MonoBehaviour
         {
             playerThirdpersonMesh.GetComponent<SkinnedMeshRenderer>().material = blueTeamMat;
         }
-    }
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 }

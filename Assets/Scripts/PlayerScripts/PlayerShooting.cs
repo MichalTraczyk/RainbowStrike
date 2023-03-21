@@ -547,7 +547,7 @@ public class PlayerShooting : MonoBehaviour
             aimpos.x += spreadx;
             aimpos.y += spready;
         }
-        Vector3 shotPos = shotCam.transform.position + shotCam.transform.forward * 0.5f;
+        Vector3 shotPos = shotCam.transform.position + shotCam.transform.forward * 0.1f;
         RaycastHit hit;
 
         PV.RPC("RPC_OnShoot", RpcTarget.All);
@@ -561,7 +561,7 @@ public class PlayerShooting : MonoBehaviour
             {
                 wall.Hit(hit.point, 0.05f, force);
             }
-                        PlayerCollider enemyCollider = hit.transform.GetComponent<PlayerCollider>();
+            PlayerCollider enemyCollider = hit.transform.GetComponent<PlayerCollider>();
             if (enemyCollider != null)
             {
                 float distance = Vector3.Distance(transform.position, hit.point);
@@ -572,6 +572,7 @@ public class PlayerShooting : MonoBehaviour
                     damage = 0;
                 //PlayHitParticlesClientRpc(hit.point.x, hit.point.y, hit.point.z);
                 bool hitHead = false;
+
                 enemyCollider.Damage(damage, PhotonNetwork.LocalPlayer, currentWeapon.weaponName,transform.position,out hitHead);
                 hitEnemy = true;
 

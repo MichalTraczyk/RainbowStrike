@@ -147,6 +147,7 @@ public class PlayerHp : MonoBehaviourPunCallbacks
     void Die(int damage, Vector3 pos)
     {
         deadAlready = true;
+        PlayerManager.Instance.changeAliveState(false);
         GetComponent<PlayerNetworkSetup>().playerManager.Die();
         StopAllCoroutines();
         StartCoroutine(dieVolumeAnimation());

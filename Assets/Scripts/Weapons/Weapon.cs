@@ -127,12 +127,10 @@ public class Weapon : MonoBehaviour
         if (w.prefab != null)
             w.prefab.SetActive(true);
 
-        Debug.Log("old aiming offset of " + aimOffset.x + " " + aimOffset.y + " " + aimOffset.z);
         aimOffset = w.AimOffset;
         aimRotation = w.AimRotation;
         shotCam = w.shotCam;
-        Debug.Log("new aiming offset of " + s + " " + aimOffset.x + " " + aimOffset.y + " " + aimOffset.z);
-        Debug.Log("Target scope: " + w.prefab.name + " aiming offset: " + w.AimOffset.x + " " + w.AimOffset.y + " " + w.AimOffset.z);
+
         if (w.shotCam == null)
             h.shotCam = h.defaultShotCam;
         else

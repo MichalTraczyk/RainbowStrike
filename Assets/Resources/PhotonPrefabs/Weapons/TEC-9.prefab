@@ -1020,7 +1020,7 @@ MonoBehaviour:
   slot: 1
   weaponType: 0
   bulletsInMagazine: 15
-  currentAmmoOverall: 54
+  currentAmmoOverall: 75
   currentAmmoMagazine: 15
   reloadTime: 2.2
   noAmmoReloadTime: 2.5

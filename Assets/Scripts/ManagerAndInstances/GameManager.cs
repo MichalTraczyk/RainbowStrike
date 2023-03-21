@@ -431,7 +431,6 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void CheckOnPlayerDieWin()
     {
-        Debug.Log("Killed player");
         if (currentGameState == GameState.Round)
         {
             if (remainingRedPlayers <= 0)

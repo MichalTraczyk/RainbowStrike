@@ -189,7 +189,6 @@ public class PlayerMove : MonoBehaviour
 
         //Destroy window here
         RaycastHit hit;
-        Debug.Log("start???");
         if(Physics.Raycast(transform.position + Vector3.up, transform.forward, out hit, Mathf.Infinity))
         {
             Debug.Log(LayerMask.LayerToName(hit.transform.gameObject.layer));
@@ -214,6 +213,7 @@ public class PlayerMove : MonoBehaviour
     }
     IEnumerator jumpOnTheRoof()
     {
+        Debug.Log("Jumping on the roof");
         DisablePlayer();
         isJumpingIntoSomething = true;
         
@@ -223,16 +223,16 @@ public class PlayerMove : MonoBehaviour
         RaycastHit hit;
         
         //ray from the player up and front towards the ground - should detect roof to step on
-        Ray ray = new Ray(transform.position + playerFront + Vector3.up,Vector3.down);
+        Ray ray = new Ray(transform.position + playerFront + Vector3.up*3,Vector3.down);
 
 
         float t = 0;
         float lerpSpeed = 2;
 
         //if detected ground to step on
-        if(Physics.Raycast(ray,out hit,3,ground))
+        if(Physics.Raycast(ray,out hit,5,ground))
         {
-
+            Debug.Log("Detected ground");
             //player moves up at start
             Vector3 startPos = transform.position;
             Vector3 targetPos = transform.position;
