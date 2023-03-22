@@ -95,6 +95,7 @@ public class PlayerSettings : MonoBehaviour
     {
         PlayerPrefs.SetFloat("soundFXVolume", newValue);
         GlobalSoundManager.Instance.UpdateVolume();
+        FindObjectOfType<RainController>().UpdateSettings();
     }
 
 }
