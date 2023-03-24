@@ -621,14 +621,14 @@ public class GameManager : MonoBehaviourPunCallbacks
             ps.kills = 0;
             ps.deaths = 0;
             ps.assists = 0;
-            ps.money = 8000; //CHUJ
+            ps.money = 1000; //CHUJ
         }
     }
     public void ResetMoney()
     {
         foreach (PlayerStats ps in playerStats)
         {
-            ps.money = 8000;
+            ps.money = 1000;
         }
     }
     public PlayerStats getStatsByPlayer(Player p)

@@ -39,7 +39,7 @@ public class FragGrenade : Grenade
                 float dist = Vector3.Distance(transform.position, c.transform.position);
                 int damage = Mathf.RoundToInt(baseDmgPerPart - dmgLoss * dist);
                 damage = Mathf.Clamp(damage, 0, 100);
-                pc.Damage(damage, sender, "Grenade", transform.position);
+                pc.Damage(damage, sender, "Frag", transform.position);
             }
             Debug.Log("3");
             DestructiblePart wall = c.transform.GetComponent<DestructiblePart>();

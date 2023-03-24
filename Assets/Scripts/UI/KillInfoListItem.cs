@@ -46,12 +46,11 @@ public class KillInfoListItem : MonoBehaviour
         }
 
         headshotIcon.SetActive(headShot);
-        if(weaponName == "Bomb")
+        if(weaponName == "Bomb" || weaponName == "Grenade")
         {
-
-        }
-        else if (weaponName == "Grenade")
-        {
+            Sprite icon = FindObjectOfType<WeaponManager>()?.GetGrenadeIcon("Bomb");
+            if (icon != null)
+                weaponIcon.sprite = icon;
         }
         else if(weaponName == "")
         {
