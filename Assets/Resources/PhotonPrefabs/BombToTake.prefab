@@ -122,7 +122,7 @@ MonoBehaviour:
   onKeyrelased:
     m_PersistentCalls:
       m_Calls: []
-  MessageTosShow: Press e to take the bomb
+  MessageTosShow: Press F to take the bomb
   owner: {fileID: 0}
   shouldBeEnabled: 1
 --- !u!114 &980684994584931407

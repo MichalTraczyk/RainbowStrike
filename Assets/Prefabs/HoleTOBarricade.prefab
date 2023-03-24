@@ -14,7 +14,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &6579947706049540906
 Transform:
@@ -1891,7 +1891,7 @@ GameObject:
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 4294967295
   m_IsActive: 1
 --- !u!4 &4055549568013603758
 Transform:
@@ -1996,7 +1996,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8084012565907145714
 Transform:
   m_ObjectHideFlags: 0
@@ -2121,6 +2121,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 670731e8046584f439b7a03c42c3405e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pieces:
+  - {fileID: 7856635267482258914}
+  - {fileID: 7933277190581342827}
+  - {fileID: 4568929534302841382}
+  - {fileID: 7824458378589099139}
+  - {fileID: 8718930371863589273}
+  - {fileID: 2916746990324187567}
+  - {fileID: 2839679438948580330}
+  - {fileID: 8101160374742746667}
+  - {fileID: 433260654686758532}
+  - {fileID: 137290893008354591}
+  - {fileID: 6932671121520522467}
+  - {fileID: 5297471342616869492}
+  - {fileID: 4529476837531411963}
+  - {fileID: 1528207492239077014}
+  - {fileID: 8053310169442152016}
+  - {fileID: 8425441066078358167}
+  - {fileID: 933858524519204289}
+  - {fileID: 5039719244514661800}
   wallLayers:
     serializedVersion: 2
     m_Bits: 262144
@@ -2128,7 +2147,6 @@ MonoBehaviour:
   notDamagedWallGO: {fileID: 13712543155867134}
   partsParent: {fileID: 8084012565907145725}
   neededToDestroy: 3
-  destroyedAtStart: 0
   jumpable: 1
   jumpCollider: {fileID: 8084012566761863432}
   timeToReinforce: 4

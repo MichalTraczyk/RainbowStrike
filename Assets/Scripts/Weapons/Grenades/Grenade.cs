@@ -12,7 +12,7 @@ public abstract class Grenade : MonoBehaviour
     protected float destroyTimeAfterTrigger = 0.1f;
     protected Player sender;
     protected PhotonView PV;
-    LayerMask groundLayers;
+    public LayerMask groundLayers;
     [SerializeField] protected float radius;
 
     private void Awake()
@@ -24,7 +24,6 @@ public abstract class Grenade : MonoBehaviour
     {
         Vector3 direction = pos2 - pos1;
         return Physics.Raycast(pos1,direction,radius,groundLayers);
-
     }
     public abstract void Trigger();
 

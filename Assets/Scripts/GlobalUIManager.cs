@@ -122,12 +122,32 @@ public class GlobalUIManager : MonoBehaviour
                 TimeLeft.text = ":)";
                 break;
             case GameState.Round:
+
                 int secs = Mathf.RoundToInt(GameManager.Instance.roundRemainingTime);
                 int minutes = secs / 60;
 
                 int seconds = secs % 60;
 
-                TimeLeft.text = minutes.ToString() + ":" + seconds.ToString();
+                TimeLeft.text = minutes.ToString() + ":";
+                if ((secs % 60) < 10)
+                    TimeLeft.text += "0";
+                TimeLeft.text += seconds.ToString();
+
+                /*
+                string mins = "";
+                if (minutes < 10)
+                    mins += "0";
+                mins += minutes.ToString();
+
+                string ss = "";
+                if (seconds < 10)
+                    ss += "0";
+                ss += seconds.ToString();
+
+
+                TimeLeft.text = mins + ":" + ss;*/
+
+
                 break;
             case GameState.PlantedBomb:
 

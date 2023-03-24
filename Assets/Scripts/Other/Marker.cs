@@ -4,24 +4,15 @@ using UnityEngine;
 
 public class Marker : MonoBehaviour
 {
-    public float FixedSize = .005f;
-    [HideInInspector]
-    public Camera cam;
+    public float lifetime = 5;
+    private float t;
 
-    private void Start()
+    private void Update()
     {
-        cam = Camera.main;
-        Destroy(this.gameObject, 5);
-    }
-    void AutoResize()
-    {
-        var distance = (cam.transform.position - transform.position).magnitude;
-        var size = distance * FixedSize * cam.fieldOfView;
-        transform.localScale = Vector3.one * size;
-        transform.forward = transform.position - cam.transform.position;
-    }
-    void Update()
-    {
-        AutoResize();
+        t += Time.deltaTime;
+        if(t>lifetime)
+        {
+            GetComponentInParent<PlayerUI>().OnPingDestroy(this.GetComponent<RectTransform>());
+        }
     }
 }

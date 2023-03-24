@@ -172,9 +172,9 @@ public class PlayerShooting : MonoBehaviour
     [PunRPC]
     void RPC_SpawnMarker(Team senderTeam, Vector3 pos)
     {
-        if (senderTeam == PlayerManager.Instance.localPlayerTeam)
+        if (PlayerManager.Instance.currentPlayerGameObject != null &&  senderTeam == PlayerManager.Instance.localPlayerTeam )
         {
-            Instantiate(markerPrefab, pos, Quaternion.identity);
+            PlayerManager.Instance.currentPlayerGameObject.GetComponent<PlayerUI>().AddPing(pos);
         }
     }
     void Lean()
@@ -778,6 +778,7 @@ public class PlayerShooting : MonoBehaviour
             currentWeapon.animator.SetBool("isAiming", aiming);
             currentWeapon.animator.SetBool("isRunning", (moveController.currentMoveState == MoveState.Running));
             currentWeapon.animator.SetBool("isWalking", moveController.isWalking());
+            currentWeapon.animator.SetBool("isCrouching", (moveController.currentMoveState == MoveState.Crouching));
         }
 
     }

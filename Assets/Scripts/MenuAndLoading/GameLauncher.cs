@@ -80,6 +80,17 @@ public class GameLauncher : MonoBehaviourPunCallbacks
         PhotonNetwork.CreateRoom(roomNameInputField.text,roomOptions);
         MenuManager.Instance.OpenMenu("Loading");
     }
+    public void OnQuickPlayClicked()
+    {
+        MenuManager.Instance.OpenMenu("Loading");
+        var a = PhotonNetwork.JoinRandomRoom();
+        
+    }
+    public override void OnJoinRandomFailed(short returnCode, string message)
+    {
+        errorText.text = "Error " + returnCode + ": " + message;
+        MenuManager.Instance.OpenMenu("Error");
+    }
     public override void OnJoinedRoom()
     {
         MenuManager.Instance.OpenMenu("Room");

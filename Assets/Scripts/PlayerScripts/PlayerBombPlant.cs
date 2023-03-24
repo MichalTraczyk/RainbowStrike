@@ -70,12 +70,11 @@ public class PlayerBombPlant : MonoBehaviour
             return;
         if (Input.GetKeyDown(KeyCode.G))
         {
-               DropBomb();
-            
+            DropBomb();
         }
         if (interact.currInteract == null && isOnBombsite)
         {
-            if (Input.GetKeyDown(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.Alpha4))
             {
                 if (hasBomb)
                 {
@@ -83,7 +82,7 @@ public class PlayerBombPlant : MonoBehaviour
                     StartPlanting();
                 }
             }
-            if (Input.GetKeyUp(KeyCode.E))
+            if (Input.GetKeyUp(KeyCode.Alpha4))
             {
                 if (planting)
                 {

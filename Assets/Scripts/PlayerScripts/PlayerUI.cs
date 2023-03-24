@@ -6,7 +6,7 @@ using TMPro;
 using Photon.Pun;
 using System;
 
-public class PlayerUI : MonoBehaviour
+public class PlayerUI: MonoBehaviour
 {
     public GameObject shop;
     [Header("Weapon UI")]
@@ -33,6 +33,14 @@ public class PlayerUI : MonoBehaviour
     public WeaponInfoPanel weaponInfoPanel;
 
     [Header("Other")]
+    private Camera mainCam;
+
+    public RectTransform BombsiteAIcon;
+    public RectTransform BombsiteBIcon;
+    public GameObject pingIconPrefab;
+    public RectTransform pingsParent;
+    Dictionary<RectTransform,Vector3> pingIcons;
+
     public GameObject hitmarker;
 
     //Refrences
@@ -43,11 +51,17 @@ public class PlayerUI : MonoBehaviour
     {
         PV = GetComponent<PhotonView>();
         weaponSwap = GetComponent<PlayerWeaponSwap>();
+        pingIcons = new Dictionary<RectTransform, Vector3>();
+        mainCam = Camera.main;
     }
     private void Start()
     {
         hpSlider.maxValue = 100;
         hpSlider.value = 100;
+
+        pingIcons.Add(BombsiteAIcon, GameObject.FindGameObjectWithTag("BombsiteA").transform.position);
+        pingIcons.Add(BombsiteBIcon, GameObject.FindGameObjectWithTag("BombsiteB").transform.position);
+
     }
     private void Update()
     {
@@ -64,6 +78,7 @@ public class PlayerUI : MonoBehaviour
                 OpenShop();
             }
         }
+        UpdatePings();
     }
     public void UpdateInteractMessage(string msg)
     {
@@ -85,6 +100,41 @@ public class PlayerUI : MonoBehaviour
         GetComponent<MouseLook>().enabled = true;
         shop.SetActive(false);
     }
+    public void AddPing(Vector3 worldPos)
+    {
+        GameObject obj = Instantiate(pingIconPrefab, pingsParent);
+        pingIcons.Add(obj.GetComponent<RectTransform>(), worldPos);
+    }
+    public void UpdatePings()
+    {   
+        foreach(var a in pingIcons)
+        {
+            Vector3 pos = mainCam.WorldToViewportPoint(a.Value);
+            if(pos.z > 0)
+            {
+                a.Key.gameObject.SetActive(true);
+                pos.x *= Screen.width;
+                pos.y *= Screen.height;
+                pos.x = Mathf.Clamp(pos.x, 0, Screen.width);
+                pos.y = Mathf.Clamp(pos.y, 0, Screen.height);
+                a.Key.transform.position = pos;
+            }
+            else
+            {
+                a.Key.gameObject.SetActive(false);
+            }
+        }
+    }
+    public void OnPingDestroy(RectTransform t)
+    {
+        if(pingIcons.ContainsKey(t))
+        {
+            pingIcons.Remove(t);
+            Destroy(t.gameObject);
+        }
+    }
+
+
     public void UpdateGrenade(string grenade)
     {
         grenadeIcon.sprite = WeaponManager.Instance.GetGrenadeIcon(grenade);

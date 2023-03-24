@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class PlayerSettings : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class PlayerSettings : MonoBehaviour
     public float FieldOfView { get; private set; }
     public float mouseSensitivityX { get; private set; }
     public float mouseSensitivityY { get; private set; }
+
+    private int gfxSettings = 2;
 
     //Gameplay
     [SerializeField] Slider FOVSlider;
@@ -21,6 +24,9 @@ public class PlayerSettings : MonoBehaviour
     [SerializeField] Slider GunVolumeSlider;
     [SerializeField] Slider SFXSlider;
     [SerializeField] Slider FootstepsSlider;
+
+
+    [SerializeField] TextMeshProUGUI gxfSettingsText;
 
 
     public Action OnSettingsChanged;
@@ -36,6 +42,11 @@ public class PlayerSettings : MonoBehaviour
         FieldOfView = PlayerPrefs.GetFloat("FOV",60);
         mouseSensitivityX = PlayerPrefs.GetFloat("MouseX",7);
         mouseSensitivityY = PlayerPrefs.GetFloat("MouseY",7);
+
+
+        gfxSettings = PlayerPrefs.GetInt("GFXSettings", 2);
+        OnSettingsButtonClicked(0);
+        UpdateGfxSettings();
         SlidersSetup();
     }
 
@@ -60,6 +71,9 @@ public class PlayerSettings : MonoBehaviour
         PlayerPrefs.SetFloat("MouseX", mouseSensitivityX);
         PlayerPrefs.SetFloat("MouseY", mouseSensitivityY);
 
+        PlayerPrefs.SetInt("GFXSettings", gfxSettings);
+
+        UpdateGfxSettings();
     }
     //=================================
     //Gameplay settings
@@ -77,7 +91,24 @@ public class PlayerSettings : MonoBehaviour
         FieldOfView = newValue;
     }
 
+    public void OnSettingsButtonClicked(int dir)
+    {
+        gfxSettings += dir;
+        gfxSettings = Mathf.Clamp(gfxSettings, 0, 2);
 
+        string text = "HIGH";
+        if (gfxSettings == 0)
+            text = "LOW";
+        else if (gfxSettings == 1)
+            text = "MEDIUM";
+
+        gxfSettingsText.text = text;
+
+    }
+    void UpdateGfxSettings()
+    {
+        QualitySettings.SetQualityLevel(gfxSettings, true);
+    }
     //================================
     //Audio settings
     //================================

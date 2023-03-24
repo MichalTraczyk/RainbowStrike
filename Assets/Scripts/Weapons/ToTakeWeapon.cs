@@ -18,7 +18,7 @@ public class ToTakeWeapon : MonoBehaviour
 
     private void Start()
     {
-        string txt = "Press E to take the " + weaponName;
+        string txt = "Press F to take the " + weaponName;
         GetComponent<Interactable>().MessageTosShow = txt;
         PV = GetComponent<PhotonView>();
 

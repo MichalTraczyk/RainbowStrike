@@ -9,7 +9,6 @@ public class FlashbangGrenade : Grenade
     public Transform particles;
     public GameObject AudioContainer;
     bool boomed = false;
-    public LayerMask ground;
     private void Start()
     {
         if (!PV.IsMine)
@@ -42,12 +41,8 @@ public class FlashbangGrenade : Grenade
         if(dist < radius)
         {
             float w = 1 - (dist - 8) / radius;
-
-            RaycastHit hit;
-            if(Physics.Raycast(transform.position,playerObj.transform.position + Vector3.up*1.5f,out hit,dist,ground))
-            {
-                w /= 5;
-            }
+            if (CheckIfBehindCover(transform.position, playerObj.transform.position + Vector3.up * 1.5f))
+                w /= 10;
             WeaponManager.Instance.AddFlashBangEffect(w, 5);
             //PlayerAudioManager.Instance.PlayOtherSound(flashbangClip,SoundType.Gun);
         }

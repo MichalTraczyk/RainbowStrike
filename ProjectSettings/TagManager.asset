@@ -13,6 +13,8 @@ TagManager:
   - DyingVolume
   - Window
   - RepelStartPos
+  - BombsiteA
+  - BombsiteB
   layers:
   - Default
   - TransparentFX
@@ -35,7 +37,7 @@ TagManager:
   - Destructible
   - Roof
   - InvicibleWall
-  - 
+  - OnTriggerOnly
   - 
   - 
   - 

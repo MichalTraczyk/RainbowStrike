@@ -50,6 +50,7 @@ public class Destructible_Barricade : Destructible
     [PunRPC]
     void RPC_HitWall(Vector3 pos, float range, float force, bool hard)
     {
+        Debug.Log("2");
         if (pieces.Count + neededToDestroy <= allPieces.Count)
             DestroyAll();
         else

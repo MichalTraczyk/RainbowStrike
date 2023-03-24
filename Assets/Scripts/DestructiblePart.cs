@@ -6,6 +6,7 @@ public class DestructiblePart : MonoBehaviour
 {
     public void Hit(Vector3 pos, float range, float force, bool hard = false)
     {
+        Debug.Log("Owo!!!");
         GetComponentInParent<Destructible>().HitWall(pos, range, force,hard);
     }
 }

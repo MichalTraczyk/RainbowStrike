@@ -154,13 +154,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   delay: 2
   destroyTimeAfterTrigger: 6
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 262209
   radius: 25
   flashbangClip: {fileID: 8300000, guid: acd7ba9d056f37a42810b325c4b7c8cc, type: 3}
   particles: {fileID: 5548776139060781859}
   AudioContainer: {fileID: 113248636185683624, guid: 319bb4d72cd06704a8debcb7600a9740, type: 3}
-  ground:
-    serializedVersion: 2
-    m_Bits: 262208
 --- !u!114 &8926040853774558563
 MonoBehaviour:
   m_ObjectHideFlags: 0

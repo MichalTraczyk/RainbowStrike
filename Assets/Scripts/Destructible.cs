@@ -11,7 +11,7 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
 {
     [SerializeField]public bool soft { get; private set; }
 
-    protected List<Rigidbody> pieces = new List<Rigidbody>();
+    [SerializeField]protected List<Rigidbody> pieces = new List<Rigidbody>();
     protected List<Rigidbody> allPieces = new List<Rigidbody>();
 
     [SerializeField] protected LayerMask wallLayers;
@@ -36,20 +36,24 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
         if (onHit == null)
             onHit = new UnityEvent();
 
-        foreach (Rigidbody rb in transform.GetComponentsInChildren<Rigidbody>())
-        {
-            pieces.Add(rb);
-        }
+        //foreach (Rigidbody rb in transform.GetComponentsInChildren<Rigidbody>())
+        //{
+        //    pieces.Add(rb);
+        //}
+
         allPieces = new List<Rigidbody>(pieces);
         ShowGoodWall();
     }
     protected void HitWallOnParent(Vector3 pos, float range, float force)
     {
+        
         if(!hitAlready)
         {
             HideGoodWall();
         }
+
         Collider[] c = Physics.OverlapSphere(pos, range, wallLayers);
+        Debug.Log("Znalazlem: " + c.Length);
         foreach (Collider col in c)
         {
             Rigidbody r = col.GetComponent<Rigidbody>();
@@ -75,6 +79,7 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
 
     void RemovePart(Rigidbody r,Vector3 pos,float range, float force)
     {
+        Debug.Log("removing part!");
         r.isKinematic = false;
         pieces.Remove(r);
 
@@ -103,6 +108,7 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
     {
         if (t < cooldown)
             return;
+        Debug.Log("1");
         t = 0;
         PV.RPC("RPC_HitWall", RpcTarget.All, pos, range, force,hard);
     }

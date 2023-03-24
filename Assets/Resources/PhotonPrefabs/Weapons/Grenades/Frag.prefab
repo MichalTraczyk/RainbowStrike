@@ -43516,6 +43516,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   delay: 2
   destroyTimeAfterTrigger: 0.1
+  groundLayers:
+    serializedVersion: 2
+    m_Bits: 262209
   radius: 5
   particles: {fileID: 599864025}
   baseDmgPerPart: 10
