@@ -124,7 +124,6 @@ public class PlayerShooting : MonoBehaviour
         //Grenade input
         if (Input.GetKeyDown(KeyCode.F) && currentGrenade != "" && interact.currInteract == null)
         {
-            Debug.Log("Throwing grenade");
             StartCoroutine(ThrowGrenade());
         }
 

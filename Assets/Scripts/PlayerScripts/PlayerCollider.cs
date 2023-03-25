@@ -21,6 +21,7 @@ public class PlayerCollider : MonoBehaviour
     }
     public void Damage(float damage, Player killer, string weaponName, Vector3 killerPosition)
     {
+        Debug.Log("Damaging?");
         if (player != null)
             player.TakeDamage(Mathf.RoundToInt(damage * multiplier), killer, weaponName, killerPosition);
     }

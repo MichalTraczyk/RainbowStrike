@@ -59,6 +59,7 @@ public class PlayerHp : MonoBehaviourPunCallbacks
     
     public void TakeDamage(int damage, Player killer, string weaponName, Vector3 pos, bool headshot = false)
     {
+        Debug.Log("Before rpc>");
         PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer, weaponName, pos,headshot);
     }
     [PunRPC]
@@ -74,9 +75,10 @@ public class PlayerHp : MonoBehaviourPunCallbacks
         StartCoroutine(VolumeAnimation(damageVolume, 0.05f, 0.2f));
 
         currentHp -= damage;
+        Debug.Log("Damaging! " + weaponName + " dead already: " + deadAlready + "hp: " + currentHp);
         PV.RPC("RPC_UpdateUI", RpcTarget.All, currentHp);
 
-        //Adding players to list who assisted in killing this
+        //Adding players to list who assisted in killing this 
         if(killer != null)
         {
             if(!whoDamaged.Contains(killer))
@@ -85,6 +87,8 @@ public class PlayerHp : MonoBehaviourPunCallbacks
 
         if (currentHp<=0)
         {
+            deadAlready = true;
+
             //Throwing off current weapon
             GetComponent<PlayerWeaponSwap>().DropWeapon();
 
@@ -100,6 +104,8 @@ public class PlayerHp : MonoBehaviourPunCallbacks
                     GameManager.Instance.AddAssist(p);
                 }
             }
+
+
             if(killer != null)
             {
                 GameManager.Instance.AddKill(killer);
@@ -112,10 +118,14 @@ public class PlayerHp : MonoBehaviourPunCallbacks
             //Adding money
             GameManager.Instance.ChangeMoney(killer, 400);
 
+
             //Sending message about kill
             string killerNickname = killer.NickName;
             string killedNickanme = PhotonNetwork.LocalPlayer.NickName;
-            Team myTeam = PlayerManager.Instance.localPlayerTeam;
+
+
+            Team myTeam = GameManager.Instance.getStatsByPlayer(killer).team;
+
             KillInfo thisKillInfo = new KillInfo(
                 killerNickname,
                 killedNickanme,
@@ -123,8 +133,8 @@ public class PlayerHp : MonoBehaviourPunCallbacks
                 myTeam,
                 weaponName
                 );
-            GameManager.Instance.OnPlayerKilled(PhotonNetwork.LocalPlayer,thisKillInfo);
 
+            GameManager.Instance.OnPlayerKilled(PhotonNetwork.LocalPlayer,thisKillInfo);
 
             //Changing stats
             GameManager.Instance.AddDeath(PhotonNetwork.LocalPlayer);
@@ -146,7 +156,6 @@ public class PlayerHp : MonoBehaviourPunCallbacks
     }
     void Die(int damage, Vector3 pos)
     {
-        deadAlready = true;
         PlayerManager.Instance.changeAliveState(false);
         GetComponent<PlayerNetworkSetup>().playerManager.Die();
         StopAllCoroutines();

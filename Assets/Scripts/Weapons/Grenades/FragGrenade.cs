@@ -29,8 +29,8 @@ public class FragGrenade : Grenade
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius, colliderLayers);
         foreach (Collider c in colliders)
         {
-            Debug.Log("1");
             PlayerCollider pc = c.GetComponent<PlayerCollider>();
+
             if (pc != null)
             {
                 bool behindWall;
@@ -39,14 +39,14 @@ public class FragGrenade : Grenade
                 float dist = Vector3.Distance(transform.position, c.transform.position);
                 int damage = Mathf.RoundToInt(baseDmgPerPart - dmgLoss * dist);
                 damage = Mathf.Clamp(damage, 0, 100);
+
+                Debug.Log("Trying to damage!");
                 pc.Damage(damage, sender, "Frag", transform.position);
             }
-            Debug.Log("3");
+
             DestructiblePart wall = c.transform.GetComponent<DestructiblePart>();
-            Debug.Log(wall);
             if (wall != null && !CheckIfBehindCover(wall.transform.position,transform.position))
             {
-                Debug.Log("Hitting wall!");
                 wall.Hit(transform.position, radius/3,500);
             }
         }

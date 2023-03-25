@@ -422,7 +422,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     //=======================================================
     //WIN CHECKS
     //=====================================================
-    public void OnPlayerKilled(Player p, KillInfo info)
+    public void OnPlayerKilled(Player p,KillInfo info)
     {
         PV.RPC("RPC_ChangeRemainingPlayers", RpcTarget.All, p);
         PV.RPC("RPC_AddKillMessage", RpcTarget.All, info.KillerNickname, info.KilledNickname, info.HeadShot, info.KillerTeam, info.WeaponName);

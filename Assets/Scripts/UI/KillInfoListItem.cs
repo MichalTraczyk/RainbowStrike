@@ -36,6 +36,9 @@ public class KillInfoListItem : MonoBehaviour
         killer.text = killerNickname;
 
         killed.text = killedNickname;
+
+        Debug.Log("Killer: " + killerNickname + " team: " + killerTeam);
+
         if (killerTeam == Team.Red)
         {
             killer.color = Color.red;
@@ -46,52 +49,22 @@ public class KillInfoListItem : MonoBehaviour
         }
 
         headshotIcon.SetActive(headShot);
-        if(weaponName == "Bomb" || weaponName == "Grenade")
-        {
-            Sprite icon = FindObjectOfType<WeaponManager>()?.GetGrenadeIcon("Bomb");
-            if (icon != null)
-                weaponIcon.sprite = icon;
-        }
-        else if(weaponName == "")
-        {
 
+
+        Weapon w = FindObjectOfType<WeaponManager>()?.GetWeaponByName(weaponName).GetComponent<Weapon>();
+        Sprite icon = null;
+        if (w != null)
+        {
+            icon = w.icon;
         }
+
+        if (icon != null)
+            weaponIcon.sprite = icon;
         else
         {
-            Sprite icon = FindObjectOfType<WeaponManager>()?.GetWeaponByName(weaponName).GetComponent<Weapon>()?.icon;
+            icon = FindObjectOfType<WeaponManager>()?.GetGrenadeIcon(weaponName);
             if (icon != null)
                 weaponIcon.sprite = icon;
         }
-
-        /*
-        Debug.Log("4");
-        killer.text = killinfo.KillerNickname;
-        killed.text = killinfo.KilledNickname;
-        if (killinfo.KillerTeam == Team.Red)
-        {
-            killer.color = Color.red;
-        }
-        else if (killinfo.KillerTeam == Team.Blue)
-        {
-            killer.color = Color.blue;
-        }
-
-        if (killinfo.HeadShot)
-        {
-            headshotIcon.SetActive(true);
-        }
-
-
-        if (killinfo.WeaponName != "Grenade")
-        {
-            if (killinfo.WeaponName != "")
-            {
-                Sprite icon = FindObjectOfType<WeaponManager>()?.GetWeaponByName(killinfo.WeaponName).GetComponent<Weapon>()?.icon;
-                if (icon != null)
-                    weaponIcon.sprite = icon;
-            }
-        }*/
-
-
     }
 }
