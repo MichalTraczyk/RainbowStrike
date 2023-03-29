@@ -59,14 +59,11 @@ public class PlayerHp : MonoBehaviourPunCallbacks
     
     public void TakeDamage(int damage, Player killer, string weaponName, Vector3 pos, bool headshot = false)
     {
-        Debug.Log("Before rpc>");
-        PV.RPC("RPC_TakeDamage", RpcTarget.All, damage, killer, weaponName, pos,headshot);
+        PV.RPC("RPC_TakeDamage", PV.Owner, damage, killer, weaponName, pos,headshot);
     }
     [PunRPC]
     void RPC_TakeDamage(int damage, Player killer, string weaponName,Vector3 pos,bool headshot)
     {
-        if (!PV.IsMine)
-            return;
         if (GameManager.Instance.currentGameState == GameState.WarmupEnd)
             return;
         if (deadAlready)

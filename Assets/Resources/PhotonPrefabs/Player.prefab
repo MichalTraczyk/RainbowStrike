@@ -3115,6 +3115,7 @@ GameObject:
   - component: {fileID: 7531973361512418303}
   - component: {fileID: 2612167116277973699}
   - component: {fileID: 4762008458451744453}
+  - component: {fileID: 8539811190755932449}
   m_Layer: 11
   m_Name: Player
   m_TagString: Untagged
@@ -3650,6 +3651,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4cccc8712b243d141bfff03475578309, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8539811190755932449
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3142150596051287352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 2
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 6
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &3142150596051287354
 GameObject:
   m_ObjectHideFlags: 0
@@ -9208,7 +9227,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 0
-  MaxDistance: 45
+  MaxDistance: 10.3366
   Pan2D: 0
   rolloffMode: 1
   BypassEffects: 0

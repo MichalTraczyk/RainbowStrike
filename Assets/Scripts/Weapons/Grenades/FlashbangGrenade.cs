@@ -32,20 +32,22 @@ public class FlashbangGrenade : Grenade
     [PunRPC]
     void RPC_GenerateFlashbang()
     {
-        Debug.Log("rzucam!");
         GenerateEffects();
+
         GameObject playerObj = PlayerManager.Instance.currentPlayerGameObject;
-        float dist = Vector3.Distance(transform.position, playerObj.transform.position);
+
+        //if player behind cover
+        if (CheckIfBehindCover(transform.position, playerObj.transform.position + Vector3.up * 1.5f))
+            return;
         
 
-        if(dist < radius)
-        {
-            float w = 1 - (dist - 8) / radius;
-            if (CheckIfBehindCover(transform.position, playerObj.transform.position + Vector3.up * 1.5f))
-                w /= 10;
-            WeaponManager.Instance.AddFlashBangEffect(w, 5);
-            //PlayerAudioManager.Instance.PlayOtherSound(flashbangClip,SoundType.Gun);
-        }
+        float dist = Vector3.Distance(transform.position, playerObj.transform.position);
+
+        if (dist > radius)
+            return;
+        float w = 1 - (dist - 8) / radius;
+
+        WeaponManager.Instance.AddFlashBangEffect(w, 5);
     }
     void GenerateEffects()
     {
@@ -56,6 +58,7 @@ public class FlashbangGrenade : Grenade
 
         GameObject audio = Instantiate(AudioContainer, transform.position, Quaternion.identity);
         audio.GetComponent<AudioSource>().clip = flashbangClip;
+        audio.GetComponent<AudioSource>().volume = PlayerPrefs.GetFloat("footstepsVolume");
         audio.GetComponent<AudioSource>().Play();
     }
 

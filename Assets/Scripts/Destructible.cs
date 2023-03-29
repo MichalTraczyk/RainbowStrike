@@ -112,6 +112,7 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
         t = 0;
         PV.RPC("RPC_HitWall", RpcTarget.All, pos, range, force,hard);
     }
+
     protected void DestroyAll()
     {
         HideGoodWall();
@@ -121,6 +122,7 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
             RemovePart(r, transform.position, 2, 400);
         }
     }
+
     protected void Repair()
     {
         pieces = new List<Rigidbody>(allPieces);

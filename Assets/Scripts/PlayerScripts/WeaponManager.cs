@@ -47,6 +47,7 @@ public class WeaponManager : MonoBehaviour
         StopAllCoroutines();
         StartCoroutine(flashbangDamp(targetWeight, holdTime));
     }
+
     IEnumerator flashbangDamp(float targetWeight, float holdTime)
     {
         targetWeight = Mathf.Clamp01(targetWeight);
@@ -59,6 +60,7 @@ public class WeaponManager : MonoBehaviour
             flashbangVolume.weight = Mathf.Lerp(startWeight, targetWeight, t);
             yield return new WaitForEndOfFrame();
         }
+
         yield return new WaitForSeconds(0.5f);
 
         t = 0;

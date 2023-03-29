@@ -160,6 +160,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         DeleteBomb();
         ResetLean();
+        currentPlayerGameObject.GetComponent<PlayerNetworkSetup>().UpdateOutline();
         currentPlayerGameObject.GetComponent<PlayerWeaponSwap>().TakeStartWeapon();
     }
     public void OnRoundStart()

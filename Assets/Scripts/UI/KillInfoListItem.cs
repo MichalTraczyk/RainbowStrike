@@ -31,6 +31,8 @@ public class KillInfoListItem : MonoBehaviour
     {
         Destroy(this.gameObject, 4);
     }
+
+
     public void Setup(string killerNickname, string killedNickname, bool headShot, Team killerTeam, string weaponName)
     {
         killer.text = killerNickname;
@@ -50,21 +52,25 @@ public class KillInfoListItem : MonoBehaviour
 
         headshotIcon.SetActive(headShot);
 
+        WeaponManager weaponManager = WeaponManager.Instance;
+        GameObject go = weaponManager.GetWeaponByName(weaponName);
 
-        Weapon w = FindObjectOfType<WeaponManager>()?.GetWeaponByName(weaponName).GetComponent<Weapon>();
         Sprite icon = null;
-        if (w != null)
+        if (go != null)
         {
+            Weapon w = go.GetComponent<Weapon>();
             icon = w.icon;
         }
+
 
         if (icon != null)
             weaponIcon.sprite = icon;
         else
         {
-            icon = FindObjectOfType<WeaponManager>()?.GetGrenadeIcon(weaponName);
+            icon = WeaponManager.Instance.GetGrenadeIcon(weaponName);
             if (icon != null)
                 weaponIcon.sprite = icon;
         }
+
     }
 }

@@ -35,12 +35,14 @@ public class FragGrenade : Grenade
             {
                 bool behindWall;
                 behindWall = CheckIfBehindCover(transform.position, pc.transform.position);
+                
+                if (behindWall)
+                    continue;
 
                 float dist = Vector3.Distance(transform.position, c.transform.position);
                 int damage = Mathf.RoundToInt(baseDmgPerPart - dmgLoss * dist);
                 damage = Mathf.Clamp(damage, 0, 100);
 
-                Debug.Log("Trying to damage!");
                 pc.Damage(damage, sender, "Frag", transform.position);
             }
 

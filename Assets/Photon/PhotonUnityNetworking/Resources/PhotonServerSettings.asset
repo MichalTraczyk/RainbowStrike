@@ -118,6 +118,7 @@ MonoBehaviour:
   - RPC_StopRepairing
   - RPC_OnPlayerJoined
   - RPC_OnAllPlayersLoaded
+  - RPC_CheckOutline
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

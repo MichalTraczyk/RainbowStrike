@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
+using System;
+
 public class PlayerNetworkSetup : MonoBehaviour
 {
     public GameObject playerThirdpersonMesh;
@@ -13,6 +15,7 @@ public class PlayerNetworkSetup : MonoBehaviour
 
     public Material blueTeamMat;
     public Material redTeamMat;
+
     public GameObject firstPersonCam;
 
     public bool isSpectatingThis { get; private set; }
@@ -113,5 +116,15 @@ public class PlayerNetworkSetup : MonoBehaviour
         {
             playerThirdpersonMesh.GetComponent<SkinnedMeshRenderer>().material = blueTeamMat;
         }
+    }
+
+    public void UpdateOutline()
+    {
+        PV.RPC("RPC_CheckOutline", RpcTarget.All, playerManager.localPlayerTeam);
+    }
+    [PunRPC]
+    void RPC_CheckOutline(Team t)
+    {
+        GetComponent<Outline>().enabled = (t == PlayerManager.Instance.localPlayerTeam);
     }
 }

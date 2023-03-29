@@ -22,8 +22,12 @@ public abstract class Grenade : MonoBehaviour
     }
     protected bool CheckIfBehindCover(Vector3 pos1, Vector3 pos2)
     {
-        Vector3 direction = pos2 - pos1;
-        return Physics.Raycast(pos1,direction,radius,groundLayers);
+        float distance = Vector3.Distance(pos1, pos2);
+
+        Ray ray = new Ray(pos1, pos2 - pos1);
+
+        return Physics.Raycast(ray, distance, groundLayers);
+
     }
     public abstract void Trigger();
 
