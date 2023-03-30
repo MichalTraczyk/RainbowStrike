@@ -236,4 +236,15 @@ public class PlayerManager : MonoBehaviourPunCallbacks
 
         currentPlayerGameObject = null;
     }
+
+    public void RefreshNicknameIcons()
+    {
+        if(currentPlayerGameObject!= null)
+            currentPlayerGameObject.GetComponent<PlayerUI>().RefreshNicknameIcons();
+    }
+
+    public override void OnLeftRoom()
+    {
+        GameManager.Instance.RefreshIcons();
+    }
 }

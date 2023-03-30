@@ -35,23 +35,24 @@ public class PlayerUI: MonoBehaviour
     [Header("Other")]
     private Camera mainCam;
 
-    public RectTransform BombsiteAIcon;
-    public RectTransform BombsiteBIcon;
+    public Marker BombsiteAIcon;
+    public Marker BombsiteBIcon;
     public GameObject pingIconPrefab;
     public RectTransform pingsParent;
-    Dictionary<RectTransform,Vector3> pingIcons;
-
+    List<Marker> pingIcons = new List<Marker>();
     public GameObject hitmarker;
 
     //Refrences
     private PhotonView PV;
     private PlayerWeaponSwap weaponSwap;
 
+    public GameObject nicknameIcon;
+
+
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
         weaponSwap = GetComponent<PlayerWeaponSwap>();
-        pingIcons = new Dictionary<RectTransform, Vector3>();
         mainCam = Camera.main;
     }
     private void Start()
@@ -59,8 +60,12 @@ public class PlayerUI: MonoBehaviour
         hpSlider.maxValue = 100;
         hpSlider.value = 100;
 
-        pingIcons.Add(BombsiteAIcon, GameObject.FindGameObjectWithTag("BombsiteA").transform.position);
-        pingIcons.Add(BombsiteBIcon, GameObject.FindGameObjectWithTag("BombsiteB").transform.position);
+
+        //TODO: Add bombsite icons handle
+        //pingIcons.Add(BombsiteAIcon);
+        //pingIcons.Add(BombsiteBIcon);
+        //pingIcons.Add(BombsiteAIcon, GameObject.FindGameObjectWithTag("BombsiteA").transform.position);
+        //pingIcons.Add(BombsiteBIcon, GameObject.FindGameObjectWithTag("BombsiteB").transform.position);
 
     }
     private void Update()
@@ -80,6 +85,78 @@ public class PlayerUI: MonoBehaviour
         }
         UpdatePings();
     }
+
+    #region pings
+    public void AddPing(Marker markerPrefab)
+    {
+        markerPrefab.transform.SetParent(pingsParent);
+        pingIcons.Add(markerPrefab);
+    }
+    public void UpdatePings()
+    {
+        foreach(Marker m in pingIcons)
+        {
+            Debug.Log(m);
+            m.UpdatePosition(transform.position);
+        }
+    }
+    public void OnPingDestroy(Marker t)
+    {
+        if(pingIcons.Contains(t))
+        {
+            pingIcons.Remove(t);
+            Destroy(t.gameObject);
+        }
+    }
+    public Vector3 getPingPosition(Vector3 worldPos)
+    {
+        Vector3 pos = mainCam.WorldToViewportPoint(worldPos);
+        pos.x *= Screen.width;
+        pos.y *= Screen.height;
+        pos.x = Mathf.Clamp(pos.x, 0, Screen.width);
+        pos.y = Mathf.Clamp(pos.y, 0, Screen.height);
+        return pos;
+    }
+
+
+    public void RefreshNicknameIcons()
+    {
+        List<Marker> markersToRemove = new List<Marker>();
+        foreach(Marker m in pingIcons)
+        {
+            if(m.GetType() == typeof(NicknameIcon))
+            {
+                markersToRemove.Add(m);
+            }
+        }
+
+        foreach(Marker m in markersToRemove)
+        {
+            pingIcons.Remove(m);
+            Destroy(m.gameObject);
+        }
+
+
+        GameObject[] gos = GameObject.FindGameObjectsWithTag("Player");
+        foreach(GameObject go in gos)
+        {
+            if (go == this.gameObject)
+                continue;
+
+            PlayerNetworkSetup pns = go.GetComponent<PlayerNetworkSetup>();
+            Team t = pns.thisPlayerTeam;
+
+            if(t == PlayerManager.Instance.localPlayerTeam)
+            {
+                GameObject markerGO = Instantiate(nicknameIcon);
+                NicknameIcon NI = markerGO.GetComponent<NicknameIcon>();
+                NI.Setup(go.transform, pns.thisPlayerNickname);
+                AddPing(NI);
+            }
+        }
+    }
+    #endregion
+    #region updates
     public void UpdateInteractMessage(string msg)
     {
         interactText.text = msg;
@@ -100,41 +177,6 @@ public class PlayerUI: MonoBehaviour
         GetComponent<MouseLook>().enabled = true;
         shop.SetActive(false);
     }
-    public void AddPing(Vector3 worldPos)
-    {
-        GameObject obj = Instantiate(pingIconPrefab, pingsParent);
-        pingIcons.Add(obj.GetComponent<RectTransform>(), worldPos);
-    }
-    public void UpdatePings()
-    {   
-        foreach(var a in pingIcons)
-        {
-            Vector3 pos = mainCam.WorldToViewportPoint(a.Value);
-            if(pos.z > 0)
-            {
-                a.Key.gameObject.SetActive(true);
-                pos.x *= Screen.width;
-                pos.y *= Screen.height;
-                pos.x = Mathf.Clamp(pos.x, 0, Screen.width);
-                pos.y = Mathf.Clamp(pos.y, 0, Screen.height);
-                a.Key.transform.position = pos;
-            }
-            else
-            {
-                a.Key.gameObject.SetActive(false);
-            }
-        }
-    }
-    public void OnPingDestroy(RectTransform t)
-    {
-        if(pingIcons.ContainsKey(t))
-        {
-            pingIcons.Remove(t);
-            Destroy(t.gameObject);
-        }
-    }
-
-
     public void UpdateGrenade(string grenade)
     {
         grenadeIcon.sprite = WeaponManager.Instance.GetGrenadeIcon(grenade);
@@ -175,6 +217,8 @@ public class PlayerUI: MonoBehaviour
         hpText.text = hp.ToString();
         hpSlider.value = hp;
     }
+    #endregion
+
 
     #region planting
     public void OnBombisteEnterExit(bool onBombsite)
@@ -263,7 +307,7 @@ public class PlayerUI: MonoBehaviour
     }
     #endregion
 
-
+    #region hitmarker
     public void ShowHitmarker()
     {
         StopCoroutine(showHitmarker());
@@ -277,4 +321,5 @@ public class PlayerUI: MonoBehaviour
         yield return new WaitForSeconds(0.1f);
         hitmarker.SetActive(false);
     }
+    #endregion
 }

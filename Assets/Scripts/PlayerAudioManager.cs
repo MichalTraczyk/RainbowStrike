@@ -52,6 +52,8 @@ public class PlayerAudioManager : MonoBehaviour
                 break;
             case SoundType.Footsteps:
                 volume = GlobalSoundManager.Instance.footstepsVolume;
+                if (PV.IsMine)
+                    volume /= 3;
                 break;
             default:
                 volume = 0.5f;
@@ -85,6 +87,8 @@ public class PlayerAudioManager : MonoBehaviour
     void RPC_PlayFootstep()
     {
         int r = Random.Range(0, currFootstepsArea.walkingClips.Length);
+
+
         PlayOtherSound(currFootstepsArea.walkingClips[r],SoundType.Footsteps);
     }
     [PunRPC]

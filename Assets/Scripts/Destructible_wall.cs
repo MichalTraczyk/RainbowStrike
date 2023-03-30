@@ -95,7 +95,6 @@ public class Destructible_wall : Destructible
     {
         if (isReinforced && !hard)
             return;
-        Debug.Log("1");
         HitWallOnParent(pos, range, force);
     }
 

@@ -3118,7 +3118,7 @@ GameObject:
   - component: {fileID: 8539811190755932449}
   m_Layer: 11
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3334,6 +3334,7 @@ MonoBehaviour:
   shotLayers:
     serializedVersion: 2
     m_Bits: 327873
+  pingPrefab: {fileID: 4966038556407151869, guid: 9115efa37945f1b4a9c7c063e354ab78, type: 3}
   gunPos: {fileID: 3142150597065738946}
   hitmarkerSound: {fileID: 8300000, guid: 2c1a00831a0ce11418ec1d9dd066730b, type: 3}
   leanContainer: {fileID: 5691341662956498016}
@@ -3404,11 +3405,12 @@ MonoBehaviour:
   hasBombIcon: {fileID: 2518054325468811863}
   BombPlantSlider: {fileID: 6850554952736151611}
   weaponInfoPanel: {fileID: 7874687250254337360}
-  BombsiteAIcon: {fileID: 7296832483294589056}
-  BombsiteBIcon: {fileID: 4055426997670174192}
+  BombsiteAIcon: {fileID: 0}
+  BombsiteBIcon: {fileID: 0}
   pingIconPrefab: {fileID: 4966038556407151869, guid: 9115efa37945f1b4a9c7c063e354ab78, type: 3}
   pingsParent: {fileID: 7499480255349612023}
   hitmarker: {fileID: 4920789990910005771}
+  nicknameIcon: {fileID: 4966038556407151869, guid: 7872920312083f348a2c0434c61c9e51, type: 3}
 --- !u!114 &4260485605972362093
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9227,9 +9229,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 0
-  MaxDistance: 10.3366
+  MaxDistance: 25
   Pan2D: 0
-  rolloffMode: 1
+  rolloffMode: 2
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -9244,6 +9246,15 @@ AudioSource:
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5153683
+      value: 0.43962085
+      inSlope: -2.221424
+      outSlope: -2.221424
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.20437121
       outWeight: 0.33333334
     - serializedVersion: 3
       time: 1

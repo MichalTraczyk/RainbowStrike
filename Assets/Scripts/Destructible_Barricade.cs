@@ -33,14 +33,17 @@ public class Destructible_Barricade : Destructible
     public override void ResetCompletly()
     {
         onReset.Invoke();
-        interactObject.SetActive(true);
+        //interactObject.SetActive(true);
         checkIfJumpable();
-        InteractCheck();
-        Repair();
         isBeingRepaired = false;
 
         if (destroyedAtStart)
             DestroyAll();
+        else
+            Repair();   
+
+
+        InteractCheck();
     }
     void OnHit()
     {

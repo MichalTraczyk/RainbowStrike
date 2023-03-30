@@ -119,6 +119,8 @@ MonoBehaviour:
   - RPC_OnPlayerJoined
   - RPC_OnAllPlayersLoaded
   - RPC_CheckOutline
+  - RPC_RefreshIcons
+  - RPC_SetEverything
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

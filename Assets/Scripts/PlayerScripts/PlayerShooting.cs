@@ -16,6 +16,7 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private GameObject aimCamera;
     [SerializeField] private GameObject markerPrefab;
     [SerializeField] private LayerMask shotLayers;
+    [SerializeField] private GameObject pingPrefab;
     public Transform gunPos;
     public AudioClip hitmarkerSound;
 
@@ -173,7 +174,10 @@ public class PlayerShooting : MonoBehaviour
     {
         if (PlayerManager.Instance.currentPlayerGameObject != null &&  senderTeam == PlayerManager.Instance.localPlayerTeam )
         {
-            PlayerManager.Instance.currentPlayerGameObject.GetComponent<PlayerUI>().AddPing(pos);
+            GameObject go = Instantiate(pingPrefab);
+            PingIcon pi = go.GetComponent<PingIcon>();
+            pi.Setup(pos);
+            PlayerManager.Instance.currentPlayerGameObject.GetComponent<PlayerUI>().AddPing(pi);
         }
     }
     void Lean()

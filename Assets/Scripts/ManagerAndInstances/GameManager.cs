@@ -83,8 +83,12 @@ public class GameManager : MonoBehaviourPunCallbacks
     public float roundRemainingTime { get; private set; }
 
     public bool hardcoreMode { get; private set; }
+
+
     public List<PlayerManager> redTeamPlayerManagers { get; private set; }
     public List<PlayerManager> blueTeamPlayerManagers { get; private set; }
+
+
 
 
     public Transform bombSpawnPos;
@@ -425,8 +429,18 @@ public class GameManager : MonoBehaviourPunCallbacks
     public void OnPlayerKilled(Player p,KillInfo info)
     {
         PV.RPC("RPC_ChangeRemainingPlayers", RpcTarget.All, p);
+        //PV.RPC("RPC_RefreshIcons", RpcTarget.All);
         PV.RPC("RPC_AddKillMessage", RpcTarget.All, info.KillerNickname, info.KilledNickname, info.HeadShot, info.KillerTeam, info.WeaponName);
-
+        
+    }
+    public void RefreshIcons()
+    {
+        PV.RPC("RPC_RefreshIcons", RpcTarget.All);
+    }
+    [PunRPC]
+    void RPC_RefreshIcons()
+    {
+        PlayerManager.Instance.RefreshNicknameIcons();
     }
 
     void CheckOnPlayerDieWin()
@@ -674,6 +688,5 @@ public class GameManager : MonoBehaviourPunCallbacks
         PlayerStats ps = getStatsByPlayer(otherPlayer);
         playerStats.Remove(ps);
     }
-
 }
 

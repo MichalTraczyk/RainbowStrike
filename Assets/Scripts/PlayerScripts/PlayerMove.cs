@@ -43,7 +43,7 @@ public class PlayerMove : MonoBehaviour
     public float jumpSpeedModifier = 1.6f;
     public TextMeshProUGUI jumpText;
 
-
+    private float runningMultiplier;
     float normalHeight;
     public MoveState currentMoveState { get; private set; }
     Vector3 yVelocity;
@@ -72,6 +72,8 @@ public class PlayerMove : MonoBehaviour
         animHelper = GetComponent<PlayerAnimationHelper>();
         playerShooting = GetComponent<PlayerShooting>();
         targetLerp = NormalCamPos;
+
+        runningMultiplier = runningSpeed / playerSpeed;
     }
     void StartCrouching()
     {
@@ -391,9 +393,9 @@ public class PlayerMove : MonoBehaviour
             case MoveState.Walking:
                 speed = playerSpeed;
                 break;
-            case MoveState.Running:
-                speed = runningSpeed;
-                break;
+            //case MoveState.Running:
+              //  speed = runningSpeed;
+               // break;
             case MoveState.Crouching:
                 speed = crouchingSpeed;
                 break;
@@ -409,8 +411,8 @@ public class PlayerMove : MonoBehaviour
         float z = 0;
         if (canMove)
         {
-            x = Input.GetAxis("Horizontal");
-            z = Input.GetAxis("Vertical");
+            x = Input.GetAxisRaw("Horizontal");
+            z = Input.GetAxisRaw("Vertical");
         }
 
         if(currentMoveState == MoveState.Repeling)
@@ -449,7 +451,15 @@ public class PlayerMove : MonoBehaviour
         animator.SetFloat("vely", z);
 
         //Calculating move vector
+        
         Vector3 move = transform.right * x + transform.forward * z;
+        move.Normalize();
+
+        if(z>0 && currentMoveState == MoveState.Running)
+        {
+            move += transform.forward * (runningMultiplier - 1);
+        }
+
 
         //Setting the read velocity for other scripts
         readVelocity = move;
@@ -492,6 +502,13 @@ public class PlayerMove : MonoBehaviour
         playerShooting.enabled = true;
         canMove = true;
         playerShooting.AnimatorUpdate();
+    }
+    public bool isRunning()
+    {
+        if (currentMoveState != MoveState.Running)
+            return false;
+
+        return false;
     }
     public bool isWalking()
     {

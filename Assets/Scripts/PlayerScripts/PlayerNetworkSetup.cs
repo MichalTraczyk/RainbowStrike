@@ -4,6 +4,7 @@ using UnityEngine;
 using Photon.Pun;
 using Cinemachine;
 using System;
+using Photon.Realtime;
 
 public class PlayerNetworkSetup : MonoBehaviour
 {
@@ -25,6 +26,8 @@ public class PlayerNetworkSetup : MonoBehaviour
     public CinemachineVirtualCamera playerCam;
     public Transform localShotCollidersParent;
 
+    public Team thisPlayerTeam { get; private set; }
+    public string thisPlayerNickname { get; private set; }
     // Start is called before the first frame update
     private void Awake()
     {
@@ -51,7 +54,7 @@ public class PlayerNetworkSetup : MonoBehaviour
             PlayerHands.layer = LayerMask.NameToLayer("LocalWeapon");
 
             Team t = playerManager.localPlayerTeam;
-            PV.RPC("RPC_SetMeshMaterial", RpcTarget.All, t);
+            PV.RPC("RPC_SetEverything", RpcTarget.All, t, PhotonNetwork.NickName);
 
             if(GameManager.Instance.currentGameState == GameState.RoundPrepare)
             {
@@ -71,6 +74,8 @@ public class PlayerNetworkSetup : MonoBehaviour
             {
                 c.enabled = false;
             }
+            GameManager.Instance.RefreshIcons();
+
         }
         else
         {
@@ -78,14 +83,11 @@ public class PlayerNetworkSetup : MonoBehaviour
             UI.SetActive(false);
         }
     }
-
-
-
     private void OnDestroy()
     {
         PlayerSettings.Instance.OnSettingsChanged -= UpdateSettings;
+        GameManager.Instance.RefreshIcons();
     }
-
     public void SetSpectatorFpsView()
     {
         isSpectatingThis = true;
@@ -106,8 +108,11 @@ public class PlayerNetworkSetup : MonoBehaviour
     }
 
     [PunRPC]
-    void RPC_SetMeshMaterial(Team t)
+    void RPC_SetEverything(Team t,string nickname)
     {
+        thisPlayerTeam = t;
+        thisPlayerNickname = nickname;
+
         if(t==Team.Red)
         {
             playerThirdpersonMesh.GetComponent<SkinnedMeshRenderer>().material = redTeamMat;
@@ -125,6 +130,9 @@ public class PlayerNetworkSetup : MonoBehaviour
     [PunRPC]
     void RPC_CheckOutline(Team t)
     {
-        GetComponent<Outline>().enabled = (t == PlayerManager.Instance.localPlayerTeam);
+        if(t == PlayerManager.Instance.localPlayerTeam)
+        {
+            GetComponent<Outline>().enabled = true;
+        }
     }
 }

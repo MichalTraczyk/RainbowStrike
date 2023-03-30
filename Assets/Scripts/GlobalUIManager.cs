@@ -274,5 +274,4 @@ public class GlobalUIManager : MonoBehaviour
         settingsParent.SetActive(true);
         MenuManager.Instance.OpenMenu("GameplaySettings");
     }
-
 }
