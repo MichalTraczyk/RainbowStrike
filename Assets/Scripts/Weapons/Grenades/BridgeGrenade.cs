@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Cinemachine;
 using Photon.Realtime;
 public class BridgeGrenade : Grenade
 {
@@ -11,6 +12,8 @@ public class BridgeGrenade : Grenade
     public LayerMask colliderLayers;
     public GameObject AudioContainer;
     public AudioClip explosionGrenade;
+
+    public CinemachineImpulseSource impulse;
     private void Start()
     {
         if (!PV.IsMine)
@@ -62,6 +65,7 @@ public class BridgeGrenade : Grenade
         particles.parent = null;
         particles.rotation = Quaternion.identity;
         particles.GetComponent<ParticleSystem>().Play();
+        impulse.GenerateImpulse();
 
         GameObject audio = Instantiate(AudioContainer, transform.position, Quaternion.identity);
         audio.GetComponent<AudioSource>().clip = explosionGrenade;

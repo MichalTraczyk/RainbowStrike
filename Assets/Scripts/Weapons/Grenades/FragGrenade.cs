@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Cinemachine;
+
 public class FragGrenade : Grenade
 {
     public Transform particles;
@@ -10,6 +12,8 @@ public class FragGrenade : Grenade
     public LayerMask colliderLayers;
     public GameObject AudioContainer;
     public AudioClip explosionGrenade;
+
+    public CinemachineImpulseSource impulse;
     private void Start()
     {
         if (!PV.IsMine)
@@ -67,6 +71,8 @@ public class FragGrenade : Grenade
         GameObject audio = Instantiate(AudioContainer, transform.position, Quaternion.identity);
         audio.GetComponent<AudioSource>().clip = explosionGrenade;
         audio.GetComponent<AudioSource>().Play();
+
+        impulse.GenerateImpulse();
     }
     void DisableThis()
     {
