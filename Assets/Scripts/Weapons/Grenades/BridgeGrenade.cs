@@ -35,9 +35,7 @@ public class BridgeGrenade : Grenade
         PV.RPC("RPC_PlayParticles", RpcTarget.All);
         Collider[] colliders = Physics.OverlapSphere(transform.position, radius, colliderLayers);
         foreach (Collider c in colliders)
-        {
-            Debug.Log("1");
-            PlayerCollider pc = c.GetComponent<PlayerCollider>();
+        {            PlayerCollider pc = c.GetComponent<PlayerCollider>();
             if (pc != null)
             {
                 float dist = Vector3.Distance(transform.position, c.transform.position);
@@ -45,13 +43,11 @@ public class BridgeGrenade : Grenade
                 damage = Mathf.Clamp(damage, 0, 100);
                 pc.Damage(damage, sender, "Bridge", transform.position);
             }
-            Debug.Log("3");
 
             DestructiblePart wall = c.transform.GetComponent<DestructiblePart>();
             Debug.Log(wall);
             if (wall != null)
             {
-                Debug.Log("Hitting wall!");
                 wall.Hit(transform.position, radius / 3, 500,true);
             }
         }

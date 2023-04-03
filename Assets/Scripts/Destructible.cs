@@ -79,7 +79,6 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
 
     void RemovePart(Rigidbody r,Vector3 pos,float range, float force)
     {
-        Debug.Log("removing part!");
         r.isKinematic = false;
         pieces.Remove(r);
 
@@ -108,7 +107,6 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
     {
         if (t < cooldown)
             return;
-        Debug.Log("1");
         t = 0;
         PV.RPC("RPC_HitWall", RpcTarget.All, pos, range, force,hard);
     }

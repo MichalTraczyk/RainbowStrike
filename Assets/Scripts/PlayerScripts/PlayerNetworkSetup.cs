@@ -130,9 +130,7 @@ public class PlayerNetworkSetup : MonoBehaviour
     [PunRPC]
     void RPC_CheckOutline(Team t)
     {
-        if(t == PlayerManager.Instance.localPlayerTeam)
-        {
-            GetComponent<Outline>().enabled = true;
-        }
+        Debug.Log("Team1: " + t + " local team: " + PlayerManager.Instance.localPlayerTeam);
+        GetComponent<Outline>().enabled = (t == PlayerManager.Instance.localPlayerTeam);
     }
 }
