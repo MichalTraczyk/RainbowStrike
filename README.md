@@ -9,11 +9,12 @@
 ## -Bomb
 ### Planting and defusing bomb to win the game
 
-## -Destructible enviroment
-### Destroy walls with your weapon or grenades, and if enemy team reinforced the wall, just blow it up!
+## -Changeable enviroment
+### -Reinforce the walls
 
 ![alt-text](https://github.com/MichalTraczyk/RainbowStrike/blob/main/Assets/gifs/reifnorce%20wall.gif)
 
+## -Or blow them up
 ![alt-text](https://github.com/MichalTraczyk/RainbowStrike/blob/main/Assets/gifs/DestructibleWall.gif)
 
 ## -Unusual movement system inspired by game Rainbow Six Siege
