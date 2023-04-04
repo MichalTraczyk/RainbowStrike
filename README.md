@@ -16,8 +16,9 @@
 
 ## -Changeable enviroment
 ### -Reinforce the walls
-
 ![alt-text](https://github.com/MichalTraczyk/RainbowStrike/blob/main/Assets/GifsAndScreenshots/ReinforceWalls.gif)
+
+
 
 ### -Or blow them up
 ![alt-text](https://github.com/MichalTraczyk/RainbowStrike/blob/main/Assets/GifsAndScreenshots/DestructibleWall.gif)
