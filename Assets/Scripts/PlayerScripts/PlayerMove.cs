@@ -10,7 +10,7 @@ public enum MoveState
     Crouching,
     Repeling
 }
-public class PlayerMove : MonoBehaviour
+public class PlayerMove : MonoBehaviour, IPunObservable
 {
     [Header("Assignables")]
     private CharacterController controller;
@@ -62,6 +62,38 @@ public class PlayerMove : MonoBehaviour
     PlayerShooting playerShooting;
 
     public Transform test;
+
+
+    //Lag compensation
+    Vector3 networkPosition;
+    Quaternion networkRotation;
+    Vector3 networkVel;
+
+    Vector3 movement;
+
+    public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    {
+
+        if (stream.IsWriting)
+        {
+            //We own this player: send the others our data
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
+            stream.SendNext(movement);
+        }
+        else
+        {
+            networkPosition = (Vector3)stream.ReceiveNext();
+            networkRotation = (Quaternion)stream.ReceiveNext();
+            networkVel = (Vector3)stream.ReceiveNext();
+
+            float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.timestamp));
+            networkPosition += (networkVel * lag);
+        }
+
+    }
+
+
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
@@ -102,13 +134,19 @@ public class PlayerMove : MonoBehaviour
     void Update()
     {
         if (!PV.IsMine || GlobalUIManager.Instance.paused)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, networkPosition, Time.deltaTime * playerSpeed);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, networkRotation, Time.deltaTime * 100);
             return;
+        }
+
+        Vector3 oldPosition = transform.position;
         CrouchCameraLerp();
         MyInput();
         if(PlayerManager.Instance.localPlayerTeam == GameManager.Instance.currentTerroTeam)
             RepelCheck();
         Move();
-
+        movement = transform.position - oldPosition;
     }
     #region Repeling and window jumping
     bool RepelMoveCheck(int dir)
@@ -494,7 +532,6 @@ public class PlayerMove : MonoBehaviour
         currentMoveState = MoveState.Walking;
         playerShooting.AnimatorUpdate();
         GetComponent<PlayerInteractHandle>().cancelInteract();
-
     }
     public void EnablePlayer()
     {
