@@ -22,6 +22,7 @@ public class PlayerHp : MonoBehaviourPunCallbacks
 
     Volume dieVolume;
     Volume damageVolume;
+    [SerializeField] AudioClip dieClip;
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
@@ -167,6 +168,9 @@ public class PlayerHp : MonoBehaviourPunCallbacks
         {
             dieCamera.SetActive(true);
         }
+
+        GetComponent<PlayerAudioManager>().PlayOtherSound(dieClip);
+
         if(GetComponent<CharacterController>() != null)
             GetComponent<CharacterController>().enabled = false;
 
