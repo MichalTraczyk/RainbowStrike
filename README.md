@@ -5,6 +5,7 @@
 
 ![alt text](https://github.com/MichalTraczyk/RainbowStrike/blob/main/Assets/GifsAndScreenshots/WeaponTake.png)
 
+![alt text](https://github.com/MichalTraczyk/RainbowStrike/blob/main/Assets/GifsAndScreenshots/HopOn.gif)
 
 ## Main features:
 
@@ -17,7 +18,6 @@
 ## -Changeable enviroment
 ### -Reinforce the walls
 ![alt-text](https://github.com/MichalTraczyk/RainbowStrike/blob/main/Assets/GifsAndScreenshots/ReinforceWalls.gif)
-
 
 
 ### -Or blow them up
