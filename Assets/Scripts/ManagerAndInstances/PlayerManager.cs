@@ -96,7 +96,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (currSpectatorManager != null)
             Destroy(currSpectatorManager);
 
-        Debug.Log("Creating controller! id: " + PV.ViewID);
         PV.RPC("RPC_ChangeAliveState", RpcTarget.All, true);
         GameManager.Instance.AddRemainingPlayer(localPlayerTeam);
         currentPlayerGameObject = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"), getSpawnpoint(), Quaternion.identity, 0, new object[] { PV.ViewID }) ;

@@ -53,7 +53,6 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
         }
 
         Collider[] c = Physics.OverlapSphere(pos, range, wallLayers);
-        Debug.Log("Znalazlem: " + c.Length);
         foreach (Collider col in c)
         {
             Rigidbody r = col.GetComponent<Rigidbody>();

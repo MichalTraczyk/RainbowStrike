@@ -103,22 +103,6 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
         runningMultiplier = runningSpeed / playerSpeed;
     }
-    void StartCrouching()
-    {
-        animator.SetBool("Crouching",true);
-        controller.height = crouchHeight;
-        controller.center = new Vector3(0, 0.52f, 0);
-        currentMoveState = MoveState.Crouching;
-        targetLerp = CrouchCamPos;
-    }
-    void StopCrouching()
-    {
-        animator.SetBool("Crouching", false);
-        controller.center = new Vector3(0, 0.9f, 0);
-        controller.height = normalHeight;
-        currentMoveState = MoveState.Walking;
-        targetLerp = NormalCamPos;
-    }
     private void Start()
     {
         speed = playerSpeed;
@@ -139,11 +123,42 @@ public class PlayerMove : MonoBehaviour, IPunObservable
         Vector3 oldPosition = transform.position;
         CrouchCameraLerp();
         MyInput();
-        if(PlayerManager.Instance.localPlayerTeam == GameManager.Instance.currentTerroTeam)
+        if (PlayerManager.Instance.localPlayerTeam == GameManager.Instance.currentTerroTeam)
             RepelCheck();
         Move();
         movement = transform.position - oldPosition;
     }
+
+
+    #region Crouching
+    void CrouchCameraLerp()
+    {
+        if((Mathf.Abs(readVelocity.x) + Mathf.Abs(readVelocity.z) > 0.1f) && currentMoveState == MoveState.Crouching)
+        {
+            camParent.localPosition = Vector3.Lerp(camParent.localPosition, CrouchWalkCamPos, Time.deltaTime * 10);
+        }
+        else
+        {
+            camParent.localPosition = Vector3.Lerp(camParent.localPosition, targetLerp,Time.deltaTime * 10);
+        }
+    }
+    void StartCrouching()
+    {
+        animator.SetBool("Crouching",true);
+        controller.height = crouchHeight;
+        controller.center = new Vector3(0, 0.52f, 0);
+        currentMoveState = MoveState.Crouching;
+        targetLerp = CrouchCamPos;
+    }
+    void StopCrouching()
+    {
+        animator.SetBool("Crouching", false);
+        controller.center = new Vector3(0, 0.9f, 0);
+        controller.height = normalHeight;
+        currentMoveState = MoveState.Walking;
+        targetLerp = NormalCamPos;
+    }
+    #endregion
     #region Repeling and window jumping
     bool RepelMoveCheck(int dir)
     {
@@ -297,15 +312,10 @@ public class PlayerMove : MonoBehaviour, IPunObservable
         EnablePlayer();
         isJumpingIntoSomething = false;
     }
+
     void RepelCheck()
     {
         jumpText.text = "";
-        if (CanJumpIntoWindow())
-        {
-            jumpText.text = "Press space to jump!";
-            if (Input.GetButtonDown("Jump"))
-                StartCoroutine(jumpIntoWindow());
-        }
 
         if (isJumpingIntoSomething)
             return;
@@ -319,6 +329,12 @@ public class PlayerMove : MonoBehaviour, IPunObservable
                 StartCoroutine(jumpOnTheRoof());
             }
         }
+        else if (CanJumpIntoWindow())
+        {
+            jumpText.text = "Press space to jump!";
+            if (Input.GetButtonDown("Jump"))
+                StartCoroutine(jumpIntoWindow());
+        }
         else if (canStartRepel())
         {
             jumpText.text = "Press space to start repel!";
@@ -327,7 +343,7 @@ public class PlayerMove : MonoBehaviour, IPunObservable
                 return;
 
             RaycastHit h;
-            if (Physics.Raycast(camParent.position, camParent.forward, out h, 5f, ground))
+            if (Physics.Raycast(transform.position + Vector3.up *0.1f, transform.forward, out h, 5f, ground))
             {
                 StartCoroutine(StartRepelCorut(-h.normal, h.point));
             }
@@ -351,7 +367,10 @@ public class PlayerMove : MonoBehaviour, IPunObservable
         
         //Calculating how far player is from a wall
         Vector3 alongWall = Quaternion.Euler(0,90,0) * normal;
+
         Vector3 pointOnWall = new Vector3(pos.x, transform.position.y, pos.z);
+
+
         Ray ray = new Ray(pointOnWall, alongWall);
         float distance = Vector3.Cross(ray.direction, transform.position - ray.origin).magnitude;
 
@@ -370,7 +389,6 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
         controller.enabled = true;
         
-        
         StartRepel(normal);
         playerShooting.ShowWeapons();
     }
@@ -386,17 +404,6 @@ public class PlayerMove : MonoBehaviour, IPunObservable
     }
 
 #endregion
-    void CrouchCameraLerp()
-    {
-        if((Mathf.Abs(readVelocity.x) + Mathf.Abs(readVelocity.z) > 0.1f) && currentMoveState == MoveState.Crouching)
-        {
-            camParent.localPosition = Vector3.Lerp(camParent.localPosition, CrouchWalkCamPos, Time.deltaTime * 10);
-        }
-        else
-        {
-            camParent.localPosition = Vector3.Lerp(camParent.localPosition, targetLerp,Time.deltaTime * 10);
-        }
-    }
     void MyInput()
     {
         if (Input.GetKeyDown(KeyCode.LeftShift) && currentMoveState != MoveState.Repeling)
@@ -535,7 +542,12 @@ public class PlayerMove : MonoBehaviour, IPunObservable
         playerShooting.enabled = true;
         canMove = true;
         playerShooting.AnimatorUpdate();
+        playerShooting.ShowWeapons();
+        StopAllCoroutines();
+        atRepelPos = false;
     }
+
+    #region getters
     public bool isRunning()
     {
         if (currentMoveState != MoveState.Running)
@@ -554,13 +566,18 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
         return walking;
     }
+    #endregion
+    #region
     private void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Window")
             canJumpIntoWindow = true;
 
         if (other.tag == "RepelStartPos")
+        {
             atRepelPos = true;
+            Debug.Log("entering repel pos");
+        }
 
     }
     private void OnTriggerExit(Collider other)
@@ -569,6 +586,11 @@ public class PlayerMove : MonoBehaviour, IPunObservable
             canJumpIntoWindow = false;
 
         if (other.tag == "RepelStartPos")
+        {
             atRepelPos = false;
+            Debug.Log("exiting repel pos");
+
+        }
     }
+    #endregion
 }

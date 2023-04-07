@@ -98,7 +98,6 @@ public class PlayerUI: MonoBehaviour
     {
         foreach(Marker m in pingIcons)
         {
-            Debug.Log(m);
             m.UpdatePosition(transform.position);
         }
     }
