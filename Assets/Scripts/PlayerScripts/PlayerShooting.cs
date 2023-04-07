@@ -17,26 +17,28 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private GameObject markerPrefab;
     [SerializeField] private LayerMask shotLayers;
     [SerializeField] private GameObject pingPrefab;
+    [SerializeField] AudioClip hitmarkerSound;
     public Transform gunPos;
-    public AudioClip hitmarkerSound;
 
     //Leaning
     [Header("Lean assignables")]
     [SerializeField] private Transform leanContainer;
     [SerializeField] private Vector3 leanOffsetPosition;
     [SerializeField] private Vector3 leanOffsetRotation;
-    Vector3 desiredLeanPos;
-    Vector3 desiredLeanRot;
 
-    Vector3 defaultCamPosition;
-    Vector3 defaultCamRotation;
-    Vector3 currentLeanPos;
-    Vector3 currentLeanRot;
 
-    int currentLean = 0;
-    float leanT;
+    private Vector3 desiredLeanPos;
+    private Vector3 desiredLeanRot;
 
-    public float force = 50;
+    private Vector3 defaultCamPosition;
+    private Vector3 defaultCamRotation;
+    private Vector3 currentLeanPos;
+    private Vector3 currentLeanRot;
+
+    private int currentLean = 0;
+    private float leanT;
+
+    [SerializeField] float force = 50;
 
 
     [Header("Weapons")]
@@ -44,7 +46,7 @@ public class PlayerShooting : MonoBehaviour
     public Weapon primaryWeapon;
     public Weapon secondaryWeapon;
 
-    public CinemachineImpulseSource shootingImpulse;
+    [SerializeField] CinemachineImpulseSource shootingImpulse;
 
     [SerializeField]
     private string currentGrenade;
@@ -53,19 +55,19 @@ public class PlayerShooting : MonoBehaviour
     public bool isReloading { get; private set; }
 
     //Private variables
-    bool canShot = true;
-    bool aiming;
+    private bool canShot = true;
+    private bool aiming;
     //Vector3 positionToLerp;
-    float czas;
+    private float czas;
 
     //Refrences
-    PlayerMove moveController;
-    MouseLook mouseLookScript;
-    PhotonView PV;
-    Animator animator;
-    PlayerNetworkSetup networkSetup;
-    PlayerInteractHandle interact;
-    PlayerUI playerUI;
+    private PlayerMove moveController;
+    private MouseLook mouseLookScript;
+    private PhotonView PV;
+    private Animator animator;
+    private PlayerNetworkSetup networkSetup;
+    private PlayerInteractHandle interact;
+    private PlayerUI playerUI;
     // Start is called before the first frame update
     void Awake()
     {

@@ -11,17 +11,19 @@ public enum SoundType
 public class PlayerAudioManager : MonoBehaviour
 {
     public static PlayerAudioManager Instance;
-    public FootstepsArea currFootstepsArea;
 
-    [SerializeField] AudioSource oneshotSource;
-
-    float t;
-
-    public float movePause = 0.15f;
-    public float runPause = 0.1f;
+    [SerializeField] float movePause = 0.15f;
+    [SerializeField] float runPause = 0.1f;
     
-    PlayerMove move;
-    PhotonView PV;
+    [SerializeField] FootstepsArea currFootstepsArea;
+    [SerializeField] AudioSource oneshotSource;
+    
+    private float t;
+
+    private PlayerMove move;
+    private PhotonView PV;
+
+
     private void Awake()
     {
         move = GetComponent<PlayerMove>();

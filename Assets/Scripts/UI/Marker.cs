@@ -6,7 +6,7 @@ public abstract class Marker : MonoBehaviour
 {
     protected PlayerUI parentUI;
     [SerializeField] protected TextMeshProUGUI distanceText;
-    private void Awake()
+    private void Start()
     {
         parentUI = PlayerManager.Instance.currentPlayerGameObject.GetComponent<PlayerUI>();
     }

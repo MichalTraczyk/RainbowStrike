@@ -10,37 +10,40 @@ public class PlayerUI: MonoBehaviour
 {
     public GameObject shop;
     [Header("Weapon UI")]
-    public TextMeshProUGUI currentAmmo;
-    public TextMeshProUGUI overallAmmo;
-    public Image PrimaryWeaponIcon;
-    public Image SecondaryWeaponIcon;
-    public Image grenadeIcon;
+    [SerializeField] TextMeshProUGUI currentAmmo;
+    [SerializeField] TextMeshProUGUI overallAmmo;
+    [SerializeField] Image PrimaryWeaponIcon;
+    [SerializeField] Image SecondaryWeaponIcon;
+    [SerializeField] Image grenadeIcon;
 
     [Header("Hp")]
-    public TextMeshProUGUI hpText;
-    public Slider hpSlider;
+    [SerializeField] TextMeshProUGUI hpText;
+    [SerializeField] Slider hpSlider;
     [Header("Interact")]
-    public TextMeshProUGUI interactText;
+    [SerializeField] TextMeshProUGUI interactText;
 
 
     //DO PRZENIESIENIA BOMB PLANTED
     [Header("Bomb")]
-    public Image hasBombIcon;
-    public Slider BombPlantSlider;
+    [SerializeField] Image hasBombIcon;
+    [SerializeField] Slider BombPlantSlider;
 
 
     [Header("Shop")]
-    public WeaponInfoPanel weaponInfoPanel;
+    [SerializeField] WeaponInfoPanel weaponInfoPanel;
+
+
+    [Header("Pings")]
+    [SerializeField] Marker BombsiteAIcon;
+    [SerializeField] Marker BombsiteBIcon;
+    [SerializeField] GameObject pingIconPrefab;
+    [SerializeField] RectTransform pingsParent;
+    [SerializeField] GameObject hitmarker;
+
+    private List<Marker> pingIcons = new List<Marker>();
 
     [Header("Other")]
     private Camera mainCam;
-
-    public Marker BombsiteAIcon;
-    public Marker BombsiteBIcon;
-    public GameObject pingIconPrefab;
-    public RectTransform pingsParent;
-    List<Marker> pingIcons = new List<Marker>();
-    public GameObject hitmarker;
 
     //Refrences
     private PhotonView PV;
@@ -61,12 +64,11 @@ public class PlayerUI: MonoBehaviour
         hpSlider.value = 100;
 
 
-        //TODO: Add bombsite icons handle
-        //pingIcons.Add(BombsiteAIcon);
-        //pingIcons.Add(BombsiteBIcon);
-        //pingIcons.Add(BombsiteAIcon, GameObject.FindGameObjectWithTag("BombsiteA").transform.position);
-        //pingIcons.Add(BombsiteBIcon, GameObject.FindGameObjectWithTag("BombsiteB").transform.position);
+        ((BombsiteIcon)BombsiteAIcon).Setup(GameObject.FindGameObjectWithTag("BombsiteA").transform.position);
+        ((BombsiteIcon)BombsiteBIcon).Setup(GameObject.FindGameObjectWithTag("BombsiteB").transform.position);
 
+        AddPing(BombsiteAIcon);
+        AddPing(BombsiteBIcon);
     }
     private void Update()
     {

@@ -14,7 +14,7 @@ public class PingIcon : Marker
     private Vector3 targetPos;
     private float dist;
     private int d;
-    public void Setup(Vector3 pos, Sprite icon = null)
+    public virtual void Setup(Vector3 pos, Sprite icon = null)
     {
         pingPosition = pos;
         if (icon != null)
@@ -41,7 +41,7 @@ public class PingIcon : Marker
         }
     }
 
-    private void Update()
+    public virtual void Update()
     {
         t += Time.deltaTime;
         if (t > lifetime)

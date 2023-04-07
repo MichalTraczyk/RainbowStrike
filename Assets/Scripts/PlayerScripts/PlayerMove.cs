@@ -14,62 +14,59 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 {
     [Header("Assignables")]
     private CharacterController controller;
-    public Transform groundCheck;
-    public Transform camParent;
+    [SerializeField] Transform groundCheck;
+    [SerializeField] Transform camParent;
 
-    public Vector3 NormalCamPos;
-    public Vector3 CrouchCamPos;
-    public Vector3 CrouchWalkCamPos;
-    public float crouchHeight;
-    public LayerMask ground;
-    public LayerMask repel;
-    public Vector3 repelRight;
+    [SerializeField] Vector3 NormalCamPos;
+    [SerializeField] Vector3 CrouchCamPos;
+    [SerializeField] Vector3 CrouchWalkCamPos;
+    [SerializeField] float crouchHeight;
+    [SerializeField] LayerMask ground;
+    [SerializeField] LayerMask repel;
+    [SerializeField] Vector3 repelRight;
+    [SerializeField] TextMeshProUGUI jumpText;
 
-    bool atRepelPos = false;
 
 
     private bool groundedPlayer;
     [Header("Parameters")]
-    public float playerSpeed = 9f;
-    public float runningSpeed = 14f;
-    public float crouchingSpeed = 4f;
-    public float jumpHeight = 1.0f;
-    public float gravityValue = -20.81f;
-    public bool canMove = true;
+
+    [SerializeField] float playerSpeed = 9f;
+    [SerializeField] float runningSpeed = 14f;
+    [SerializeField] float crouchingSpeed = 4f;
+    [SerializeField] float jumpHeight = 1.0f;
+    [SerializeField] float gravityValue = -20.81f;
+    [SerializeField] bool canMove = true;
 
     [Header("Repel and Window Jumping")]
     bool canJumpIntoWindow = false, isJumpingIntoSomething = false;
     public float repelSpeed = 1;
     public float jumpSpeedModifier = 1.6f;
-    public TextMeshProUGUI jumpText;
+    public MoveState currentMoveState { get; private set; }
 
     private float runningMultiplier;
-    float normalHeight;
-    public MoveState currentMoveState { get; private set; }
-    Vector3 yVelocity;
-    Vector3 readVelocity;
-    float speed;
+    private float normalHeight;
+    private bool atRepelPos = false;
+    private Vector3 yVelocity;
+    private Vector3 readVelocity;
+    private float speed;
 
 
     Vector3 targetLerp;
 
     //Refrences
-    PlayerAnimationHelper animHelper;
-    MouseLook playerMouseLook;
-    Animator animator;
-    PhotonView PV;
-    PlayerAudioManager audioManager;
-    PlayerShooting playerShooting;
-
-    public Transform test;
-
+    private PlayerAnimationHelper animHelper;
+    private MouseLook playerMouseLook;
+    private Animator animator;
+    private PhotonView PV;
+    private PlayerShooting playerShooting;
 
     //Lag compensation
-    Vector3 networkPosition;
-    Quaternion networkRotation;
-    Vector3 networkVel;
+    private Vector3 networkPosition;
+    private Quaternion networkRotation;
+    private Vector3 networkVel;
 
-    Vector3 movement;
+    private Vector3 movement;
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
@@ -100,7 +97,6 @@ public class PlayerMove : MonoBehaviour, IPunObservable
         playerMouseLook = GetComponent<MouseLook>();
         controller = gameObject.GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
-        audioManager = GetComponent<PlayerAudioManager>();
         animHelper = GetComponent<PlayerAnimationHelper>();
         playerShooting = GetComponent<PlayerShooting>();
         targetLerp = NormalCamPos;
