@@ -76,6 +76,7 @@ public class PlayerNetworkSetup : MonoBehaviour
             }
             GameManager.Instance.RefreshIcons();
 
+            GameManager.Instance.ChangeDeadState(PV.Owner, false);
         }
         else
         {

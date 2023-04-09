@@ -11,6 +11,7 @@ public class StatsListItem : MonoBehaviour
     public TextMeshProUGUI Assists;
     public TextMeshProUGUI Score;
     public TextMeshProUGUI Money;
+    public GameObject isDeadObject;
 
     public void Setup(playerStatsStruct stats)
     {
@@ -19,6 +20,7 @@ public class StatsListItem : MonoBehaviour
         Deaths.text =stats.Deaths.ToString();
         Assists.text =stats.Assists.ToString();
         Score.text =stats.Score.ToString();
+        isDeadObject.SetActive(stats.IsDead);
 
         if (stats.Team == PlayerManager.Instance.localPlayerTeam)
             Money.text = stats.Money.ToString();

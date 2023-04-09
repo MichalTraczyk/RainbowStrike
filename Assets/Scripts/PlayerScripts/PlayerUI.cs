@@ -31,7 +31,7 @@ public class PlayerUI: MonoBehaviour
 
     [Header("Shop")]
     [SerializeField] WeaponInfoPanel weaponInfoPanel;
-
+    [SerializeField] TextMeshProUGUI moneyText;
 
     [Header("Pings")]
     [SerializeField] Marker BombsiteAIcon;
@@ -252,6 +252,11 @@ public class PlayerUI: MonoBehaviour
     }
     #endregion
     #region Weapon buying
+    public void RefreshMoneyText()
+    {
+        moneyText.text = GameManager.Instance.getStatsByPlayer(PhotonNetwork.LocalPlayer).money.ToString();
+    }
+
     public void OnHealClicked()
     {
         if (500 > GameManager.Instance.getStatsByPlayer(PhotonNetwork.LocalPlayer).money)
@@ -261,12 +266,14 @@ public class PlayerUI: MonoBehaviour
             GameManager.Instance.ChangeMoney(PhotonNetwork.LocalPlayer, -500);
             GlobalSoundManager.Instance.PlayGlobalSound(GlobalSoundManager.Instance.healAudio);
         }
+        RefreshMoneyText();
         //GetComponent<Player>().HealServerRpc();
     }
 
     public void OnWeaponBuyButtonClicked(string weapon, int price)
     {
         weaponSwap.TrySetWeapon(weapon, price, PhotonNetwork.LocalPlayer);
+        //RefreshMoneyText();
     }
 
     public void OnMouseHoverOverButton(string weaponName)

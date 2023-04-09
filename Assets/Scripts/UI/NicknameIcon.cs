@@ -23,6 +23,10 @@ public class NicknameIcon : Marker
 
     public override void UpdatePosition(Vector3 pos)
     {
+        if (parentPlayer == null || parentUI == null)
+            return;
+
+
         p = parentPlayer.position + Vector3.up * 2f;
         targetPosition = parentUI.getPingPosition(p);
         if (targetPosition.z < 0)

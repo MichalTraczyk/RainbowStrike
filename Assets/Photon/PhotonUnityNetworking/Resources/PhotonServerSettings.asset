@@ -121,6 +121,8 @@ MonoBehaviour:
   - RPC_CheckOutline
   - RPC_RefreshIcons
   - RPC_SetEverything
+  - RPC_AddHeadshot
+  - RPC_ChangeDeadState
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

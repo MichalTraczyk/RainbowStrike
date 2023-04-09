@@ -7,6 +7,7 @@ using Photon.Realtime;
 using System.IO;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System;
 
 public enum GameState
 {
@@ -27,6 +28,7 @@ public class PlayerStats
     public int headshots;
     public int assists;
     public int money;
+    public bool isDead;
 }
 public struct playerStatsStruct
 {
@@ -37,8 +39,9 @@ public struct playerStatsStruct
     public int Assists;
     public int Money;
     public int Score;
+    public bool IsDead;
 
-    public playerStatsStruct(string nickname, int kills, int deaths, int assists, Team team, int money,int score)
+    public playerStatsStruct(string nickname, int kills, int deaths, int assists, Team team, int money,int score,bool isDead)
     {
         Nickname = nickname;
         Kills = kills;
@@ -47,8 +50,8 @@ public struct playerStatsStruct
         Team = team;
         Money = money;
         Score = score;
+        IsDead = isDead;
     }
-
 }
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -284,7 +287,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         PlayerStats[] playerS = playerStats.ToArray();
 
         //Sort array of player stats
-        playerS = MyExstenstions.SortArray(playerS);
+        //playerS = MyExstenstions.SortArray(playerS);
 
 
         //Create list of structs
@@ -298,10 +301,16 @@ public class GameManager : MonoBehaviourPunCallbacks
                 s.assists,
                 s.team,
                 s.money,
-                s.kills * 2 + s.assists
+                s.kills * 2 + s.assists,
+                s.isDead
                 );
             sortedStruct.Add(structStats);
         }
+
+        sortedStruct.Sort((x , y) =>
+        {
+            return x.Score - y.Score;
+        });
 
         //Setup UI
         GlobalUIManager.Instance.WinGame(winnerTeam, sortedStruct);
@@ -503,8 +512,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
 
 
-
-
     [PunRPC]
     void RPC_OnPlayerSetTeam()
     {
@@ -564,9 +571,15 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     public void AddHeadshot(Player player)
     {
-        PV.RPC("RPC_AddHEadshot", RpcTarget.All, player);
+        PV.RPC("RPC_AddHeadshot", RpcTarget.All, player);
 
     }
+    public void ChangeDeadState(Player player, bool newState)
+    {
+        PV.RPC("RPC_ChangeDeadState", RpcTarget.All, player, newState);
+    }
+
+
     //RPCS
     [PunRPC]
     void RPC_AddKill(Player p)
@@ -591,12 +604,20 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         PlayerStats psToUpdate = getStatsByPlayer(p);
         psToUpdate.deaths++;
+        psToUpdate.isDead = true;
     }
     [PunRPC]
-    void RPC_AddHEadshot(Player p)
+    void RPC_AddHeadshot(Player p)
     {
         PlayerStats psToUpdate = getStatsByPlayer(p);
         psToUpdate.headshots++;
+    }
+
+    [PunRPC]
+    void RPC_ChangeDeadState(Player p, bool newState)
+    {
+        PlayerStats psToUpdate = getStatsByPlayer(p);
+        psToUpdate.isDead = newState;
     }
 
 
@@ -614,7 +635,8 @@ public class GameManager : MonoBehaviourPunCallbacks
                 ps.assists,
                 ps.team,
                 ps.money,
-                score
+                score,
+                ps.isDead
                 ));
         }
         return stats.ToArray();

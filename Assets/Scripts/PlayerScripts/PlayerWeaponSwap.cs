@@ -133,18 +133,18 @@ public class PlayerWeaponSwap : MonoBehaviourPunCallbacks
     }
     public void TrySetWeapon(string weaponName, int price, Player player, Scope scope = Scope.Iron, int ammo = -1,int overallAmmo = -1)
     {
-        PV.RPC("RPC_TrySetWeaponOwner", RpcTarget.All, weaponName, price, player, scope, ammo, overallAmmo);
+        PV.RPC("RPC_TrySetWeaponOwner", PV.Owner, weaponName, price, player, scope, ammo, overallAmmo);
     }
     [PunRPC]
     void RPC_TrySetWeaponOwner(string weaponName, int price, Player player, Scope scope, int ammo, int overallAmmo)
     {
-        if (!PV.IsMine)
-            return;
+        //if (!PV.IsMine)
+           // return;
         if (price > GameManager.Instance.getStatsByPlayer(PhotonNetwork.LocalPlayer).money)
             return;
 
         GameManager.Instance.ChangeMoney(PhotonNetwork.LocalPlayer, -price);
-
+        GetComponent<PlayerUI>().RefreshMoneyText();
         WeaponSlot s = WeaponManager.Instance.GetWeaponByName(weaponName).GetComponent<Weapon>().slot;
 
 
@@ -297,9 +297,10 @@ public class PlayerWeaponSwap : MonoBehaviourPunCallbacks
         if (price > GameManager.Instance.getStatsByPlayer(PhotonNetwork.LocalPlayer).money)
             return;
 
+
         GameManager.Instance.ChangeMoney(PhotonNetwork.LocalPlayer, -price);
         shootingHandle.SetGrenade(grenade);
-
+        GetComponent<PlayerUI>().RefreshMoneyText();
 
     }
 }
