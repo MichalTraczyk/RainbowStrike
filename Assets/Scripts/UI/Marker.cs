@@ -8,7 +8,10 @@ public abstract class Marker : MonoBehaviour
     [SerializeField] protected TextMeshProUGUI distanceText;
     private void Start()
     {
-        parentUI = PlayerManager.Instance.currentPlayerGameObject.GetComponent<PlayerUI>();
+        GameObject player = PlayerManager.Instance.currentPlayerGameObject;
+        if(player!=null)
+            parentUI = player.GetComponent<PlayerUI>();
+
     }
     public abstract void UpdatePosition(Vector3 currentPos);
 
