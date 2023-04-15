@@ -9946,7 +9946,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1783844732250381923, guid: bd311738976f95d4f9e5c5582c8811e8, type: 3}
       propertyPath: price
-      value: 2300
+      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 1972695078268008728, guid: bd311738976f95d4f9e5c5582c8811e8, type: 3}
       propertyPath: m_AnchorMax.x

@@ -512,7 +512,7 @@ public class PlayerShooting : MonoBehaviour
         currentWeapon.animator.SetTrigger("Shot");
         if (currentWeapon.weaponType == WeaponType.Shotgun)
         {
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 15; i++)
             {
                 GenerateShot();
             }

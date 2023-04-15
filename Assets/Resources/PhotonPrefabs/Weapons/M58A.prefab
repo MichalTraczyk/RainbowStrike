@@ -2235,8 +2235,8 @@ MonoBehaviour:
   currentAmmoMagazine: 8
   reloadTime: 1
   noAmmoReloadTime: 3
-  bulletSpread: 0.2
-  baseDamage: 33
+  bulletSpread: 0.15
+  baseDamage: 11
   damageCurve:
     serializedVersion: 2
     m_Curve:
@@ -2659,6 +2659,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4213255539613819306}
     m_Modifications:
+    - target: {fileID: 1836342547, guid: dab64f0728d77d2418f0f33212a47303, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1836342547, guid: dab64f0728d77d2418f0f33212a47303, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1836342547, guid: dab64f0728d77d2418f0f33212a47303, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.10125
+      objectReference: {fileID: 0}
     - target: {fileID: 245596407374584038, guid: dab64f0728d77d2418f0f33212a47303, type: 3}
       propertyPath: m_RootOrder
       value: 7
