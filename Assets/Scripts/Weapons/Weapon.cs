@@ -144,11 +144,16 @@ public class Weapon : MonoBehaviour
         }
         else
         {
-            MyExstenstions.SetLayerRecursively(this.gameObject, LayerMask.NameToLayer("LocalWeapon"));
-            gameObject.layer = LayerMask.NameToLayer("LocalWeapon");
-            MuzzleFlashLocal.gameObject.layer = 0;
+            SetLayersToLocalWeapon();
         }
     }
+    public void SetLayersToLocalWeapon()
+    {
+        MyExstenstions.SetLayerRecursively(this.gameObject, LayerMask.NameToLayer("LocalWeapon"));
+        gameObject.layer = LayerMask.NameToLayer("LocalWeapon");
+        MuzzleFlashLocal.gameObject.layer = 0;
+    }
+
 
     [PunRPC]
     void RPC_DestroyThis()

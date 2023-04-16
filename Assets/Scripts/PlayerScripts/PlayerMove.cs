@@ -113,7 +113,7 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
     void Update()
     {
-        if (!PV.IsMine || GlobalUIManager.Instance.paused)
+        if (!PV.IsMine)
         {
             transform.position = Vector3.MoveTowards(transform.position, networkPosition, Time.deltaTime * playerSpeed);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, networkRotation, Time.deltaTime * 100);

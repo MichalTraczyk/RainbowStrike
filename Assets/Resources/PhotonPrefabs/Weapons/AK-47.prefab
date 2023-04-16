@@ -2181,25 +2181,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ShowLayerWeightsInspector: 1
   ShowParameterInspector: 1
-  m_SynchronizeParameters:
-  - Type: 4
-    SynchronizeType: 1
-    Name: isRunning
-  - Type: 4
-    SynchronizeType: 1
-    Name: isAiming
-  - Type: 4
-    SynchronizeType: 1
-    Name: isWalking
-  - Type: 9
-    SynchronizeType: 0
-    Name: Shot
-  - Type: 9
-    SynchronizeType: 0
-    Name: ReloadNoAmmo
-  - Type: 9
-    SynchronizeType: 0
-    Name: ReloadAmmo
+  m_SynchronizeParameters: []
   m_SynchronizeLayers:
   - SynchronizeType: 0
     LayerIndex: 0

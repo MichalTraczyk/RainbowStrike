@@ -64,6 +64,8 @@ public class GameManager : MonoBehaviourPunCallbacks
     public int winRoundMoney;
     public int loseRoundMoney;
     public int TargetRounds;
+    public int startMoney = 1000;
+
 
     //Private variables
     private List<PlayerStats> playerStats = new List<PlayerStats>();
@@ -71,10 +73,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     int remainingRedPlayers;
     int remainingBluePlayers;
     
-    //Round Winner
-    //public GameObject winnerUI;
-    public Transform winnerUIParent;
-
     //=======================================================
     //READABLE VARIABLES
     //=======================================================
@@ -657,14 +655,14 @@ public class GameManager : MonoBehaviourPunCallbacks
             ps.kills = 0;
             ps.deaths = 0;
             ps.assists = 0;
-            ps.money = 1000; //CHUJ
+            ps.money = startMoney; //CHUJ
         }
     }
     public void ResetMoney()
     {
         foreach (PlayerStats ps in playerStats)
         {
-            ps.money = 1000;
+            ps.money = startMoney;
         }
     }
     public PlayerStats getStatsByPlayer(Player p)

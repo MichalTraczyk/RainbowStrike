@@ -178,8 +178,7 @@ public class PlayerWeaponSwap : MonoBehaviourPunCallbacks
         }
         else
         {
-            t.GetComponent<Weapon>().handsMesh.layer = LayerMask.NameToLayer("LocalWeapon");
-            t.GetComponent<Weapon>().weaponMesh.layer = LayerMask.NameToLayer("LocalWeapon");
+            t.GetComponent<Weapon>().SetLayersToLocalWeapon();
         }
 
         WeaponSlot s = t.GetComponent<Weapon>().slot;

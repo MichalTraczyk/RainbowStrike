@@ -510,6 +510,8 @@ public class PlayerShooting : MonoBehaviour
         currentWeapon.currentAmmoMagazine -= 1;
 
         currentWeapon.animator.SetTrigger("Shot");
+
+        PV.RPC("RPC_OnShoot", RpcTarget.All);
         if (currentWeapon.weaponType == WeaponType.Shotgun)
         {
             for (int i = 0; i < 15; i++)
@@ -555,7 +557,6 @@ public class PlayerShooting : MonoBehaviour
         Vector3 shotPos = shotCam.transform.position + shotCam.transform.forward * 0.1f;
         RaycastHit hit;
 
-        PV.RPC("RPC_OnShoot", RpcTarget.All);
         //PV.RPC("RPC_ShotSoundEffect", RpcTarget.All);
 
         bool hitEnemy = false;

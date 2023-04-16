@@ -106,7 +106,7 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
     {
         if (t < cooldown)
             return;
-        t = 0;
+        //t = 0;
         PV.RPC("RPC_HitWall", RpcTarget.All, pos, range, force,hard);
     }
 

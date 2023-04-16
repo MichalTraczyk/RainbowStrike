@@ -247,7 +247,6 @@ public class GlobalUIManager : MonoBehaviour
 
     public void OpenPause()
     {
-
         paused = true;
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
