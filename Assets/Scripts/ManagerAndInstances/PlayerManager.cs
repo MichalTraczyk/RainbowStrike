@@ -15,7 +15,7 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     public GameObject waitingUI;
     public GameObject currentPlayerGameObject { get; private set; }
     public Team localPlayerTeam { get; private set; }
-    int spawnIndex;
+    private int spawnIndex;
     [SerializeField] GameObject spectatorManagerPrefab;
     private GameObject currSpectatorManager;
     public bool isAlive { get; private set; }
@@ -35,7 +35,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         waitingUI.SetActive(PV.IsMine);
 
         GameManager.Instance.OnPlayerJoinedScene();
-        //teamChoseUI.SetActive(PV.IsMine);
     }
     
     public void SetRedTeam()
@@ -54,23 +53,26 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         teamChoseUI.SetActive(false);
         localPlayerTeam = team;
 
-        PV.RPC("RPC_IninScoreboard", RpcTarget.All, PhotonNetwork.LocalPlayer, localPlayerTeam);
+        PV.RPC("RPC_InitScoreboard", RpcTarget.All, PhotonNetwork.LocalPlayer, localPlayerTeam);
+
+        //get position where player should spawn
         spawnIndex = SpawnManager.Instance.GetSpawnIndex(localPlayerTeam);
+
+        //Spawn player if its warmup
         if(GameManager.Instance.currentGameState == GameState.Warmup)
             CreateController();
 
+
+        //Call GameManager that client is ready
         GameManager.Instance.OnPlayerSetTeam();
     }
     [PunRPC]
-    void RPC_IninScoreboard(Player p,Team t)
+    void RPC_InitScoreboard(Player p,Team t)
     {
         if (!PV.IsMine)
             localPlayerTeam = t;
 
-        
         GameManager.Instance.AddManagerToList(t, this);
-
-
         GameManager.Instance.AddPlayerstats(p,t);
     }
     public void Die()

@@ -133,24 +133,8 @@ public class GlobalUIManager : MonoBehaviour
                     TimeLeft.text += "0";
                 TimeLeft.text += seconds.ToString();
 
-                /*
-                string mins = "";
-                if (minutes < 10)
-                    mins += "0";
-                mins += minutes.ToString();
-
-                string ss = "";
-                if (seconds < 10)
-                    ss += "0";
-                ss += seconds.ToString();
-
-
-                TimeLeft.text = mins + ":" + ss;*/
-
-
                 break;
             case GameState.PlantedBomb:
-
                 break;
             default:
                 TimeLeft.text = "==:==";
@@ -167,7 +151,6 @@ public class GlobalUIManager : MonoBehaviour
     }
     public void WinGame(Team t,List<playerStatsStruct> sortedPlayerStats)
     {
-
         GameWinParent.SetActive(true);
 
         foreach (playerStatsStruct s in sortedPlayerStats)
@@ -198,6 +181,8 @@ public class GlobalUIManager : MonoBehaviour
 
     void UpdateTabeleWynikow()
     {
+
+        //Destroy old stats panels
         foreach (Transform child in redParent)
         {
             Destroy(child.gameObject);
@@ -207,10 +192,8 @@ public class GlobalUIManager : MonoBehaviour
             Destroy(child.gameObject);
         }
 
-
+        //Spawn stats panels
         playerStatsStruct[] stats = GameManager.Instance.GetPlayerStatsList();
-
-
         foreach (playerStatsStruct s in stats)
         {
             Transform parent = redParent;
@@ -224,6 +207,10 @@ public class GlobalUIManager : MonoBehaviour
             rt.sizeDelta = new Vector2(rt.sizeDelta.x, 40);
         }
 
+        SetupWinorderUI();
+    }
+    private void SetupWinorderUI()
+    {
         Team[] winOrder = GameManager.Instance.getWinOrder();
         for (int i = 0; i < winOrder.Length; i++)
         {

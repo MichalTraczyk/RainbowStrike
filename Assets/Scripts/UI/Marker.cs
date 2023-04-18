@@ -14,5 +14,4 @@ public abstract class Marker : MonoBehaviour
 
     }
     public abstract void UpdatePosition(Vector3 currentPos);
-
 }

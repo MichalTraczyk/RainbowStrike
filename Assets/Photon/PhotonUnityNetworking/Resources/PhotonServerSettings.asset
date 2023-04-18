@@ -123,6 +123,7 @@ MonoBehaviour:
   - RPC_SetEverything
   - RPC_AddHeadshot
   - RPC_ChangeDeadState
+  - RPC_InitScoreboard
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

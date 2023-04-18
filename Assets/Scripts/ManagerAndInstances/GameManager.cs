@@ -30,7 +30,7 @@ public class PlayerStats
     public int money;
     public bool isDead;
 }
-public struct playerStatsStruct
+public struct playerStatsStruct : IComparable<playerStatsStruct>
 {
     public string Nickname;
     public Team Team;
@@ -52,6 +52,11 @@ public struct playerStatsStruct
         Score = score;
         IsDead = isDead;
     }
+
+    public int CompareTo(playerStatsStruct other)
+    {
+        return Score-other.Score;
+    }
 }
 public class GameManager : MonoBehaviourPunCallbacks
 {
@@ -69,6 +74,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     //Private variables
     private List<PlayerStats> playerStats = new List<PlayerStats>();
+    private Dictionary<Player, PlayerStats> playerStatsDictionary = new Dictionary<Player, PlayerStats>();
     private PhotonView PV;
     int remainingRedPlayers;
     int remainingBluePlayers;
@@ -92,10 +98,10 @@ public class GameManager : MonoBehaviourPunCallbacks
 
 
 
-    public Transform bombSpawnPos;
-    int readyPlayers = 0;
+    [SerializeField] Transform bombSpawnPos;
+    private int readyPlayers = 0;
 
-    List<Team> wonRoundsOrder = new List<Team>();
+    private List<Team> wonRoundsOrder = new List<Team>();
 
 
     //room managing
@@ -192,6 +198,7 @@ public class GameManager : MonoBehaviourPunCallbacks
 
     void Win(Team team, string becauseOff)
     {
+        Debug.Log("End round: " + becauseOff);
         PV.RPC("RPC_OnWinMaster", RpcTarget.MasterClient, team);
     } 
     [PunRPC]
@@ -362,9 +369,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         GlobalUIManager.Instance.StartCountdown(Mathf.RoundToInt(timeBeforeRoundStart));
         GlobalUIManager.Instance.BombDefused();
         currentGameState = GameState.RoundPrepare;
-
-
-
 
         Interactable[] interacts = FindObjectsOfType<Interactable>();
         foreach (Interactable i in interacts)
@@ -582,33 +586,39 @@ public class GameManager : MonoBehaviourPunCallbacks
     [PunRPC]
     void RPC_AddKill(Player p)
     {
-        PlayerStats psToUpdate = getStatsByPlayer(p);
-        psToUpdate.kills++;
+        playerStatsDictionary[p].kills++;
+        //PlayerStats psToUpdate = getStatsByPlayer(p);
+       // psToUpdate.kills++;
     }
     [PunRPC]
     void RPC_ChangeMoney(Player p, int mon)
     {
-        PlayerStats psToUpdate = getStatsByPlayer(p);
-        psToUpdate.money += mon;
+        playerStatsDictionary[p].money += mon;
+        //PlayerStats psToUpdate = getStatsByPlayer(p);
+       // psToUpdate.money += mon;
     }
     [PunRPC]
     void RPC_AddAssist(Player p)
     {
-        PlayerStats psToUpdate = getStatsByPlayer(p);
-        psToUpdate.assists++;
+        playerStatsDictionary[p].assists++;
+        //PlayerStats psToUpdate = getStatsByPlayer(p);
+       // psToUpdate.assists++;
     }
     [PunRPC]
     void RPC_AddDeath(Player p)
     {
-        PlayerStats psToUpdate = getStatsByPlayer(p);
-        psToUpdate.deaths++;
-        psToUpdate.isDead = true;
+        playerStatsDictionary[p].deaths++;
+        playerStatsDictionary[p].isDead = true;
+        //PlayerStats psToUpdate = getStatsByPlayer(p);
+        //psToUpdate.deaths++;
+       // psToUpdate.isDead = true;
     }
     [PunRPC]
     void RPC_AddHeadshot(Player p)
     {
-        PlayerStats psToUpdate = getStatsByPlayer(p);
-        psToUpdate.headshots++;
+        playerStatsDictionary[p].headshots++;
+        //PlayerStats psToUpdate = getStatsByPlayer(p);
+        //psToUpdate.headshots++;
     }
 
     [PunRPC]
@@ -646,6 +656,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         stats.player = p;
         stats.team = t;
         stats.money = 16000;
+        playerStatsDictionary.Add(p, stats);
         playerStats.Add(stats);
     }
     public void ResetAllStats()
@@ -655,7 +666,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             ps.kills = 0;
             ps.deaths = 0;
             ps.assists = 0;
-            ps.money = startMoney; //CHUJ
+            ps.money = startMoney;
         }
     }
     public void ResetMoney()
@@ -667,12 +678,14 @@ public class GameManager : MonoBehaviourPunCallbacks
     }
     public PlayerStats getStatsByPlayer(Player p)
     {
+        return playerStatsDictionary[p];
+        /*
         foreach (PlayerStats ps in playerStats)
         {
             if (ps.player == p)
                 return ps;
         }
-        return null;
+        return null;*/
     }
     public Team[] getWinOrder()
     {
