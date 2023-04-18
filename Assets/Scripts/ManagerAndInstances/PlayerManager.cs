@@ -10,19 +10,26 @@ using Photon.Realtime;
 public class PlayerManager : MonoBehaviourPunCallbacks
 {
     public static PlayerManager Instance;
-    PhotonView PV;
-    public GameObject teamChoseUI;
-    public GameObject waitingUI;
+
+    [SerializeField] GameObject teamChoseUI;
+    [SerializeField] GameObject waitingUI;
+    [SerializeField] GameObject spectatorManagerPrefab;
+    
+    
     public GameObject currentPlayerGameObject { get; private set; }
     public Team localPlayerTeam { get; private set; }
+    
+    
     private int spawnIndex;
-    [SerializeField] GameObject spectatorManagerPrefab;
+    private PhotonView PV;
     private GameObject currSpectatorManager;
+
     public bool isAlive { get; private set; }
     private void Awake()
     {
         PV = GetComponent<PhotonView>();
-        if(PV.IsMine)
+
+        if(PV.IsMine && Instance == null)
         {
             Instance = this;
         }
@@ -50,9 +57,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         Cursor.visible = false;
         Cursor.lockState = CursorLockMode.Locked;
 
+        //no need to show UI of team chose
         teamChoseUI.SetActive(false);
         localPlayerTeam = team;
 
+        //Make an RPC call to game manager that we want to be added to thescoreboard
         PV.RPC("RPC_InitScoreboard", RpcTarget.All, PhotonNetwork.LocalPlayer, localPlayerTeam);
 
         //get position where player should spawn
@@ -62,10 +71,11 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if(GameManager.Instance.currentGameState == GameState.Warmup)
             CreateController();
 
-
         //Call GameManager that client is ready
         GameManager.Instance.OnPlayerSetTeam();
     }
+
+
     [PunRPC]
     void RPC_InitScoreboard(Player p,Team t)
     {
@@ -95,12 +105,21 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     }
     void CreateController()
     {
+        //Stop spectating when starting to play
         if (currSpectatorManager != null)
             Destroy(currSpectatorManager);
 
+        //Signal everyone that we are not dead anymore
         PV.RPC("RPC_ChangeAliveState", RpcTarget.All, true);
+        //Signal GameManager to count us when checking if the round should finish
         GameManager.Instance.AddRemainingPlayer(localPlayerTeam);
-        currentPlayerGameObject = PhotonNetwork.Instantiate(Path.Combine("PhotonPrefabs", "Player"), getSpawnpoint(), Quaternion.identity, 0, new object[] { PV.ViewID }) ;
+        //Create new player with spawn info of PV who spawned it
+        currentPlayerGameObject = PhotonNetwork.Instantiate(
+            Path.Combine("PhotonPrefabs", "Player"), 
+            getSpawnpoint(), 
+            Quaternion.identity, 
+            0,
+            new object[] { PV.ViewID });
     }
 
     public void changeAliveState(bool newAliveState)
@@ -164,6 +183,8 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         currentPlayerGameObject.GetComponent<PlayerNetworkSetup>().UpdateOutline();
         currentPlayerGameObject.GetComponent<PlayerWeaponSwap>().TakeStartWeapon();
     }
+
+
     public void OnRoundStart()
     {
         if (currentPlayerGameObject != null)
@@ -184,19 +205,15 @@ public class PlayerManager : MonoBehaviourPunCallbacks
         if (currentPlayerGameObject != null)
             currentPlayerGameObject.GetComponent<PlayerHp>().ResetHp();
     }
+
+
     Vector3 getSpawnpoint()
     {
         Vector3 position;
-        //Vector3 position = SpawnManager.Instance.GetSpawnpoint(localPlayerTeam, spawnIndex);
         if (localPlayerTeam == GameManager.Instance.currentTerroTeam)
-        {
             position = SpawnManager.Instance.redTeamSpawnpoints[spawnIndex].position;
-        }
         else
-        {
             position = SpawnManager.Instance.blueeamSpawnpoints[spawnIndex].position;
-
-        }
         return position;
     }
 
@@ -221,7 +238,6 @@ public class PlayerManager : MonoBehaviourPunCallbacks
     {
         if (PV.IsMine)
             return;
-
         currentPlayerGameObject = obj;
     }
     public void onAllPlayersJoin()
