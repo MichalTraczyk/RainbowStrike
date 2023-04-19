@@ -37,6 +37,7 @@ public class PlayerNetworkSetup : MonoBehaviour
         PhotonView managerObj = PhotonView.Find(Id);
         playerManager = managerObj.GetComponent<PlayerManager>();
         playerManager.SetPlayerGameObject(this.gameObject);
+
     }
     void UpdateSettings()
     {
