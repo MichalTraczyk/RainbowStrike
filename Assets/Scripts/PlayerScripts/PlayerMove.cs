@@ -226,8 +226,6 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
             yield return new WaitForEndOfFrame();
         }
-
-
         //down movement
         t = 0;
         Vector3 startPos2 = transform.position;
@@ -249,6 +247,8 @@ public class PlayerMove : MonoBehaviour, IPunObservable
             if(db != null)
                 db.OnJump();
         }
+
+
         //front movement
         t = 0;
         while (t < 1)
@@ -258,8 +258,6 @@ public class PlayerMove : MonoBehaviour, IPunObservable
             t += Time.deltaTime * speed;
             yield return new WaitForEndOfFrame();
         }
-
-
         EnablePlayer();
         isJumpingIntoSomething = false;
         canJumpIntoWindow = false;

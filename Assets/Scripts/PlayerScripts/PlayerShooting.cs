@@ -557,8 +557,6 @@ public class PlayerShooting : MonoBehaviour
         Vector3 shotPos = shotCam.transform.position + shotCam.transform.forward * 0.1f;
         RaycastHit hit;
 
-        //PV.RPC("RPC_ShotSoundEffect", RpcTarget.All);
-
         bool hitEnemy = false;
         if (Physics.Raycast(shotPos, aimpos, out hit, Mathf.Infinity, shotLayers))
         {
@@ -567,6 +565,7 @@ public class PlayerShooting : MonoBehaviour
             {
                 wall.Hit(hit.point, 0.05f, force);
             }
+
             PlayerCollider enemyCollider = hit.transform.GetComponent<PlayerCollider>();
             if (enemyCollider != null)
             {
@@ -576,7 +575,6 @@ public class PlayerShooting : MonoBehaviour
 
                 if (damage < 0)
                     damage = 0;
-                //PlayHitParticlesClientRpc(hit.point.x, hit.point.y, hit.point.z);
                 bool hitHead = false;
 
                 enemyCollider.Damage(damage, PhotonNetwork.LocalPlayer, currentWeapon.weaponName,transform.position,out hitHead);
@@ -584,7 +582,6 @@ public class PlayerShooting : MonoBehaviour
 
                 if (hitHead)
                     ShowHitmarker();
-
             }
 
             PV.RPC("RPC_HitParticles", RpcTarget.All,hitEnemy,hit.point,hit.normal);

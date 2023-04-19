@@ -46,15 +46,20 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
     }
     protected void HitWallOnParent(Vector3 pos, float range, float force)
     {
-        if(!hitAlready)
-            HideGoodWall();
         
+        if(!hitAlready)
+        {
+            HideGoodWall();
+        }
+
         Collider[] c = Physics.OverlapSphere(pos, range, wallLayers);
         foreach (Collider col in c)
         {
             Rigidbody r = col.GetComponent<Rigidbody>();
             if (pieces.Contains(r))
+            {
                 RemovePart(r, pos, range, force);
+            }
         }
     }
 
@@ -70,7 +75,6 @@ public abstract class Destructible : MonoBehaviourPunCallbacks
         notDamagedWallGO.SetActive(true);
         partsParent.SetActive(false);
     }
-
 
     void RemovePart(Rigidbody r,Vector3 pos,float range, float force)
     {
