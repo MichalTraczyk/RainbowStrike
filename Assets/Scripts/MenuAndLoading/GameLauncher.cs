@@ -73,19 +73,19 @@ public class GameLauncher : MonoBehaviourPunCallbacks
         bool hardcore = hardcoreModeToggle.isOn;
         ExitGames.Client.Photon.Hashtable customPropeties = new ExitGames.Client.Photon.Hashtable();
         customPropeties.Add("HardcoreMode", hardcore);
+
         roomOptions.CustomRoomProperties = customPropeties;
-
-
 
         PhotonNetwork.CreateRoom(roomNameInputField.text,roomOptions);
         MenuManager.Instance.OpenMenu("Loading");
     }
+
     public void OnQuickPlayClicked()
     {
         MenuManager.Instance.OpenMenu("Loading");
-        var a = PhotonNetwork.JoinRandomRoom();
-        
+        PhotonNetwork.JoinRandomRoom();
     }
+
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         errorText.text = "Error " + returnCode + ": " + message;
@@ -107,7 +107,7 @@ public class GameLauncher : MonoBehaviourPunCallbacks
         {
             Instantiate(playerListPrefab, playersListContent).GetComponent<PlayerListItem>().Setup(players[i]);
         }
-
+        //only master client 
         startButton.SetActive(PhotonNetwork.IsMasterClient);
     }
 

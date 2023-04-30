@@ -253,7 +253,7 @@ public class GameManager : MonoBehaviourPunCallbacks
             {
                 Team t = Team.Null;
 
-                Debug.Log("Po�owa!!");
+                Debug.Log("Polowa!!");
                 Debug.Log("Old terro team " + currentTerroTeam);
 
                 if (currentTerroTeam == Team.Red)
@@ -290,10 +290,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         PlayerManager.Instance.DisablePlayer();
 
         PlayerStats[] playerS = playerStats.ToArray();
-
-        //Sort array of player stats
-        //playerS = MyExstenstions.SortArray(playerS);
-
 
         //Create list of structs
         List<playerStatsStruct> sortedStruct = new List<playerStatsStruct>();
@@ -356,6 +352,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         SpawnNewBomb();
         PV.RPC("RPC_ResetRoundAll", RpcTarget.All);
 
+        //Destroy everything that is on the ground
         GameObject[] weaponsToTake = GameObject.FindGameObjectsWithTag("ToTakeWeapon");
         foreach (GameObject go in weaponsToTake)
         {
@@ -363,6 +360,7 @@ public class GameManager : MonoBehaviourPunCallbacks
         }
         Invoke("StartRound", timeBeforeRoundStart);
     }
+
     [PunRPC]
     void RPC_ResetRoundAll()
     {
@@ -370,12 +368,14 @@ public class GameManager : MonoBehaviourPunCallbacks
         GlobalUIManager.Instance.BombDefused();
         currentGameState = GameState.RoundPrepare;
 
+        //Some interactables can be used only by CT
         Interactable[] interacts = FindObjectsOfType<Interactable>();
         foreach (Interactable i in interacts)
         {
             i.TeamCheck();
         }
         
+        //Repair all walls and barricades
         Destructible[] ds = FindObjectsOfType<Destructible>();
         foreach(Destructible d in ds)
         {
@@ -386,7 +386,6 @@ public class GameManager : MonoBehaviourPunCallbacks
         PlayerManager.Instance.GenerateNewPlayer();
         PlayerManager.Instance.OnRoundReset();
 
-        //PlayerManager.Instance.DeleteBomb();
         roundRemainingTime = roundTime;
     }
 
@@ -679,13 +678,6 @@ public class GameManager : MonoBehaviourPunCallbacks
     public PlayerStats getStatsByPlayer(Player p)
     {
         return playerStatsDictionary[p];
-        /*
-        foreach (PlayerStats ps in playerStats)
-        {
-            if (ps.player == p)
-                return ps;
-        }
-        return null;*/
     }
     public Team[] getWinOrder()
     {
@@ -720,6 +712,7 @@ public class GameManager : MonoBehaviourPunCallbacks
     {
         PlayerStats ps = getStatsByPlayer(otherPlayer);
         playerStats.Remove(ps);
+        playerStatsDictionary.Remove(otherPlayer);
     }
 }
 

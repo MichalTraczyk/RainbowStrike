@@ -63,7 +63,7 @@ public class GlobalUIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Tab) && !paused)
         {
             tabela.SetActive(true);
-            UpdateTabeleWynikow();
+            UpdateScoreboard();
         }
         if (Input.GetKeyUp(KeyCode.Tab))
         {
@@ -179,9 +179,8 @@ public class GlobalUIManager : MonoBehaviour
     }
 
 
-    void UpdateTabeleWynikow()
+    void UpdateScoreboard()
     {
-
         //Destroy old stats panels
         foreach (Transform child in redParent)
         {
@@ -191,7 +190,6 @@ public class GlobalUIManager : MonoBehaviour
         {
             Destroy(child.gameObject);
         }
-
         //Spawn stats panels
         playerStatsStruct[] stats = GameManager.Instance.GetPlayerStatsList();
         foreach (playerStatsStruct s in stats)

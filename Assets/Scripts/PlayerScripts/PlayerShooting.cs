@@ -14,7 +14,6 @@ public class PlayerShooting : MonoBehaviour
     [SerializeField] private GameObject handGFX;
     [SerializeField] private GameObject normalCamera;
     [SerializeField] private GameObject aimCamera;
-    [SerializeField] private GameObject markerPrefab;
     [SerializeField] private LayerMask shotLayers;
     [SerializeField] private GameObject pingPrefab;
     [SerializeField] AudioClip hitmarkerSound;
@@ -543,21 +542,23 @@ public class PlayerShooting : MonoBehaviour
 
     void GenerateShot()
     {
+        //Where to shot
         Vector3 aimpos = shotCam.forward;
-
+        //Calculate bullet spread
         float spreadx = UnityEngine.Random.Range(-currentWeapon.bulletSpread, currentWeapon.bulletSpread);
         float spready = UnityEngine.Random.Range(-currentWeapon.bulletSpread, currentWeapon.bulletSpread);
 
-        
+        //if we are not aiming out shots should go in random directions
         if (!aiming || currentWeapon.weaponType == WeaponType.Shotgun)
         {
             aimpos.x += spreadx;
             aimpos.y += spready;
         }
+        //So we dont hit ourselves
         Vector3 shotPos = shotCam.transform.position + shotCam.transform.forward * 0.1f;
         RaycastHit hit;
-
         bool hitEnemy = false;
+
         if (Physics.Raycast(shotPos, aimpos, out hit, Mathf.Infinity, shotLayers))
         {
             DestructiblePart wall = hit.transform.GetComponent<DestructiblePart>();
@@ -586,7 +587,6 @@ public class PlayerShooting : MonoBehaviour
 
             PV.RPC("RPC_HitParticles", RpcTarget.All,hitEnemy,hit.point,hit.normal);
         }
-
 
         UpdateUI();
     }

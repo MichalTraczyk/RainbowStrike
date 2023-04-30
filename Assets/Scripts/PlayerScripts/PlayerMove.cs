@@ -186,6 +186,7 @@ public class PlayerMove : MonoBehaviour, IPunObservable
 
         return true;
     }
+
     private bool CanJumpOnTheRoof()
     {
         if (RepelMoveCheck(0))
