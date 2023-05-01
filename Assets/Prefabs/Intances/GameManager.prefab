@@ -83,7 +83,7 @@ MonoBehaviour:
   OwnershipTransfer: 0
   observableSearch: 2
   ObservedComponents: []
-  sceneViewId: 0
+  sceneViewId: 1
   InstantiationId: 0
   isRuntimeInstantiated: 0
 --- !u!114 &3242351125427961976
@@ -130,5 +130,4 @@ MonoBehaviour:
   loseRoundMoney: 1000
   TargetRounds: 15
   startMoney: 1000
-  winnerUIParent: {fileID: 0}
   bombSpawnPos: {fileID: 3242351125402527912}
