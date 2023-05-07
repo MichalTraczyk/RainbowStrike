@@ -3429,7 +3429,6 @@ MonoBehaviour:
   handGFX: {fileID: 1619685030015117758}
   normalCamera: {fileID: 3142150595611531044}
   aimCamera: {fileID: 3142150596827927206}
-  markerPrefab: {fileID: 5962055404996893575, guid: 9115efa37945f1b4a9c7c063e354ab78, type: 3}
   shotLayers:
     serializedVersion: 2
     m_Bits: 327873
